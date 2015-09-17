@@ -29,6 +29,8 @@ const GeneratePwdOptions DEFAULT_GENERATE_PWD_OPTIONS_;
 // 'len' should be >= 8U (returns empty str. if NOT)
 // Returns empty str. on ANY error
 // 'charPerSet' is an OUTPUT statistics (OPTIONAL)
+// Complexity - linear: O(2*len)
+template <const bool Optimized = true>
 char* generatePwd(char* pwdBuf, const size_t len = 16U,
                   const GeneratePwdOptions& options = DEFAULT_GENERATE_PWD_OPTIONS_,
                   size_t charPerSet[GeneratePwdOptions::CHAR_SET_COUNT_] = nullptr) throw()
@@ -101,10 +103,16 @@ char* generatePwd(char* pwdBuf, const size_t len = 16U,
   
   size_t charPlacedCount = size_t(); // total amount of chars already placed in the buf.
   
-  // Places random count of a random chars from the specified set at random blank positions
-  auto addChars = [&](const GeneratePwdOptions::ECharSetType charSetType, const bool lastSet) throw() {
+  auto getCharCountPerSet = [&](const bool lastSet) throw() {
     // If last - fill the rest of the buf.
-    const auto charCount = lastSet ? (len - charPlacedCount) : rollCharPerSetCount();
+    return lastSet ? (len - charPlacedCount) : rollCharPerSetCount();
+  };
+
+  // Places random count of a random chars from the specified set at random blank positions
+  auto addCharsA = [&](const GeneratePwdOptions::ECharSetType charSetType,
+                       const bool lastSet) throw()
+  {
+    const auto charCount = getCharCountPerSet(lastSet);
     
     size_t charIdx = size_t(); // actual idx. in the array
     // Add random chars from the curr. set
@@ -114,11 +122,35 @@ char* generatePwd(char* pwdBuf, const size_t len = 16U,
     }
     charPlacedCount += charCount;
   };
-
-  if (options.useDigits) addChars(GeneratePwdOptions::ECharSetType::CST_DIGITS, false);
-  if (options.useSymbols) addChars(GeneratePwdOptions::ECharSetType::CST_SYMBOLS, false);
-  if (options.useAlpha) addChars(GeneratePwdOptions::ECharSetType::CST_ALPHA, true);
-
+  
+  // Places random count of a random chars from the specified set at predefined positions
+  //  (sequentially)
+  auto addCharsB = [&](const GeneratePwdOptions::ECharSetType charSetType,
+                       const bool lastSet) throw()
+  {
+    const auto charCount = getCharCountPerSet(lastSet);
+    
+    // Add random chars from the curr. set: O(charCount)
+    for (size_t charNumber = size_t(); charNumber < charCount; ++charNumber, ++charPlacedCount) {
+      pwdBuf[charPlacedCount] = getRandomChar(charSetType);
+    }
+  };
+  
+  switch (Optimized) {
+    case false:
+      if (options.useDigits) addCharsA(GeneratePwdOptions::ECharSetType::CST_DIGITS, false);
+      if (options.useSymbols) addCharsA(GeneratePwdOptions::ECharSetType::CST_SYMBOLS, false);
+      if (options.useAlpha) addCharsA(GeneratePwdOptions::ECharSetType::CST_ALPHA, true);
+    break;
+    default: // true
+      if (options.useDigits) addCharsB(GeneratePwdOptions::ECharSetType::CST_DIGITS, false);
+      if (options.useSymbols) addCharsB(GeneratePwdOptions::ECharSetType::CST_SYMBOLS, false);
+      if (options.useAlpha) addCharsB(GeneratePwdOptions::ECharSetType::CST_ALPHA, true);
+      // Random shuffle: O(charPlacedCount)
+      for (size_t charNumber = size_t(); charNumber < charPlacedCount; ++charNumber) {
+        std::swap(pwdBuf[charNumber], pwdBuf[rollCharIdx()]);
+      }
+  }
   return pwdBuf;
 }
 
