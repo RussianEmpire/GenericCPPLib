@@ -1,6 +1,8 @@
 ﻿#ifndef StringUtilsH
 #define StringUtilsH
 
+#include <cstring>
+
 // Will use ALL available options by default
 // Pwd. complexity: 26 + 10 + 32 + 26 = 94^N
 struct GeneratePwdOptions {
@@ -24,7 +26,6 @@ const GeneratePwdOptions::ECharSetType GeneratePwdOptions::CHAR_SETS[] =
   {ECharSetType::CST_ALPHA, ECharSetType::CST_DIGITS, ECharSetType::CST_SYMBOLS};
 const size_t GeneratePwdOptions::CHAR_SET_COUNT_ = sizeof(CHAR_SETS) / sizeof(*CHAR_SETS);
 
-#include <cstring>
 #include <functional>
 #include <random>
 #include <chrono>
