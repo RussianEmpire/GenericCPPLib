@@ -10,7 +10,8 @@ struct GeneratePwdOptions {
     CST_SYMBOLS // printable symbols: punctuation AND so on, EXCLUDING space
   };
 
-  static const auto CHAR_SET_COUNT_ = 3U; // big AND small alphas counts as a one charset
+  static const ECharSetType CHAR_SETS[];
+  static const size_t CHAR_SET_COUNT_; // big AND small alphas counts as a one charset
 
   //// ALL codes are shown for the ANSI ASCII table
   bool useAlpha      = true;
@@ -19,6 +20,9 @@ struct GeneratePwdOptions {
   bool caseSensetive = true; // use both lower AND upper case (if false - ONLY lowercase)
 };
 const GeneratePwdOptions DEFAULT_GENERATE_PWD_OPTIONS_;
+const GeneratePwdOptions::ECharSetType GeneratePwdOptions::CHAR_SETS[] =
+  {ECharSetType::CST_ALPHA, ECharSetType::CST_DIGITS, ECharSetType::CST_SYMBOLS};
+const size_t GeneratePwdOptions::CHAR_SET_COUNT_ = sizeof(CHAR_SETS) / sizeof(*CHAR_SETS);
 
 #include <cstring>
 #include <functional>
@@ -35,12 +39,15 @@ char* generatePwd(char* pwdBuf, const size_t len = 16U,
                   const GeneratePwdOptions& options = DEFAULT_GENERATE_PWD_OPTIONS_,
                   size_t charPerSet[GeneratePwdOptions::CHAR_SET_COUNT_] = nullptr) throw()
 {
-  const auto MIN_PWD_LEN_ = 8U;
+  static const auto MIN_PWD_LEN_ = 8U;
+  static_assert('z' > 'a' && 'Z' > 'A' && '9' > '0', "Incorrect char codes");
+  // [33, 47] U [58, 64] U [91, 96] U [123, 126]
+  static const char SPEC_SYMBOLS[] = {"!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"};
 
   if (!pwdBuf || !len) return nullptr;
-  memset(pwdBuf, 0, len + 1U);
+  *pwdBuf = '\0';
   if (len < MIN_PWD_LEN_) return pwdBuf;
-  
+
   const size_t timeSeed =
     static_cast<size_t>(std::chrono::system_clock::now().time_since_epoch().count());
   const std::mt19937 engine(timeSeed);
@@ -64,12 +71,21 @@ char* generatePwd(char* pwdBuf, const size_t len = 16U,
   size_t localCharPerSet[GeneratePwdOptions::CHAR_SET_COUNT_] = {0}; // statistics
   auto const currCharPerSet = charPerSet ? charPerSet : localCharPerSet; // replace if NOT provided
   
-  // [33, 47] U [58, 64] U [91, 96] U [123, 126]
-  static const char SPEC_SYMBOLS[] = {"!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"};
-  srand(static_cast<unsigned int>(time(nullptr)));
-  
-  static_assert('z' > 'a' && 'Z' > 'A' && '9' > '0', "Incorrect char codes");
-  
+  struct Randomizer_ {
+    Randomizer_() throw() { // 'srand' will be called ONLY once during initialiation
+      srand(static_cast<unsigned int>(time(nullptr)));
+    }
+  };
+  static const Randomizer_ R_; // static init. is a thread safe in C++11
+
+  auto charSetLeftCount = charSetCount;
+  size_t charPlacedCount = size_t(); // total amount of chars already placed in the buf.
+
+  auto getCharCountPerSet = [&]() throw() {
+    // If last - fill the rest of the buf.
+    return charSetLeftCount ? rollCharPerSetCount() : (len - charPlacedCount);
+  };
+
   // Also updates statistics for the specified charset
   auto getRandomChar = [&](const GeneratePwdOptions::ECharSetType charSetType) throw() {
     size_t firstIdx = size_t(), lastIdx = size_t();
@@ -101,18 +117,10 @@ char* generatePwd(char* pwdBuf, const size_t len = 16U,
     return actualChar;
   };
   
-  size_t charPlacedCount = size_t(); // total amount of chars already placed in the buf.
-  
-  auto getCharCountPerSet = [&](const bool lastSet) throw() {
-    // If last - fill the rest of the buf.
-    return lastSet ? (len - charPlacedCount) : rollCharPerSetCount();
-  };
-
   // Places random count of a random chars from the specified set at random blank positions
-  auto addCharsA = [&](const GeneratePwdOptions::ECharSetType charSetType,
-                       const bool lastSet) throw()
-  {
-    const auto charCount = getCharCountPerSet(lastSet);
+  auto addCharsA = [&](const GeneratePwdOptions::ECharSetType charSetType) throw() {
+    --charSetLeftCount;
+    const auto charCount = getCharCountPerSet();
     
     size_t charIdx = size_t(); // actual idx. in the array
     // Add random chars from the curr. set
@@ -125,10 +133,9 @@ char* generatePwd(char* pwdBuf, const size_t len = 16U,
   
   // Places random count of a random chars from the specified set at predefined positions
   //  (sequentially)
-  auto addCharsB = [&](const GeneratePwdOptions::ECharSetType charSetType,
-                       const bool lastSet) throw()
-  {
-    const auto charCount = getCharCountPerSet(lastSet);
+  auto addCharsB = [&](const GeneratePwdOptions::ECharSetType charSetType) throw() {
+    --charSetLeftCount;
+    const auto charCount = getCharCountPerSet();
     
     // Add random chars from the curr. set: O(charCount)
     for (size_t charNumber = size_t(); charNumber < charCount; ++charNumber, ++charPlacedCount) {
@@ -138,18 +145,20 @@ char* generatePwd(char* pwdBuf, const size_t len = 16U,
   
   switch (Optimized) {
     case false:
-      if (options.useDigits) addCharsA(GeneratePwdOptions::ECharSetType::CST_DIGITS, false);
-      if (options.useSymbols) addCharsA(GeneratePwdOptions::ECharSetType::CST_SYMBOLS, false);
-      if (options.useAlpha) addCharsA(GeneratePwdOptions::ECharSetType::CST_ALPHA, true);
+      memset(pwdBuf, 0, len + 1U);
+      if (options.useDigits) addCharsA(GeneratePwdOptions::ECharSetType::CST_DIGITS);
+      if (options.useSymbols) addCharsA(GeneratePwdOptions::ECharSetType::CST_SYMBOLS);
+      if (options.useAlpha) addCharsA(GeneratePwdOptions::ECharSetType::CST_ALPHA);
     break;
     default: // true
-      if (options.useDigits) addCharsB(GeneratePwdOptions::ECharSetType::CST_DIGITS, false);
-      if (options.useSymbols) addCharsB(GeneratePwdOptions::ECharSetType::CST_SYMBOLS, false);
-      if (options.useAlpha) addCharsB(GeneratePwdOptions::ECharSetType::CST_ALPHA, true);
+      if (options.useDigits) addCharsB(GeneratePwdOptions::ECharSetType::CST_DIGITS);
+      if (options.useSymbols) addCharsB(GeneratePwdOptions::ECharSetType::CST_SYMBOLS);
+      if (options.useAlpha) addCharsB(GeneratePwdOptions::ECharSetType::CST_ALPHA);
       // Random shuffle: O(charPlacedCount)
       for (size_t charNumber = size_t(); charNumber < charPlacedCount; ++charNumber) {
         std::swap(pwdBuf[charNumber], pwdBuf[rollCharIdx()]);
       }
+      pwdBuf[charPlacedCount] = '\0';
   }
   return pwdBuf;
 }
