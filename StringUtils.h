@@ -73,7 +73,7 @@ char* generatePwd(char* pwdBuf, const size_t len = 16U,
   auto const currCharPerSet = charPerSet ? charPerSet : localCharPerSet; // replace if NOT provided
   
   struct Randomizer_ {
-    Randomizer_() throw() { // 'srand' will be called ONLY once during initialiation
+    Randomizer_() throw() { // 'srand' will be called ONLY once during initialization
       srand(static_cast<unsigned int>(time(nullptr)));
     }
   };
