@@ -27,12 +27,12 @@ struct AddRemoveConst {};
 
 template <typename T>
 struct AddRemoveConst<T, true> {
-  typedef typename const T Type;
+  typedef const T Type;
 };
 
 template <typename T>
 struct AddRemoveConst<T, false> {
-  typedef typename T Type;
+  typedef T Type;
 };
 
 #define ADD_REMOVE_CONST(Type, StaticPredicate) AddRemoveConst<Type, StaticPredicate>::Type
@@ -63,7 +63,7 @@ enum class ECFundamentalTypeTags {
   FLOAT,
   DOUBLE,
   LONG_DOUBLE,
-  VOID,
+  VOID_,
   NULLPTR // C++11 std::nullptr_t
 };
 
@@ -149,7 +149,7 @@ struct TypeTag<long double, TypeTags> {
 
 template <class TypeTags>
 struct TypeTag<void, TypeTags> {
-  static const auto TAG = TypeTags::VOID;
+  static const auto TAG = TypeTags::VOID_;
 };
 
 template <class TypeTags>
