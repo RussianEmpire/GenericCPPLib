@@ -61,7 +61,8 @@ public:
   static double getCollisionProbability(bool& error, const bool logCollisions = true) throw() {
     char strBuf[MaxStrLen + 1U] = {0}; // even to 8: MaxStrLen + 8U - (MaxStrLen % 8U)
     strBuf[std::extent<decltype(strBuf)>::value - 1U] = '\0';
-    static const auto COMBINATION_COUNT_ = static_cast<unsigned long long int>(std::pow(ALPHABET_LEN_, MaxStrLen));
+    static const auto COMBINATION_COUNT_ =
+      static_cast<unsigned long long int>(std::pow(ALPHABET_LEN_, MaxStrLen));
     
     THashCodeToStrMap map;
     auto toReserveBucketCount
@@ -96,7 +97,8 @@ public:
     { // Shrink-to-fit
       decltype(map) mapClearer(std::move(map)); // release mem. before flushing file
     }
-    return static_cast<double>(stats.duplicateCount) / stats.totalCount * 100.0; // file will be auto flushed AND closed here
+    // File will be auto flushed AND closed here
+    return static_cast<double>(stats.duplicateCount) / stats.totalCount * 100.0;
   }
   
   // Generic strategy to test auto. generated char. sequences
@@ -148,6 +150,7 @@ public:
     };
     
     static_assert(MIN_CHAR_ < MAX_CHAR_, "Invalid char codes");
+    double progress;
     for (char currChar = MIN_CHAR_; currChar <= MAX_CHAR_; ++currChar) {
       params.strBuf[currIdx] = currChar;
 
@@ -162,9 +165,10 @@ public:
           ++params.stats->totalCount;
 
           if (params.stats->comboCount) { // show progress
+            progress =
+              static_cast<double>(params.stats->totalCount) / params.stats->comboCount * 100.0;
             completenessPercentage
-              = static_cast<decltype(completenessPercentage)>(static_cast<double>(params.stats->totalCount)
-              / params.stats->comboCount * 100.0);
+              = static_cast<decltype(completenessPercentage)>(progress);
 
             if (completenessPercentage > params.lastCompletenessPercentage &&
                 !(completenessPercentage % 10U))
@@ -181,7 +185,9 @@ public:
 
 private:
   
-  static bool openFile(std::ofstream& outFile, char* const fileNameBuf, const size_t fileNameBufSize) throw() {
+  static bool openFile(std::ofstream& outFile, char* const fileNameBuf,
+                       const size_t fileNameBufSize) throw()
+  {
     if (!fileNameBuf || fileNameBufSize < 2U) return false;
     //// Create unique file name (ALSO clock ticks can be replaced with the time AND/OR random)
     ////  i. e. C++11 'std::chrono' AND/OR 'std::uniform_int_distribution'
