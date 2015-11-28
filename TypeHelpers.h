@@ -69,91 +69,109 @@ enum class ECFundamentalTypeTags {
 
 template <typename T, class TypeTags = ECFundamentalTypeTags>
 struct TypeTag {
+  typedef typename TypeTags TypeTags;
   static const auto TAG = TypeTags::UNIDENTIFIED;
 };
 
 template <class TypeTags>
 struct TypeTag<bool, TypeTags> {
+  typedef typename TypeTags TypeTags;
   static const auto TAG = TypeTags::BOOL;
 };
 
 template <class TypeTags>
 struct TypeTag<signed char, TypeTags> {
+  typedef typename TypeTags TypeTags;
   static const auto TAG = TypeTags::SIGNED_CHAR;
 };
 
 template <class TypeTags>
 struct TypeTag<unsigned char, TypeTags> {
+  typedef typename TypeTags TypeTags;
   static const auto TAG = TypeTags::UNSIGNED_CHAR;
 };
 
 template <class TypeTags>
 struct TypeTag<wchar_t, TypeTags> {
+  typedef typename TypeTags TypeTags;
   static const auto TAG = TypeTags::WCHAR;
 };
 
 template <class TypeTags>
 struct TypeTag<signed short int, TypeTags> {
+  typedef typename TypeTags TypeTags;
   static const auto TAG = TypeTags::SIGNED_SHORT_INT;
 };
 
 template <class TypeTags>
 struct TypeTag<unsigned short int, TypeTags> {
+  typedef typename TypeTags TypeTags;
   static const auto TAG = TypeTags::UNSIGNED_SHORT_INT;
 };
 
 template <class TypeTags>
 struct TypeTag<signed int, TypeTags> {
+  typedef typename TypeTags TypeTags;
   static const auto TAG = TypeTags::SIGNED_INT;
 };
 
 template <class TypeTags>
 struct TypeTag<unsigned int, TypeTags> {
+  typedef typename TypeTags TypeTags;
   static const auto TAG = TypeTags::UNSIGNED_INT;
 };
 
 template <class TypeTags>
 struct TypeTag<signed long int, TypeTags> {
+  typedef typename TypeTags TypeTags;
   static const auto TAG = TypeTags::SIGNED_LONG_INT;
 };
 
 template <class TypeTags>
 struct TypeTag<unsigned long int, TypeTags> {
+  typedef typename TypeTags TypeTags;
   static const auto TAG = TypeTags::UNSIGNED_LONG_INT;
 };
 
 template <class TypeTags>
 struct TypeTag<signed long long int, TypeTags> {
+  typedef typename TypeTags TypeTags;
   static const auto TAG = TypeTags::SIGNED_LONG_LONG_INT;
 };
 
 template <class TypeTags>
 struct TypeTag<unsigned long long int, TypeTags> {
+  typedef typename TypeTags TypeTags;
   static const auto TAG = TypeTags::UNSIGNED_LONG_LONG_INT;
 };
 
 template <class TypeTags>
 struct TypeTag<float, TypeTags> {
+  typedef typename TypeTags TypeTags;
   static const auto TAG = TypeTags::FLOAT;
 };
 
 template <class TypeTags>
 struct TypeTag<double, TypeTags> {
+  typedef typename TypeTags TypeTags;
   static const auto TAG = TypeTags::DOUBLE;
 };
 
 template <class TypeTags>
 struct TypeTag<long double, TypeTags> {
+  typedef typename TypeTags TypeTags;
   static const auto TAG = TypeTags::LONG_DOUBLE;
 };
 
 template <class TypeTags>
 struct TypeTag<void, TypeTags> {
+  typedef typename TypeTags TypeTags;
   static const auto TAG = TypeTags::VOID_;
 };
 
 template <class TypeTags>
 struct TypeTag<std::nullptr_t, TypeTags> {
+  typedef typename TypeTags TypeTags;
   static const auto TAG = TypeTags::NULLPTR;
 };
 
