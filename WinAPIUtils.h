@@ -12,6 +12,7 @@ public:
   
   static const char* getLogFileNameFromAppName() throw();
   
+  // Use 'GetLastError', 'WSAGetLastError', 'errno' OR 'h_errno' as an 'errorCode'
   static char* getErrorMsg(char* const msgBuf, const size_t bufSize,
                            const DWORD errorCode, const bool fromLowerCase = true) throw();
   
