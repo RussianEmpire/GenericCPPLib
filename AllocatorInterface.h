@@ -18,7 +18,6 @@ public:
   typedef typename TBaseAllocatorType::const_pointer const_pointer;
   typedef typename TBaseAllocatorType::reference reference;
   typedef typename TBaseAllocatorType::const_reference const_reference;
-  typedef typename TBaseAllocatorType::pointer pointer;
   typedef typename TBaseAllocatorType::size_type size_type;
 
   //// Three constructor versions must be defined (even if they do nothing) 
