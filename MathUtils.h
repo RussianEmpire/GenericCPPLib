@@ -552,9 +552,9 @@ public:
   
   //// [!] Both 'getBitStrEx' variants: you can provide negative nums to them freely,
   ////  coze 'unsigned int n = -1' gives the correct bits representation [!]
-
+  
   #ifdef _MSC_VER // GCC does NOT have '__lzcnt' intrinsic
-
+  
   // Direct filling of the buf., returns 'strBuf'
   // If 'allBits' is true - str. will be filled with ALL the bits:
   //  meaning AND NOT (str. will be with the fixed size up to a 32 chars)
@@ -612,8 +612,6 @@ public:
     return strBufStart;
   }
   
-  #endif // _MSC_VER
-
   // 'uint16_t' has a fixed size of 16 bits (http://en.cppreference.com/w/cpp/types/integer)
   // 'allBits' is meaning ONLY at the very first call,
   //  when the lookup table is NOT yet inited, thus specifying content
@@ -642,7 +640,9 @@ public:
     }
     return BIT_STRS[num];
   }
-
+  
+  #endif // _MSC_VER
+  
   // 'hashSizeInBits' AND 'FNVPrime' should NOT be zero
   //  (for FNV primes see here: http://isthe.com/chongo/tech/comp/fnv/)
   // 'hashSizeInBits' should NOT be larger (OR even equal)
