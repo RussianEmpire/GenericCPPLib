@@ -33,11 +33,11 @@ class StaticallyBufferedStringLight {
   //     support implementation to the original class [!]
 public:
   
-  typedef typename StaticallyBufferedStringLight TThisType;
+  typedef StaticallyBufferedStringLight TThisType;
 
   ADD_HASHER_FOR(TThisType, hasher)
 
-  typedef typename TElemType value_type;
+  typedef TElemType value_type;
   // ONLY char, wchar_t, char16_t AND char32_t are supported!
   static_assert(std::is_same<char, TElemType>::value ||
                 std::is_same<wchar_t, TElemType>::value ||
@@ -46,29 +46,29 @@ public:
                 "'TElemType' SHOULD be 'char' / 'wchar_t' / 'char16_t' / 'char32_t'");
   typedef typename std::char_traits<TElemType> traits_type;
 
-  typedef typename AllocatorInterface<TElemType> allocator_type; // mock object type
+  typedef AllocatorInterface<TElemType> allocator_type; // mock object type
   
-  typedef typename TElemType& reference;
-  typedef typename const TElemType& const_reference;
-  typedef typename TElemType* pointer;
+  typedef TElemType& reference;
+  typedef const TElemType& const_reference;
+  typedef TElemType* pointer;
   // Ptr. to the const. value, NOT the constant pointer!!
-  typedef typename const TElemType* const_pointer;
+  typedef const TElemType* const_pointer;
 
   //// 'StaticallyBufferedStringLight' probably should NOT 
   ////  let it's symbols to be changed through the iterator
   ////   (as it CAN probably break some internal state logic)
-  typedef typename GenericRAIterator<StaticallyBufferedStringLight,
-                                     value_type, false, false> iterator;
-  typedef typename GenericRAIterator<StaticallyBufferedStringLight,
-                                     value_type, true, false> reverse_iterator;
+  typedef GenericRAIterator<StaticallyBufferedStringLight,
+                            value_type, false, false> iterator;
+  typedef GenericRAIterator<StaticallyBufferedStringLight,
+                            value_type, true, false> reverse_iterator;
   
-  typedef typename GenericRAIterator<StaticallyBufferedStringLight,
-                                     value_type, false, true> const_iterator;
-  typedef typename GenericRAIterator<StaticallyBufferedStringLight,
-                                     value_type, true, true> const_reverse_iterator;
+  typedef GenericRAIterator<StaticallyBufferedStringLight,
+                            value_type, false, true> const_iterator;
+  typedef GenericRAIterator<StaticallyBufferedStringLight,
+                            value_type, true, true> const_reverse_iterator;
 
-  typedef typename ptrdiff_t difference_type;
-  typedef typename size_t size_type;
+  typedef ptrdiff_t difference_type;
+  typedef size_t size_type;
 
   // Based on the the 'MaxLen', auto adjusted, to have a 8 byte alignment
   static const auto BUF_SIZE =
@@ -207,7 +207,7 @@ public:
     const char* mask = "";
     auto returnFlag = false; // true if return immediately
     auto getMask = [&]() throw() {
-      typedef typename TypeTag<decltype(value)>::TypeTags Tags;
+      typedef typename TypeTag<decltype(value)>::TypeTags_ Tags;
       switch (TYPE_TAG(value)) {
         // OPTIMIZATION thoughts: reduce the mask count?
         //  use 'if std::is_floatinng<decltype(value)>' for two mask types - float|integral?
