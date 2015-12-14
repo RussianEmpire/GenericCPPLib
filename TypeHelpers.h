@@ -175,7 +175,7 @@ struct TypeTag<std::nullptr_t, TypeTags> {
   static const auto TAG = TypeTags::NULLPTR;
 };
 
-#define TYPE_TAG(Object) TypeTag<std::decay<decltype(Object)>::type>::TAG
+#define TYPE_TAG(Object) TypeTag<typename std::decay<decltype(Object)>::type>::TAG
 
 // Size is in bytes
 // Fixed width integer types (since C++11): http://en.cppreference.com/w/cpp/types/integer
