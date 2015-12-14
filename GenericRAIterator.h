@@ -3,10 +3,11 @@
 
 //// Random Access Iterator [http://en.cppreference.com/w/cpp/concept/RandomAccessIterator]
 
-#include <limits>
-#include <iterator>
 #include "CompareUtils.h"
 #include "..\..\TypeHelpers.h"
+
+#include <limits>
+#include <iterator>
 
 // [!] Do NOT change an order of the elements NOR alter the sequence
 //  coze it may break an internal comparison logic [!]

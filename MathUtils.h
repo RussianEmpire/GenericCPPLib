@@ -1,6 +1,8 @@
 ﻿#ifndef MathUtilsH
 #define MathUtilsH
 
+#include  "..\..\TypeHelpers.h"
+
 #include <cstring>
 #include <cassert>
 #include <cstdio>
@@ -9,8 +11,6 @@
 #include <atomic>
 #include <limits>
 #include <algorithm>
-
-#include  "..\..\TypeHelpers.h"
 
 // Abstract
 // [!] In C++14 many of this funcs can be 'constexpr' [!]

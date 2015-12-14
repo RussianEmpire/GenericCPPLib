@@ -1,11 +1,11 @@
 ﻿#ifndef MemUtilsH
 #define MemUtilsH
 
-#include <cstring>
-#include <cassert>
-
 #include "TypeHelpers.h"
 #include "HardwareUtils.h"
+
+#include <cstring>
+#include <cassert>
 
 // HINT: Size of 'std::ptrdiff_t' AND 'uintptr_t'
 //  types depends on compiler settings
