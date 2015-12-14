@@ -1,11 +1,6 @@
 ﻿#ifndef StaticallyBufferedStringLightH
 #define StaticallyBufferedStringLightH
 
-#include <cstdio>
-#include <string>
-#include <ostream>
-#include <istream>
-
 #include "..\..\FuncUtils.h"
 #include "..\..\HashUtils.h"
 #include "..\..\MemUtils.h"
