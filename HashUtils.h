@@ -192,15 +192,24 @@ private:
     //// Create unique file name (ALSO clock ticks can be replaced with the time AND/OR random)
     ////  i. e. C++11 'std::chrono' AND/OR 'std::uniform_int_distribution'
     ////   ALSO C 'tmpnam' / 'tmpfile'
-    strncat(fileNameBuf, OUT_FILE_NAME_, fileNameBufSize - 1U);
+    #ifdef _MSC_VER // MS VS specific
+      strncat_s(fileNameBuf, fileNameBufSize, OUT_FILE_NAME_, fileNameBufSize - 1U);
+    #else
+      strncat(fileNameBuf, OUT_FILE_NAME_, fileNameBufSize - 1U);
+    #endif
     static const auto STR_TIME_BUF_SIZE_ = 32U;
     char strTimeBuf[STR_TIME_BUF_SIZE_] = {0};
     // Better use C++11 http://en.cppreference.com/w/cpp/chrono/high_resolution_clock
     const auto nowTime = time(nullptr);
-    sprintf(strTimeBuf, "%lli", nowTime);
-    strncat(fileNameBuf, strTimeBuf, fileNameBufSize - 1U);
-    strncat(fileNameBuf, OUT_FILE_NAME_EXT_, fileNameBufSize - 1U);
-
+    #ifdef _MSC_VER // MS VS specific
+      sprintf_s(strTimeBuf, sizeof(strTimeBuf), "%lli", nowTime);
+      strncat_s(fileNameBuf, fileNameBufSize, strTimeBuf, fileNameBufSize - 1U);
+      strncat_s(fileNameBuf, fileNameBufSize, OUT_FILE_NAME_EXT_, fileNameBufSize - 1U);
+    #else
+      sprintf(strTimeBuf, "%lli", nowTime);
+      strncat(fileNameBuf, strTimeBuf, fileNameBufSize - 1U);
+      strncat(fileNameBuf, OUT_FILE_NAME_EXT_, fileNameBufSize - 1U);
+    #endif
     outFile.open(fileNameBuf, std::ios::out | std::ios::trunc);
     return !(!outFile);
   }
