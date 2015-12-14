@@ -160,7 +160,7 @@ public:
        10000000000LL, 100000000000LL, 1000000000000LL, 10000000000000LL, 100000000000000LL,
        1000000000000000LL, 10000000000000000LL, 100000000000000000LL, 1000000000000000000LL};
     static const auto TABLE_END = TABLE + std::extent<decltype(TABLE)>::value; // past-the-end elem.
-
+    
     if (num < 0LL) num = -num; // reverse
     // Returns a ptr. to the first elem. in the range, which compares greater
     return std::upper_bound<>(TABLE, TABLE_END, num) - TABLE;
@@ -393,7 +393,8 @@ public:
   // [!] Should work correct with the signed num. types (NOT tested) [!]
   template<const bool SetToZero = false, typename TNumType, const size_t IndexesCount>
   static void setBits(TNumType& valueToUpdate, const size_t(&idxs)[IndexesCount]) throw() {
-    static const size_t MAX_BIT_IDX = std::min(sizeof(valueToUpdate) * 8U - 1U, 62U);
+    static const size_t MAX_BIT_IDX =
+      std::min(static_cast<unsigned int>(sizeof(valueToUpdate) * 8U - 1U), 62U);
     
     decltype(0LL) currBitMask;
     for (const auto bitIdx : idxs) {
@@ -552,6 +553,8 @@ public:
   //// [!] Both 'getBitStrEx' variants: you can provide negative nums to them freely,
   ////  coze 'unsigned int n = -1' gives the correct bits representation [!]
 
+  #ifdef _MSC_VER // GCC does NOT have '__lzcnt' intrinsic
+
   // Direct filling of the buf., returns 'strBuf'
   // If 'allBits' is true - str. will be filled with ALL the bits:
   //  meaning AND NOT (str. will be with the fixed size up to a 32 chars)
@@ -609,6 +612,8 @@ public:
     return strBufStart;
   }
   
+  #endif // _MSC_VER
+
   // 'uint16_t' has a fixed size of 16 bits (http://en.cppreference.com/w/cpp/types/integer)
   // 'allBits' is meaning ONLY at the very first call,
   //  when the lookup table is NOT yet inited, thus specifying content
