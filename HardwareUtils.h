@@ -2,6 +2,7 @@
 #define HardwareUtilsH
 
 #ifdef _MSC_VER
+  #include <cstring>
   #include <intrin.h> // Microsoft Specific
 #elif __GNUC__
   #include <cpuid.h> // GCC
@@ -65,9 +66,8 @@ private:
     #elif __GNUC__
       // Checks if 'cpuid' is supported and returns 1 for valid cpuid information or
       //  0 for unsupported cpuid level
-      if (!__get_cpuid(GET_EXTENDED_INFO, cpuInfo, cpuInfo + 1U, cpuInfo + 2U, cpuInfo + 3U)) {
+      if (!__get_cpuid(GET_EXTENDED_INFO, cpuInfo, cpuInfo + 1U, cpuInfo + 2U, cpuInfo + 3U))
         return false;
-      }
     #endif
     
     //' LM' (Long Mode) flag for AMD / 'EM64T' for Intel
