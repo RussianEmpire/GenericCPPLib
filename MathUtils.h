@@ -1,7 +1,7 @@
 ﻿#ifndef MathUtilsH
 #define MathUtilsH
 
-#include  "..\..\TypeHelpers.h"
+#include "..\..\TypeHelpers.h"
 
 #include <cstring>
 #include <cassert>
