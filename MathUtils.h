@@ -1281,6 +1281,4 @@ private:
   }
 };
 
-const MathUtils::BitOrderTester MathUtils::BitOrderTester::INSTANCE;
-
 #endif // MathUtilsH
