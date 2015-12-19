@@ -90,7 +90,7 @@ void* WinAPIUtils::copyEventData(const DWORD dwControl, const DWORD dwEventType,
     default: // unused control, NOT required
       return nullptr;
   }
-  dataSize += 8U; // add a few bytes to the end (NOT really required, BUT let it be)
+  dataSize += 8UL; // add a few bytes to the end (NOT really required, BUT let it be)
   auto const newData = new char[dataSize](); // zero (default) initialized
   
   if (newData) { // alocated
