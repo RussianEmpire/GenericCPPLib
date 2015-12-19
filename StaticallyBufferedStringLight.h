@@ -93,7 +93,7 @@ public:
   template<typename TStorageType>
   StaticallyBufferedStringLight(const TStorageType&& str) throw() {
     static_assert(!(BUF_SIZE % 8U), "Incorrect 'BUF_SIZE'");
-    *this = str; // invoking 'operator=(const TStorageType&& str)'
+    *this = std::move(str); // invoking 'operator=(const TStorageType&& str)'
   }
   
   // Copies the portion of' str' that begins at the character position 'pos' and spans 'len' characters
