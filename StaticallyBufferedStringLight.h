@@ -53,6 +53,8 @@ public:
   //// 'StaticallyBufferedStringLight' probably should NOT 
   ////  let it's symbols to be changed through the iterator
   ////   (as it CAN probably break some internal state logic)
+  ////  TO DO: provide a 'rehash' (recalc hash) / 'restore' (object state - recalc len. etc)
+  ////   OR provide a proxy object by the subscript operator?? NOT sure if it is really needed
   typedef GenericRAIterator<StaticallyBufferedStringLight,
                             value_type, false, false> iterator;
   typedef GenericRAIterator<StaticallyBufferedStringLight,
