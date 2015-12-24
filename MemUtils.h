@@ -10,7 +10,7 @@
 // HINT: Size of 'std::ptrdiff_t' AND 'uintptr_t'
 //  types depends on compiler settings
 
-template<const size_t CmpChunkSize = 2U, // in bytes sizeof(std::uintptr_t)
+template<const size_t CmpChunkSize = sizeof(std::uintptr_t), // in bytes
          const bool SignedCmpChunk = false, // as 'strcmp' by default [7.21.4/1 (C99)]
          typename TElem1Type, typename TElem2Type>
 typename IntegralTypeBySize<CmpChunkSize, true>::Type
