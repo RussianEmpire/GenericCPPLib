@@ -69,7 +69,7 @@ public:
   typedef size_t size_type;
 
   // Based on the the 'MaxLen', auto adjusted, to have a 8 byte alignment
-  static const auto BUF_SIZE =
+  static const auto BUF_SIZE = // better align to the sizeof(std::uintptr_t)
     MaxLen + 1U + (((MaxLen + 1U) % 8U) ? (8U - (MaxLen + 1U) % 8U) : 0U);
   
   // +1 for the str. terminator (always NULL-TERMINATED)
