@@ -410,7 +410,21 @@ public:
   //// Use next two funcs to parse individual bits, individual bytes,
   ////  variable count of bits (multiply of 2 OR 8 OR NOT)
   //// For other bit-working algos see http://graphics.stanford.edu/~seander/bithacks.html
-
+  
+  /*
+  OPTIMIZATION: use standart C++ bit fields [http://en.cppreference.com/w/cpp/language/bit_field]
+  
+  union UBitParser {
+    struct BitMasks {
+      unsigned char part1 : 5, part2 : 3,            // 1st byte
+                    part3 : 2, part4 : 4, part5 : 2, // 2nd byte
+                    part6 : 7, part7 : 1,            // 3rd byte
+                    part8;                           // 4th byte
+    } bitMasks;
+    unsigned int data;
+  } bitParser;
+  */
+  
   // Returns meaning (holding actual data) parts count (other parts will be filled with zeroes)
   // First meaning part will hold the least significant bit(s) AND so on
   // At the func. end 'num' will hold unprocessed data (if left)
@@ -982,6 +996,7 @@ public:
       // true if zero byte considered LSB (least significant byte)
       //  => the bit order is left <- right (3-th byte is MSB - most significant byte)
       reversedBitOrder = ('A' == converter.i);
+      // See C example here: https://ru.wikipedia.org/wiki/Порядок_байтов
     }
 
     ~BitOrderTester() = default;
