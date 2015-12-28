@@ -366,6 +366,9 @@ public:
     return !(*this == str); // invoking 'operator==(const TStorageType& str)'
   }
   
+  // [!] OPTIMIZATION: better use intrinsic form of the 'strcpy' here
+  //      as it SHOULD have an intrinsic form on the ALL architectures
+  //       (https://msdn.microsoft.com/ru-ru/library/5704bbxw(v=vs.100).aspx) [!]
   // HINT: we can also provide actually appended elems count
   // Zero 'count' means to attempt to copy ALL the possible elems from a 'str' (default)
   StaticallyBufferedStringLight& append(const TElemType* str, size_t count = -1) throw() {

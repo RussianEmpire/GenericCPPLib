@@ -964,7 +964,7 @@ public:
 
     static const BitOrderTester INSTANCE;
 
-    bool reversedBitOrder = false;
+    bool reversedBitOrder = false; // little-endian
 
   private:
     
