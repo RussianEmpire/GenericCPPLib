@@ -412,17 +412,25 @@ public:
   //// For other bit-working algos see http://graphics.stanford.edu/~seander/bithacks.html
   
   /*
-  OPTIMIZATION: use standart C++ bit fields [http://en.cppreference.com/w/cpp/language/bit_field]
+  [!] OPTIMIZATION: use standart C++ bit fields (http://en.cppreference.com/w/cpp/language/bit_field) [!]
   
+  template <typename TDataType,
+          const size_t Part1Size, const size_t Part2Size, const size_t Part3Size, const size_t Part4Size, 
+          const size_t Part5Size, const size_t Part6Size, const size_t Part7Size, const size_t Part8Size>
   union UBitParser {
+    static_assert(std::is_standard_layout<TDataType>::value,
+                  "'UBitParser' union: 'UBitParser' SHOULD be a POD type OR a standard layout type");
     struct BitMasks {
-      unsigned char part1 : 5, part2 : 3,            // 1st byte
-                    part3 : 2, part4 : 4, part5 : 2, // 2nd byte
-                    part6 : 7, part7 : 1,            // 3rd byte
-                    part8;                           // 4th byte
+      unsigned char part1 : Part1Size, part2 : Part2Size, part3 : Part3Size, part4 : Part4Size,
+                    part5 : Part5Size, part6 : Part6Size, part7 : Part7Size, part8 : Part8Size;
     } bitMasks;
-    unsigned int data;
-  } bitParser;
+    TDataType data;
+    static_assert(sizeof(BitMasks) == sizeof(TDataType),
+                  "'UBitParser' union: types SHOULD have an equal size");
+  };
+  
+  //           bytes:  1st     2nd bte     3rd     4th
+  UBitParser<uint32_t, 5U, 3U, 2U, 4U, 2U, 7U, 1U, 8U> bitParser;
   */
   
   // Returns meaning (holding actual data) parts count (other parts will be filled with zeroes)
