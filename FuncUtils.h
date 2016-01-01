@@ -1,7 +1,7 @@
 ﻿#ifndef FuncUtilsH
 #define FuncUtilsH
 
-#include <utility>
+#include <utility> // for 'std::move', 'std::forward'
 
 #define EXEC_MEMBER_PROC_IF_PRESENT(ProcName) namespace ProcName {\
   void ExecIfPresent(...) throw() {}\
