@@ -778,7 +778,7 @@ public:
     static const char* const ENG_LONG_POSTFIXES[] =
       {"seconds", "minutes", "hours", "days", "months", "years", "centuries", "millenniums"};
     static const char* const ENG_SHORT_POSTFIXES[] =
-       {"sec", "min", "hr", "d", "mon", "yr", "cen", "mil"};
+      {"sec", "min", "hr", "d", "mon", "yr", "cen", "mil"};
 
     static const char* const RU_LONG_POSTFIXES[] =
       {"секунд", "минут", "часов", "дней", "месяцев", "лет", "веков", "тысячелетий"};
