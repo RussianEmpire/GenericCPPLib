@@ -1,6 +1,8 @@
 ﻿#ifndef MathUtilsH
 #define MathUtilsH
 
+//// [!] Version 1.01 [!]
+
 #include "..\..\TypeHelpers.h"
 
 #include <cstring>
@@ -690,35 +692,60 @@ public:
     return offsetBasis;
   }
   
-  // 'str' SHOULD be a POD C null-terminated str.
-  // Returns zero for an empty str.
   // FNV-1a algorithm description: http://isthe.com/chongo/tech/comp/fnv/#FNV-1a
-  static size_t getFNV1aHash(const char* str) throw() {
-    if (!str || !*str) return size_t();
+  // [?!] 'currByte' SHOULD have NO more then 8 bits meaningfull?? [?!]
+  static void FNV1aAccumulate(size_t& hash, const size_t currByte) throw() {
+    //// C++11 OPTIMIZATION HINT: better use 'constexpr' instead of 'const'
     static_assert(4U == sizeof(size_t) || 8U == sizeof(size_t),
                   "Known primes & offsets for 32 OR 64 bit hashes ONLY");
-    
-    //// C++11 OPTIMIZATION HINT: better use 'constexpr' instead of 'const'
 
-    // In the general case, almost any offset_basis will serve so long as it is non - zero
+    // Some primes do hash better than other primes for a given integer size
+    static const unsigned long long int PRIMES[] =
+      {16777619ULL, 1099511628211ULL}; // 32 bit, 64 bit
+    static const auto PRIME =
+      static_cast<size_t>(PRIMES[sizeof(size_t) / 4U - 1U]);
+
+    hash ^= currByte; // xor is performed on the low order octet (8 bits) of hash
+    hash *= PRIME;
+  }
+
+  static size_t getFNV1aStdOffsetBasis() throw() {
+    //// C++11 OPTIMIZATION HINT: better use 'constexpr' instead of 'const'
+    static_assert(4U == sizeof(size_t) || 8U == sizeof(size_t),
+                  "Known primes & offsets for 32 OR 64 bit hashes ONLY");
+
+    // In the general case, almost any offset basis will serve so long as it is non - zero
     static const unsigned long long int BASISES[] =
       {2166136261ULL, 14695981039346656037ULL}; // 32 bit, 64 bit
     static const size_t OFFSET_BASIS =
       static_cast<decltype(OFFSET_BASIS)>(BASISES[sizeof(size_t) / 4U - 1U]);
-    
-    // Some primes do hash better than other primes for a given integer size
-    static const unsigned long long int PRIMES[] =
-      {16777619ULL, 1099511628211ULL}; // 32 bit, 64 bit
-    static const size_t PRIME = 
-      static_cast<decltype(OFFSET_BASIS)>(PRIMES[sizeof(size_t) / 4U - 1U]);
-    
-    auto hash = OFFSET_BASIS;
-    do {
-      hash ^= *str++; // xor is performed on the low order octet (8 bits) of hash
-      hash *= PRIME;
-    } while (*str);
 
-    return hash;
+    return OFFSET_BASIS;
+  }
+
+  // 'str' SHOULD be a POD C null-terminated str.
+  // Returns 'preHash' for an empty str.
+  // Set 'accumulate' to true AND provide a 'preHash' to take advantage of the accumulation mechanics
+  //  ('preHash' will be discarded if NOT accumulating)
+  // 'accumulate' flag is used instead of a simple '!preHash' check to avoid
+  //  a possible very rare 'zero hash of none-empty str.' error
+  static size_t getFNV1aHash(const char* str, size_t preHash = size_t(),
+                             const bool accumulate = false) throw() {
+    if (str && *str) {
+      if (!accumulate) preHash = getFNV1aStdOffsetBasis(); // considering 'str' points to the start
+      do {
+        FNV1aAccumulate(preHash, *str++);
+      } while (*str);
+      assert(preHash); // NOT an error; used to detect the none-empty strs. with the zero hash
+    }
+    return preHash;
+  }
+
+  // See 'Fixed width integer types (since C++11)' [http://en.cppreference.com/w/cpp/types/integer]
+  static uint32_t x64BitHashTo32BitHash(const uint64_t hash64) throw() {
+    static const uint64_t LOW_PART = ~uint32_t(); // 'std::numeric_limits<uint32_t>::max()'
+    // Shuffling bits of the high & low parts
+    return static_cast<uint32_t>((hash64 >> 32U) ^ (hash64 & LOW_PART));
   }
 
   //// Use 'parseNum' to format file size, date/time numbers etc. in to the human readable strs
