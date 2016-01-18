@@ -1,6 +1,8 @@
 ﻿#ifndef StaticallyBufferedStringLightH
 #define StaticallyBufferedStringLightH
 
+//// [!] Version 1.01 [!]
+
 #include "..\..\FuncUtils.h"
 #include "..\..\HashUtils.h"
 #include "..\..\MemUtils.h"
@@ -11,6 +13,7 @@
 
 EXEC_MEMBER_FUNC_IF_PRESENT(getHashIfKnown, size_t())
 EXEC_MEMBER_FUNC_IF_PRESENT(hashAlgoID, size_t())
+EXEC_MEMBER_FUNC_IF_PRESENT(setHash, false)
 
 //// Forward declaration
 class HashCodeChecker;
@@ -29,6 +32,10 @@ class StaticallyBufferedStringLight {
   //     support implementation to the original class [!]
 public:
   
+  // Share access
+  template<typename TOtherElemType, const size_t OtherMaxLen>
+  friend class StaticallyBufferedStringLight;
+
   typedef StaticallyBufferedStringLight TThisType;
 
   ADD_HASHER_FOR(TThisType, hasher)
@@ -40,6 +47,7 @@ public:
                 std::is_same<char16_t, TElemType>::value ||
                 std::is_same<char32_t, TElemType>::value,
                 "'TElemType' SHOULD be 'char' / 'wchar_t' / 'char16_t' / 'char32_t'");
+  //// [?!] Is FNV1a works correclty ONLY wit the 1 byt chars?? [?!]
   typedef typename std::char_traits<TElemType> traits_type;
 
   typedef AllocatorInterface<TElemType> allocator_type; // mock object type
@@ -106,8 +114,10 @@ public:
                                 const size_t len = std::string::npos) throw() {
     static_assert(!(BUF_SIZE % 8U), "Incorrect 'BUF_SIZE'");
     clear();
-    if (pos >= str.length()) return;
+    const auto otherLen = str.length();
+    if (pos >= otherLen) return;
     append(str.c_str() + pos, len);
+    tryShareHash(str); // ONLY if fully copied
   }
 
   //// Special implementations with the 'nullptr_t' is required 
@@ -142,14 +152,17 @@ public:
     // prevents the possible self-copying
     if (static_cast<void*>(this) == static_cast<const void*>(&str)) return;
     */
-    return (*this = str.c_str()); // invoking 'operator=(const TElemType* const str)'
+    *this = str.c_str(); // invoking 'operator=(const TElemType* const str)'
+    tryShareHash(str);
+    return *this;
   }
   
   // Can't 'steal' resources, so just copying
   //  [http://en.cppreference.com/w/cpp/language/move_operator]
   template<typename TStorageType>
   StaticallyBufferedStringLight& operator=(const TStorageType&& str) throw() {
-    return (*this = str.c_str()); // invoking 'operator=(const TElemType* const str)'
+    *this = str; // invoking 'operator=(const TStorageType& str)'
+    return *this;
   }
   
   // Make ONE symbol str.
@@ -176,7 +189,9 @@ public:
   //   (like std::string, StaticallyBufferedStringLight<ANY SIZE> etc)
   template<class TStorageType>
   StaticallyBufferedStringLight& operator+=(const TStorageType& str) throw() {
-    return (*this += str.c_str()); // invoking 'operator+=(const TElemType* const str)'
+    *this += str.c_str(); // invoking 'operator+=(const TElemType* const str)'
+    tryShareHash(str);
+    return *this;
   }
   
   // Adds ONE symbol
@@ -196,7 +211,10 @@ public:
              std::enable_if<std::is_arithmetic<TValueType>::value &&
                             !std::is_pointer<TValueType>::value && // 'std::nullptr_t' is OK
                             !std::is_same<TValueType, TElemType>::value>::type>
-  StaticallyBufferedStringLight& append(const TValueType value) throw() {
+  StaticallyBufferedStringLight& append(const TValueType value,
+                                        size_t* const actuallyAppended = nullptr) throw()
+  {
+    if (actuallyAppended) *actuallyAppended = size_t(); // reset
     const auto spaceLeft = std::extent<decltype(data_)>::value - length_;
     if (spaceLeft < 2U) { // NO actual space left (1 for the str. terminator)
       truncated_ = true;
@@ -238,16 +256,17 @@ public:
     getMask();
     if (returnFlag) return *this;
     
+    auto const originEnd = data_ + length_;
     #ifdef _MSC_VER // MS VS specific
       // Number of characters stored in buffer, not counting the terminating null character
-      auto count = _snprintf_s(data_ + length_, spaceLeft, _TRUNCATE, mask, value);
+      auto count = _snprintf_s(originEnd, spaceLeft, _TRUNCATE, mask, value);
       if (count < 0) { // if NOT enough space left
         count = spaceLeft - 1U;
         truncated_ = true;
       }
     #else
       // Number of characters that properly SHOULD have been written (except terminating null character)
-      auto count = snprintf(data_ + length_, spaceLeft, mask, value);
+      auto count = snprintf(originEnd, spaceLeft, mask, value);
       if (count < 0) {
         data_[length_] = '\0'; // ensure NO actual changes
         return *this; // encoding error
@@ -257,12 +276,15 @@ public:
         truncated_ = true;
       }
     #endif
-
+    // If actually updated AND hash WAS already known -
+    //  update hash, using accumulation mechanics [OPTIMIZATION]
+    if (!modified_ && count > 0)
+      hash_ = MathUtils::getFNV1aHash(originEnd, hash_, size_t() < length_); // accumulte if was't empty
     length_ += count;
-    modified_ = true;
+    if (actuallyAppended) *actuallyAppended = static_cast<size_t>(count);
     return *this;
   }
-
+  
   // Same as the 'append(const TValueType value)'
   template<typename TValueType,
            class = typename // remove from the overload resolution to avoid an ambiguity
@@ -279,6 +301,10 @@ public:
     return *this;
   }
   
+  //// OPTIMIZATION/REDESIGN HINT: add parallel hash. code calc. during the strs. comparing
+  ////  (AND other similar funcs)
+  //// Partial hash. can be also calculated (using 'std::pair' like 'size_t charIdx', 'size_t partHash')
+
   // 'str' SHOULD points to the POD C str.
   // [!] Less effective, then 'operator==(const TElemType (&str)[ArrayElemCount])' [!]
   bool operator==(const TElemType* const str) const throw() {
@@ -336,6 +362,7 @@ public:
     
     // Using hash code. algo. ID to identify if the same algo. is used by the 'str' instance
     // OPTIMIZATION HINT: use C++14 'constexpr' here
+    // HINT: static. check also if the storage str. type size <= sizeof(size_t) (to fit hash.)
     static const auto SAME_HASHING_ = (hashAlgoID() == hashAlgoID::ExecIfPresent(str));
     if (SAME_HASHING_) {
       const auto thisHash = getHashIfKnown(); // ONLY if already calculated
@@ -354,11 +381,17 @@ public:
     static const auto SAME_CHAR_TYPE_ = // remove cv and ref.
       std::is_same<typename std::decay<decltype(*c_str())>::type,
                    typename std::decay<decltype(*str.c_str())>::type>::value;
+    auto result = false;
     switch (SAME_CHAR_TYPE_) {
-      case true: return isEqualMemD<>(data_, str.c_str(), sizeof(*data_) * length());
+      case true: result = isEqualMemD<>(data_, str.c_str(), sizeof(*data_) * length());
       // Diff. types: call 'operator==(const TOtherElemType* const str)'
-      default: return *this == str.c_str();
+      default: result = (*this == str.c_str());
     }
+    if (result && SAME_HASHING_) { // equal AND uses same hashig algo.
+      const auto thisHash = getHashIfKnown(); // ONLY if already calculated [get possibly updated]
+      if (thisHash) setHash::ExecIfPresent(str, thisHash); // if relevant - share
+    }
+    return result;
   }
 
   template<typename TStorageType>
@@ -371,38 +404,27 @@ public:
   //       (https://msdn.microsoft.com/ru-ru/library/5704bbxw(v=vs.100).aspx) [!]
   // HINT: we can also provide actually appended elems count
   // Zero 'count' means to attempt to copy ALL the possible elems from a 'str' (default)
-  StaticallyBufferedStringLight& append(const TElemType* str, size_t count = -1) throw() {
+  StaticallyBufferedStringLight& append(const TElemType* str, size_t count = -1,
+                                        size_t* const actuallyAppended = nullptr) throw() {
+    if (actuallyAppended) *actuallyAppended = size_t(); // reset
     if (!str || !*str) return *this;
     if (length_ >= MAX_LEN_) { // buff. end
       truncated_ = true;
       return *this;
     }
-    if (!count) count = std::numeric_limits<decltype(count)>::max(); // replace value
+    if (!count) count = std::numeric_limits<decltype(count)>::max(); // replace value [!IMPORTANT!]
 
-    auto const strEnd = data_ + length_;
+    auto const strEnd = data_ + length_; // original
     if (checkAddrIfInternal(str) && str < strEnd) { // if 'str' points to the substr. of 'data_'
       const decltype(count) restrictCount = strEnd - str; // restrict the count of chars to copy
       if (count > restrictCount) count = restrictCount; // update limit (if req.)
     }
-    auto currElem = *str++;
     auto actuallyCopiedCount = size_t();
     do {
-      // IN FUTURE: use 'push_back' instead of manually adding an elem. 
-      //  (if so, req. to modify this code - remove redundant checks)
-      data_[length_++] = currElem;
+      if (!push_back(*str++)) break;
       if (++actuallyCopiedCount >= count) break; // stop at 'count'
-      
-      currElem = *str++;
-      if (!currElem) break; // stop at '\0'
-
-      if (length_ >= MAX_LEN_) { // buff. end
-        truncated_ = true;
-        break;
-      }
     } while (true);
-    data_[length_] = '\0';
-    modified_ = actuallyCopiedCount > size_t();
-
+    if (actuallyAppended) *actuallyAppended = actuallyCopiedCount;
     return *this;
   }
 
@@ -411,7 +433,7 @@ public:
     modified_ = false;
 
     length_ = size_t();
-    hash_ = size_t();
+    hash_ = size_t(); // hash of an empty str. SHOULD be zero
 
     *data_ = TElemType();
   }
@@ -472,7 +494,7 @@ public:
   };
   
   #define PLACEHOLDER // to remove the warning
-  AT(PLACEHOLDER);
+  AT(PLACEHOLDER); // [!] CAN break hash caching mechanics, so use this at your own risk [!]
   AT(const);
   
   //// [!] If using none-const version of the 'at' OR 'operator[]' etc 
@@ -482,6 +504,7 @@ public:
   ////  AND protects the instance of ANY harmfull effects
 
   TElemType& operator[](const size_t pos) throw() {
+    // Compromise hash manually?? NO, better relay on the end user
     return at(pos);
   }
   
@@ -521,8 +544,13 @@ public:
     }
     data_[length_++] = c;
     data_[length_] = TElemType();
-    modified_ = true;
 
+    // If hash WAS already known - update, using accumulation mechanics [OPTIMIZATION]
+    if (!modified_) {
+      if (decltype(length_)(1U) == length_)// if WAS empty 
+        hash_ = MathUtils::getFNV1aStdOffsetBasis(); // prepare hash
+      MathUtils::FNV1aAccumulate(hash_, c); // add last
+    }
     return true;
   }
   
@@ -531,10 +559,11 @@ public:
   TElemType pop_back() throw() {
     if (!length_) return TElemType();
     
-    const char c = data_[length_ - 1U];
-    data_[--length_] = TElemType();
-    modified_ = true;
-
+    const auto c = data_[--length_];
+    data_[length_] = TElemType();
+    // [!] We can NOT simply rollback the hash here, as the number could be easily overflowed
+    //      during the hash code calculation (deaccumulation mechanics MAY did NOT work correctly) [!]
+    length_ <= decltype(length_)() ? clear() : modified_ = true;
     return c;
   }
   
@@ -545,7 +574,7 @@ public:
     static_assert(1U == sizeof(TElemType), "'TElemType' SHOULD be 1 byte long!");
 
     if (modified_) { // recalc. rather then returning cached value
-      hash_ = MathUtils::getFNV1aHash(data_);
+      hash_ = MathUtils::getFNV1aHash(data_); // [!] FNV-1a algo. used NOT ONLY in that func. [!]
       modified_ = false;
     }
     return hash_;
@@ -564,8 +593,18 @@ public:
 
   // NEVER recalculates hash
   // Returns zero if actual hash is unknown OR if str. is empty
+  //  (what if actual hash is zero?? possible very rare case)
   size_t getHashIfKnown() const throw() {
     return modified_ ? size_t() : hash_;
+  }
+
+  // [!] Unsafe! Do NOT use OR use at your own risk [!]
+  bool setHash(const size_t hash) const throw() {
+    if (!modified_) // curr. hash value is relevant
+      assert(hash_ == hash); // DEBUG check ONLY
+    hash_ = hash;
+    modified_ = false;
+    return true;
   }
 
   // Manually setting '\0' is NOT allowed
@@ -575,6 +614,8 @@ public:
     if (c == data_[pos]) return true; // already
 
     data_[pos] = c;
+    // NO way to easily rehash here
+    //  (store a table of the intermediate hashes to simplify the hash code recalc.??)
     modified_ = true;
     return true;
   }
@@ -657,6 +698,8 @@ public:
     }
   }
 
+  //// [!] Using a none-const iterators to change the str. content
+  ////      CAN break hash caching mechanics, so use this at your own risk [!]
   iterator begin() throw() {
     return std::move(iterator(this));
   }
@@ -711,6 +754,22 @@ public:
   
 private:
   
+  template<class TStorageType>
+  // If possible; strs. SHOULD be equal AND use the same hashing algo!
+  bool tryShareHash(const TStorageType& storage) const throw() {
+    if (truncated_ || length() != storage.length()) return false; // NOT fully copied, NOT equal
+    
+    // Using hash code. algo. ID to identify if the same algo. is used by the 'storage' instance
+    // OPTIMIZATION HINT: use C++14 'constexpr' here
+    // HINT: static. check also if the storage str. type size <= sizeof(size_t) (to fit hash.)
+    static const auto SAME_HASHING_ = (hashAlgoID() == hashAlgoID::ExecIfPresent(storage));
+    if (!SAME_HASHING_) return false; // diff. algo.
+    
+    const auto thisHash = getHashIfKnown(); // ONLY if already calculated
+    if (!thisHash) return false; // NOT relevant [a very rare 'relevant zero hash.' error is possible]
+    return setHash::ExecIfPresent(storage, thisHash); // if relevant - share
+  }
+
   // Returns true if the provided address lies withing the internal buffer
   // Used to check buffer overlapping
   bool checkAddrIfInternal(const TElemType* const addr) const throw() {
@@ -725,7 +784,7 @@ private:
   mutable bool modified_;
 
   size_t length_;
-  mutable size_t hash_;
+  mutable size_t hash_; // treat hash. code properly on adding new str. changing routines
 
   TElemType data_[BUF_SIZE];
 };
