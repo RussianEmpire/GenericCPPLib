@@ -1,7 +1,7 @@
 ﻿#ifndef StaticallyBufferedStringLightH
 #define StaticallyBufferedStringLightH
 
-//// [!] Version 1.01 [!]
+//// [!] Version 1.02 [!]
 
 #include "..\..\FuncUtils.h"
 #include "..\..\HashUtils.h"
@@ -97,11 +97,23 @@ public:
     static_assert(!(BUF_SIZE % 8U), "Incorrect 'BUF_SIZE'");
     *this = str; // invoking 'operator=(const TStorageType& str)'
   }
-
+  
+  // Replace the default generated version (just a copy of the templated version)
+  StaticallyBufferedStringLight(const StaticallyBufferedStringLight& str) throw() {
+    static_assert(!(BUF_SIZE % 8U), "Incorrect 'BUF_SIZE'");
+    *this = str; // invoking 'operator=(const TStorageType& str)'
+  }
+  
   // Can't 'steal' resources, so just copying
   //  [http://en.cppreference.com/w/cpp/language/move_constructor]
   template<typename TStorageType>
   StaticallyBufferedStringLight(const TStorageType&& str) throw() {
+    static_assert(!(BUF_SIZE % 8U), "Incorrect 'BUF_SIZE'");
+    *this = std::move(str); // invoking 'operator=(const TStorageType&& str)'
+  }
+
+  // Replace the default generated version (just a copy of the templated version)
+  StaticallyBufferedStringLight(const StaticallyBufferedStringLight&& str) throw() {
     static_assert(!(BUF_SIZE % 8U), "Incorrect 'BUF_SIZE'");
     *this = std::move(str); // invoking 'operator=(const TStorageType&& str)'
   }
@@ -156,7 +168,13 @@ public:
     tryShareHash(str);
     return *this;
   }
-  
+
+  // Replace the default generated version
+  StaticallyBufferedStringLight& operator=(const StaticallyBufferedStringLight& str) throw() {
+    // Invoking 'operator=(const TStorageType& str)'
+    return operator=<StaticallyBufferedStringLight>(str);
+  }
+
   // Can't 'steal' resources, so just copying
   //  [http://en.cppreference.com/w/cpp/language/move_operator]
   template<typename TStorageType>
@@ -165,6 +183,12 @@ public:
     return *this;
   }
   
+  // Replace the default generated version
+  StaticallyBufferedStringLight& operator=(const StaticallyBufferedStringLight&& str) throw() {
+    // Invoking 'operator=(const TStorageType&& str)'
+    return operator=<StaticallyBufferedStringLight>(std::move(str));
+  }
+
   // Make ONE symbol str.
   StaticallyBufferedStringLight& operator=(const TElemType symb) throw() {
     // OPTIMIZATION HINT: remove overhead
