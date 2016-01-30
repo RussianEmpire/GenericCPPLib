@@ -154,18 +154,15 @@ public:
   }
   
   // Compatible with the ANY storage class which has 'TElemType' as an elem. type 
-  //  AND provides the null-terminated str. by the public const member 'c_str'
+  //  AND provides null-terminated str. by the public const member 'c_str'
   //   (like std::string, StaticallyBufferedStringLight<ANY SIZE> etc)
   template<typename TStorageType>
   StaticallyBufferedStringLight& operator=(const TStorageType& str) throw() {
-    /* REDUNDANT due to the existing 'if (str == data_)' check
-        in the 'operator=(const TElemType* const str)'
-
-    // prevents the possible self-copying
-    if (static_cast<void*>(this) == static_cast<const void*>(&str)) return;
-    */
-    *this = str.c_str(); // invoking 'operator=(const TElemType* const str)'
-    tryShareHash(str);
+    // Raw copy should be faster [OPTIMIZATION]
+    if (!tryRawCopyFrom(str)) { // if NOT - do standart copy (with the hash calc.)
+      *this = str.c_str(); // invoking 'operator=(const TElemType* const str)'
+      tryShareHash(str);
+    }
     return *this;
   }
 
@@ -175,10 +172,17 @@ public:
     return operator=<StaticallyBufferedStringLight>(str);
   }
 
-  // Can't 'steal' resources, so just copying
+  // Can't 'steal' resources (transfer ownership, responsibility AND control), so just copying
+  //  (does NOT alters an incoming object, allowing so to past a const)
   //  [http://en.cppreference.com/w/cpp/language/move_operator]
+  // [!] A move assignment operator of class T is a non-template non-static member function
+  //      with the name 'operator=' that takes exactly one parameter of type
+  //       'T&&', 'const T&&', 'volatile T&&', or 'const volatile T&&' [!]
+  // [!] Copying data, so works MUCH slower then the real move of the dynamic objects (std::string) [!]
   template<typename TStorageType>
   StaticallyBufferedStringLight& operator=(const TStorageType&& str) throw() {
+    // Note that a trivial (NOT the default!) move assignment operator performs the same action
+    //  as the trivial copy assignment operator, that is, makes a copy of the object
     *this = str; // invoking 'operator=(const TStorageType& str)'
     return *this;
   }
@@ -288,7 +292,7 @@ public:
         count = spaceLeft - 1U;
         truncated_ = true;
       }
-    #else
+    #else // NOT MS VS
       // Number of characters that properly SHOULD have been written (except terminating null character)
       auto count = snprintf(originEnd, spaceLeft, mask, value);
       if (count < 0) {
@@ -611,6 +615,7 @@ public:
   //  which using the same hash code calculation algorithm [OPTIMIZATION]
   // OPTIMIZATION HINT : use C++14 'constexpr' here
   static size_t hashAlgoID() throw() {
+    // OPTIMIZATION HINT: use C++11 'constexpr' here
     static const size_t ID_ = 'F' + 'N' + 'V' + '-' + '1' + 'a';
     return ID_;
   }
@@ -781,6 +786,9 @@ private:
   template<class TStorageType>
   // If possible; strs. SHOULD be equal AND use the same hashing algo!
   bool tryShareHash(const TStorageType& storage) const throw() {
+    if (static_cast<const void*>(this) == static_cast<const void*>(std::addressof(storage)))
+      return true; // same obj.
+
     if (truncated_ || length() != storage.length()) return false; // NOT fully copied, NOT equal
     
     // Using hash code. algo. ID to identify if the same algo. is used by the 'storage' instance
@@ -792,6 +800,59 @@ private:
     const auto thisHash = getHashIfKnown(); // ONLY if already calculated
     if (!thisHash) return false; // NOT relevant [a very rare 'relevant zero hash.' error is possible]
     return setHash::ExecIfPresent(storage, thisHash); // if relevant - share
+  }
+
+  template<typename TStorageType>
+  // Compatible with the ANY storage class which has 'TElemType' as an elem. type 
+  //  AND provides null-terminated str. by the public const member 'c_str'
+  //   (like std::string, StaticallyBufferedStringLight<ANY SIZE> etc)
+  // Returns false if impossible (use standart 'operator=(const TElemType* const str)' then)
+  bool tryRawCopyFrom(const TStorageType& str) throw() {
+    /* The main idea
+    If 'TStorageType' provides hash code [+other conditions, see below]
+     AND hash code is ALREADY calculated (cached) AND relevant
+      we does NOT need to do step-by-step copying (with the hash code calculation AND then sharing)
+       we can just fast copy whole memory chunk AND inherit other fields value [OPTIMIZATION]
+    */
+    // 'std::decay<const T&>' == 'T'
+    if (!std::is_same<typename std::decay<decltype(*str.c_str())>::type, TElemType>::value)
+      return false; // diff. elem. type (diff. memory representation)
+    
+    // OPTIMIZATION HINT: use C++11 'constexpr' here
+    static const auto SAME_HASHING_ = (hashAlgoID() == hashAlgoID::ExecIfPresent(str));
+    if (!SAME_HASHING_) return false; // diff. algos
+    
+    if (static_cast<const void*>(this) == static_cast<const void*>(std::addressof(str)))
+      return true; // same obj. (nothing to do)
+    
+    const auto otherHash = getHashIfKnown::ExecIfPresent(str);
+    // If other hash is known AND relevant
+    if (!otherHash) return false; // there might happen rare 'zero hash of none empty str.' miss
+    
+    const auto otherLen = str.length();
+    if (otherLen > max_size()) return false; // could NOT copy ALL the data
+    
+    #ifndef _CRT_SECURE_NO_WARNINGS
+      #define CRT_SECURE_NO_WARNINGS_UNDEF_ // if NOT already defined
+      #define _CRT_SECURE_NO_WARNINGS       // MS VS specific (get rid of warning)
+    #endif
+    
+    // 'std::memcpy' is the fastest library routine for memory-to-memory copy
+    //  (SHOULD have an intrinsic form - use '/Oi' MS VS compiler command)
+    //  It is usually more efficient than 'std::strcpy', which must scan the data it copies
+    //   OR 'std::memmove', which must take precautions to handle overlapping inputs
+    std::memcpy(data_, str.c_str(), sizeof(TElemType) * (otherLen + 1U)); // incl. str. terminator
+    
+    #ifdef CRT_SECURE_NO_WARNINGS_UNDEF_
+      #undef _CRT_SECURE_NO_WARNINGS
+    #endif
+    
+    truncated_ = false;
+    modified_ = false;
+    length_ = otherLen;
+    hash_ = otherHash;
+
+    return true;
   }
 
   // Returns true if the provided address lies withing the internal buffer
