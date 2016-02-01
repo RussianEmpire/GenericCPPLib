@@ -1,7 +1,7 @@
 ﻿#ifndef StaticallyBufferedStringLightH
 #define StaticallyBufferedStringLightH
 
-//// [!] Version 1.03 [!]
+//// [!] Version 1.04 [!]
 
 #include "..\..\FuncUtils.h"
 #include "..\..\HashUtils.h"
@@ -393,31 +393,31 @@ public:
     // HINT: static. check also if the storage str. type size <= sizeof(size_t) (to fit hash.)
     static const auto SAME_HASHING_ = (hashAlgoID() == hashAlgoID::ExecIfPresent(str));
     if (SAME_HASHING_) {
-      const auto thisHash = getHashIfKnown(); // ONLY if already calculated
-      if (thisHash) { // if this hash is relevant
+      if (!modified_) { // if this hash is relevant
         // If 'TStorageType' provides hash code 
         //  AND hash code is ALREADY calculated (cached) AND relevant
         //   for the BOTH compared objects - if codes does NOT equal -> 
         //    objects is clearly diffirent (return false)
         // Called ONLY if exists (if NOT - called surrogate which is ALWAYS return zero)
-        const auto otherHash = getHashIfKnown::ExecIfPresent(str);
+        auto otherHashKnown = false;
+        const auto otherHash = getHashIfKnown::ExecIfPresent(str, otherHashKnown);
         // REMEMBER that hash code equivalence does NOT actually means that object are equal
         //  due to the non-nill collison probabilty
-        if (otherHash && otherHash != thisHash) return false; // if other hash is known AND relevant
+        if (otherHashKnown && otherHash != hash_) return false; // other hash is known AND relevant
       }
     }
     static const auto SAME_CHAR_TYPE_ = // remove cv and ref.
       std::is_same<typename std::decay<decltype(*c_str())>::type,
                    typename std::decay<decltype(*str.c_str())>::type>::value;
     auto result = false;
+
     switch (SAME_CHAR_TYPE_) {
-      case true: result = isEqualMemD<>(data_, str.c_str(), sizeof(*data_) * length());
+      case true: result = isEqualMemD<>(data_, str.c_str(), sizeof(*data_) * length()); break;
       // Diff. types: call 'operator==(const TOtherElemType* const str)'
       default: result = (*this == str.c_str());
     }
-    if (result && SAME_HASHING_) { // equal AND uses same hashig algo.
-      const auto thisHash = getHashIfKnown(); // ONLY if already calculated [get possibly updated]
-      if (thisHash) setHash::ExecIfPresent(str, thisHash); // if relevant - share
+    if (SAME_HASHING_ && result) { // uses same hashig algo. AND equal
+      if (!modified_) setHash::ExecIfPresent(str, hash_); // if relevant - share
     }
     return result;
   }
@@ -512,27 +512,28 @@ public:
   }
   
   // 'Modifier' should be 'const' OR empty
-  #define AT(Modifier) \
+  #define AT(Modifier, CompromiseHashFlag) \
   /* The first character in a string is denoted by a value of 0 (not 1)
   If 'pos' is too high - returns the last (on empty str. returns after end)*/\
   Modifier TElemType& at(const size_t pos) Modifier throw() {\
     if (pos >= length())\
       return (length() ? data_[length() - 1U] : *data_); /*no such char - return smth. else*/\
+    if (CompromiseHashFlag)\
+      modified_ = true; /* compromise hash, as there is NO guarantee the content was NOT changed */\
     return data_[pos];\
   };
   
   #define PLACEHOLDER // to remove the warning
-  AT(PLACEHOLDER); // [!] CAN break hash caching mechanics, so use this at your own risk [!]
-  AT(const);
+  AT(PLACEHOLDER, true); // [!] compromises hash, so use ONLY if you really want to change smth. [!]
+  AT(const, false); // use when you want to just access a specific symbol [does NOT compromises hash]
   
   //// [!] If using none-const version of the 'at' OR 'operator[]' etc 
   ////      beware of the inadequate actions such as altering the actual str. len.
   ////       by placing terminator char. in the middle of a sequence [!]
-  //// Bettre use 'setCharAt', which does handling this 
+  //// Better use 'setCharAt', which does handling this 
   ////  AND protects the instance of ANY harmfull effects
 
   TElemType& operator[](const size_t pos) throw() {
-    // Compromise hash manually?? NO, better relay on the end user
     return at(pos);
   }
   
@@ -620,17 +621,49 @@ public:
     return ID_;
   }
 
+  // Used in some specific optimizations
+  //  (do NOT alter unless you are clearly understands what are you doing)
+  static bool isIdealHash() throw() {
+    /*
+    For a 32 bit (4 byte) hash AND
+     a str. which consists of 10 arabic numbers (0..9),
+      26 low XOR upper (ONLY ONE of them) case english symbols (a..z OR A..Z) AND
+       32 types of specific characters like sentence delimiters (.!?) AND others (@#$%^ etc)
+        (total of 68 unique chars)
+         count of unique combinations of 32 bits is 2^32
+          (^ means power, NOT bitwise XOR) = 4 294 967 296
+
+    So we got a simple equaition: 4 294 967 296 = 68^N
+     => N = log68(4 294 967 296)
+
+    According to the logarithm transformation rule 'logX(Y) = logZ(Y)/logZ(X)'
+     (where Z is some positive natural number)
+      transforms the equaition: N = log10(4 294 967 296) / log10(68)
+
+    The answer is: N = 9,633 / 1,833 ~ 5
+
+    So within this restrictions to the available alphabet AND hash size,
+     NO hashing algo. could produce unqie hashes to the strings 6+ symbols long
+    */
+    return false; // still FNV-1a seems to have NO collisions on low-length (1-4) strs
+                  //  (further testing & researching needed)
+  }
+
   // NEVER recalculates hash
-  // Returns zero if actual hash is unknown OR if str. is empty
-  //  (what if actual hash is zero?? possible very rare case)
-  size_t getHashIfKnown() const throw() {
-    return modified_ ? size_t() : hash_;
+  // Returns zero (AND sets 'isKnown' to false) if actual hash is unknown OR if str. is empty
+  size_t getHashIfKnown(bool& isKnown) const throw() {
+    // See https://en.wikipedia.org/wiki/Comma_operator#Complex_return
+    return modified_ ? (isKnown = false, size_t()) : (isKnown = true, hash_);
   }
 
   // [!] Unsafe! Do NOT use OR use at your own risk [!]
   bool setHash(const size_t hash) const throw() {
     if (!modified_) // curr. hash value is relevant
       assert(hash_ == hash); // DEBUG check ONLY
+    // Check actual hash is equal to new [ONLY in the debug mode]
+    assert((modified_ = true,       // compromise, force recalc.
+            this->hash() == hash)); // check new (AND old) hash is correct
+
     hash_ = hash;
     modified_ = false;
     return true;
@@ -706,12 +739,14 @@ public:
     //  we can just check the hash code here [OPTIMIZATION]
     //   (ONLY if the hash code algo. is ALWAYS generates a lager hash for a larger str., FNV-1a is NOT)
     if (SAME_HASHING_ && HashCodeChecker::INSTANCE.hashOfLargerStrLarger) {
-      // Get hash ONLY if already known [OPTIMIZATION]
-      const auto thisHashCached = getHashIfKnown(), otherHashCached = str.getHashIfKnown();
-      if (thisHashCached && otherHashCached && (thisHashCached != otherHashCached)) {
-        // Equal caches does NOT necessary means the strs is actually equal, 
-        //  due to collison probability
-        return thisHashCached < otherHashCached;
+      if (!modified_) { // if this hash is already known
+        auto otherHashKnown = false;
+        const auto otherHashCached = getHashIfKnown::ExecIfPresent(str, otherHashKnown);
+        if (otherHashKnown) { // other cached too
+          // Equal caches does NOT necessary means the strs is actually equal, 
+          //  due to collison probability
+          return hash_ < otherHashCached;
+        }
       }
     }
     static const auto SAME_CHAR_TYPE_ = // remove cv and ref.
@@ -786,20 +821,19 @@ private:
   template<class TStorageType>
   // If possible; strs. SHOULD be equal AND use the same hashing algo!
   bool tryShareHash(const TStorageType& storage) const throw() {
-    if (static_cast<const void*>(this) == static_cast<const void*>(std::addressof(storage)))
-      return true; // same obj.
-
-    if (truncated_ || length() != storage.length()) return false; // NOT fully copied, NOT equal
-    
     // Using hash code. algo. ID to identify if the same algo. is used by the 'storage' instance
-    // OPTIMIZATION HINT: use C++14 'constexpr' here
+    // OPTIMIZATION HINT: use C++11 'constexpr' here
     // HINT: static. check also if the storage str. type size <= sizeof(size_t) (to fit hash.)
     static const auto SAME_HASHING_ = (hashAlgoID() == hashAlgoID::ExecIfPresent(storage));
     if (!SAME_HASHING_) return false; // diff. algo.
+
+    if (static_cast<const void*>(this) == static_cast<const void*>(std::addressof(storage)))
+      return true; // same obj.
+
+    if (modified_ || truncated_ || length() != storage.length())
+      return false; // NOT relevant hash, NOT fully copied, NOT equal
     
-    const auto thisHash = getHashIfKnown(); // ONLY if already calculated
-    if (!thisHash) return false; // NOT relevant [a very rare 'relevant zero hash.' error is possible]
-    return setHash::ExecIfPresent(storage, thisHash); // if relevant - share
+    return setHash::ExecIfPresent(storage, hash_); // if relevant - share
   }
 
   template<typename TStorageType>
@@ -825,13 +859,21 @@ private:
     if (static_cast<const void*>(this) == static_cast<const void*>(std::addressof(str)))
       return true; // same obj. (nothing to do)
     
-    const auto otherHash = getHashIfKnown::ExecIfPresent(str);
-    // If other hash is known AND relevant
-    if (!otherHash) return false; // there might happen rare 'zero hash of none empty str.' miss
+    auto otherHashKnown = false;
+    const auto otherHash = getHashIfKnown::ExecIfPresent(str, otherHashKnown);
+    if (!otherHashKnown) return false; // if other hash is NOT known NOR relevant
     
     const auto otherLen = str.length();
     if (otherLen > max_size()) return false; // could NOT copy ALL the data
     
+    // Rare AND specific optimization, skipped in a very most cases
+    // If NO collisions AND BOTH hash AND length of the two objects are equal
+    //  [AND same hash algo. is used AND both hashes is known AND relevant]
+    //   considering this objects already equal too (so NO action required, skip copying)
+    if (isIdealHash() && length() == otherLen && !modified_ && hash_ == otherHash) return true;
+    // [!] REMEMBER that hash code equivalence does NOT actually means that object are equal
+    //      due to the non-nill collison probabilty [!]
+
     #ifndef _CRT_SECURE_NO_WARNINGS
       #define CRT_SECURE_NO_WARNINGS_UNDEF_ // if NOT already defined
       #define _CRT_SECURE_NO_WARNINGS       // MS VS specific (get rid of warning)
