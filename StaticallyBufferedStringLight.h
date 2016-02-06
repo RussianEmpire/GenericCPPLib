@@ -1,7 +1,7 @@
 ﻿#ifndef StaticallyBufferedStringLightH
 #define StaticallyBufferedStringLightH
 
-//// [!] Version 1.04 [!]
+//// [!] Version 1.041 [!]
 
 #include "..\..\FuncUtils.h"
 #include "..\..\HashUtils.h"
@@ -11,9 +11,22 @@
 #include "GenericRAIterator.h"
 #include "HashCodeChecker.h"
 
-EXEC_MEMBER_FUNC_IF_PRESENT(getHashIfKnown, size_t())
-EXEC_MEMBER_FUNC_IF_PRESENT(hashAlgoID, size_t())
-EXEC_MEMBER_FUNC_IF_PRESENT(setHash, false)
+//// Define guard used to avoid multiple definitions
+
+#ifndef getHashIfKnown_EXEC_MEMBER_FUNC_IF_PRESENT_
+  #define getHashIfKnown_EXEC_MEMBER_FUNC_IF_PRESENT_
+  EXEC_MEMBER_FUNC_IF_PRESENT(getHashIfKnown, size_t())
+#endif
+
+#ifndef hashAlgoID_EXEC_MEMBER_FUNC_IF_PRESENT_
+  #define hashAlgoID_EXEC_MEMBER_FUNC_IF_PRESENT_
+  EXEC_MEMBER_FUNC_IF_PRESENT(hashAlgoID, size_t())
+#endif
+
+#ifndef setHash_EXEC_MEMBER_FUNC_IF_PRESENT_
+  #define setHash_EXEC_MEMBER_FUNC_IF_PRESENT_
+  EXEC_MEMBER_FUNC_IF_PRESENT(setHash, false)
+#endif
 
 //// Forward declaration
 class HashCodeChecker;
