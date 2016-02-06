@@ -1,10 +1,25 @@
 ﻿#ifndef FuncUtilsH
 #define FuncUtilsH
 
-//// [!] Version 1.01 [!]
+//// [!] Version 1.011 [!]
 
 #include <utility>     // for 'std::move', 'std::forward'
 #include <type_traits> // for 'std::is_same'
+
+/* Use following define guard to avoid multiple definitions:
+
+#ifndef <func. / proc. name>_EXEC_MEMBER_<FUNC / PROC>_IF_PRESENT_
+  #define <func. / proc. name>_EXEC_MEMBER_<FUNC / PROC>_IF_PRESENT_
+  EXEC_MEMBER_<FUNC / PROC>_IF_PRESENT(<func. / proc. name>, <default val.>)
+#endif
+
+Example:
+
+#ifndef getHashIfKnown_EXEC_MEMBER_FUNC_IF_PRESENT_
+  #define getHashIfKnown_EXEC_MEMBER_FUNC_IF_PRESENT_
+  EXEC_MEMBER_FUNC_IF_PRESENT(getHashIfKnown, size_t())
+#endif
+*/
 
 //// A functor (Function Object) CAN also be possibly used as a 'ProcName' OR 'FuncName'
 #define EXEC_MEMBER_PROC_IF_PRESENT(ProcName) namespace ProcName {\
