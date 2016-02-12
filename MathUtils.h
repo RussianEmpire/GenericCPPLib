@@ -1,7 +1,7 @@
 ﻿#ifndef MathUtilsH
 #define MathUtilsH
 
-//// [!] Version 1.011 [!]
+//// [!] Version 1.012 [!]
 
 #include "..\..\TypeHelpers.h"
 
@@ -415,6 +415,7 @@ public:
   
   /*
   [!] OPTIMIZATION: use standart C++ bit fields (http://en.cppreference.com/w/cpp/language/bit_field) [!]
+  [!] Remember about bit/byte endianness, type sizes AND alignment (padding) [!]
   
   template <typename TDataType,
           const size_t Part1Size, const size_t Part2Size, const size_t Part3Size, const size_t Part4Size, 
@@ -1020,13 +1021,13 @@ public:
     BitOrderTester() throw() {
       // sizeof(char) SHOULD be ALWAYS 1U, due to the CPP standart
       static_assert(sizeof(char) == 1U, "'char' type is NOT 1 byte large!");
-      static_assert(sizeof(int) > sizeof('A'), "Too small 'int' size");
-
+      static_assert(sizeof(size_t) > sizeof('A'), "Too small 'int' size");
+      
       union Converter {
         size_t i;
         unsigned char c[sizeof(decltype(i))];
       } converter = {};
-      
+       
       *converter.c = 'A'; // sets zero byte - then test is zero byte LSB OR MSB
       // true if zero byte considered LSB (least significant byte)
       //  => the bit order is left <- right (last byte is MSB - most significant byte)
