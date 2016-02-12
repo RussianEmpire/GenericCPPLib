@@ -1,7 +1,7 @@
 ﻿#ifndef MathUtilsH
 #define MathUtilsH
 
-//// [!] Version 1.01 [!]
+//// [!] Version 1.011 [!]
 
 #include "..\..\TypeHelpers.h"
 
@@ -1023,13 +1023,13 @@ public:
       static_assert(sizeof(int) > sizeof('A'), "Too small 'int' size");
 
       union Converter {
-        int i;
-        char c[sizeof(decltype(i))];
-      } converter = {0};
-
+        size_t i;
+        unsigned char c[sizeof(decltype(i))];
+      } converter = {};
+      
       *converter.c = 'A'; // sets zero byte - then test is zero byte LSB OR MSB
       // true if zero byte considered LSB (least significant byte)
-      //  => the bit order is left <- right (3-th byte is MSB - most significant byte)
+      //  => the bit order is left <- right (last byte is MSB - most significant byte)
       reversedBitOrder = ('A' == converter.i);
       // See C example here: https://ru.wikipedia.org/wiki/Порядок_байтов
     }
