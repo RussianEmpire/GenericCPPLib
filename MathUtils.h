@@ -1,7 +1,7 @@
 ﻿#ifndef MathUtilsH
 #define MathUtilsH
 
-//// [!] Version 1.012 [!]
+//// [!] Version 1.014 [!]
 
 #include "..\..\TypeHelpers.h"
 
@@ -768,7 +768,7 @@ public:
   // After return 'num' will hold the rest data which is NOT fitted into the 'results' array
   static void parseNum(unsigned long long int& num,
                        const size_t divider, const size_t* const dividers,
-                       size_t* const results, size_t& resultsCount) throw()
+                       unsigned long long int* const results, size_t& resultsCount) throw()
   {
     if (!results || !resultsCount) {
       resultsCount = 0U;
@@ -813,6 +813,10 @@ public:
     static const char* const RU_SHORT_POSTFIXES[] =
       {"сек", "мин", "час", "дн", "мес", "лет", "век", "тыс"};
 
+    static_assert(sizeof(ENG_LONG_POSTFIXES) == sizeof(ENG_SHORT_POSTFIXES) &&
+                  sizeof(RU_LONG_POSTFIXES) == sizeof(RU_SHORT_POSTFIXES) &&
+                  sizeof(ENG_LONG_POSTFIXES) == sizeof(RU_LONG_POSTFIXES),
+                  "Arrays of postfixes SHOULD have the same size"); // check elems count
     static const auto COUNT = std::extent<decltype(ENG_LONG_POSTFIXES)>::value;
 
     auto getPostfix = [&](const size_t idx) throw() {
@@ -826,13 +830,13 @@ public:
       {60U, 60U, 24U, 30U, 12U, 100U, 10U};
     //                 ^ Month last approximately 29.53 days
     
-    size_t timings[COUNT]; // = {0}
+    unsigned long long int timings[COUNT]; // = {0}
     auto timingsCount = std::extent<decltype(DIVIDERS)>::value;
     
     if (!timeInSecs) { // zero secs
       *timings = 0U;
       timingsCount = 1U;
-    } else parseNum(timeInSecs, 0U, DIVIDERS, timings, timingsCount);
+    } else parseNum(timeInSecs, 0UL, DIVIDERS, timings, timingsCount);
     
     bool prev = !(str.empty());
     char strBuf[32U];
@@ -845,7 +849,7 @@ public:
       str += ' ';
       str += getPostfix(COUNT - 1U);
     }
-    for (auto timingIdx = timingsCount - 1U; timingIdx < timingsCount; --timingIdx) {
+    for (auto timingIdx = timingsCount - 1UL; ; --timingIdx) {
       if (timings[timingIdx]) { // if NOT zero
         sprintf(strBuf, "%llu", timings[timingIdx]);
         
@@ -854,6 +858,7 @@ public:
         str += ' ';
         str += getPostfix(timingIdx);
       }
+      if (!timingIdx) break; // last
     }
     return str;
   }
@@ -1008,17 +1013,17 @@ public:
     return ReverseBits<decltype(num), TPartType, ReverseBitsInWordFunctor>(num);
   }
 
-  class BitOrderTester {
+  class ByteOrderTester {
 
   public:
 
-    static const BitOrderTester INSTANCE;
+    static const ByteOrderTester INSTANCE;
 
-    bool reversedBitOrder = false; // little-endian
+    bool reversedOrder = false; // little-endian
 
   private:
     
-    BitOrderTester() throw() {
+    ByteOrderTester() throw() {
       // sizeof(char) SHOULD be ALWAYS 1U, due to the CPP standart
       static_assert(sizeof(char) == 1U, "'char' type is NOT 1 byte large!");
       static_assert(sizeof(size_t) > sizeof('A'), "Too small 'int' size");
@@ -1027,20 +1032,20 @@ public:
         size_t i;
         unsigned char c[sizeof(decltype(i))];
       } converter = {};
-       
+      
       *converter.c = 'A'; // sets zero byte - then test is zero byte LSB OR MSB
       // true if zero byte considered LSB (least significant byte)
       //  => the bit order is left <- right (last byte is MSB - most significant byte)
-      reversedBitOrder = ('A' == converter.i);
+      reversedOrder = ('A' == converter.i);
       // See C example here: https://ru.wikipedia.org/wiki/Порядок_байтов
     }
 
-    ~BitOrderTester() = default;
+    ~ByteOrderTester() = default;
 
-    BitOrderTester(const BitOrderTester&) throw() = delete;
-    BitOrderTester(BitOrderTester&&) throw() = delete;
-    BitOrderTester& operator=(const BitOrderTester&) throw() = delete;
-    BitOrderTester& operator=(BitOrderTester&&) throw() = delete;
+    ByteOrderTester(const ByteOrderTester&) throw() = delete;
+    ByteOrderTester(ByteOrderTester&&) throw() = delete;
+    ByteOrderTester& operator=(const ByteOrderTester&) throw() = delete;
+    ByteOrderTester& operator=(ByteOrderTester&&) throw() = delete;
   };
 
   enum class ECompareStrategy {
@@ -1101,7 +1106,7 @@ public:
     if (ECompareStrategy::CS_SHUFFLE_DIVERGENT == cmpStrat && iterCountIsEven) {
       elem1 = *chunk1Re, elem2 = *chunk2Re;
       // If 'KeepByteOrder' used for strs lower cmp.
-      if (KeepByteOrder && BitOrderTester::INSTANCE.reversedBitOrder) {
+      if (KeepByteOrder && ByteOrderTester::INSTANCE.reversedOrder) {
         ReverseBytes(elem1), ReverseBytes(elem2);
       }
       if (elem1 != elem2) // compare first elems
@@ -1145,7 +1150,7 @@ public:
     for (size_t iterIdx = 0U; iterIdx < iterCount; ++iterIdx) {
       elem1 = *chunk1Re, elem2 = *chunk2Re;
       // 'KeepByteOrder' used for strs lower cmp.
-      if (KeepByteOrder && BitOrderTester::INSTANCE.reversedBitOrder) {
+      if (KeepByteOrder && ByteOrderTester::INSTANCE.reversedOrder) {
         ReverseBytes(elem1), ReverseBytes(elem2);
       }
       if ((stopAtZeroBlock && !elem1) || elem1 != elem2)
