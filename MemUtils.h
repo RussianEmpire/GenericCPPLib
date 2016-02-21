@@ -1,6 +1,8 @@
 ﻿#ifndef MemUtilsH
 #define MemUtilsH
 
+//// [!] Version 1.001 [!]
+
 #include "TypeHelpers.h"
 #include "HardwareUtils.h"
 
@@ -38,7 +40,7 @@ typename IntegralTypeBySize<CmpChunkSize, true>::Type
   }
 }
 
-template<const size_t CmpChunkSize = sizeof(std::uintptr_t), // in bytes
+template<const size_t CmpChunkSize = 4U, // in bytes; [sizeof(std::uintptr_t) in 32 bit sys.]
          // As 'memcmp' by default (http://www.cplusplus.com/reference/cstring/memcmp/)
          const bool SignedCmpChunk = false>
 // [!] Does NOT checks an incoming args. on validity [!]

@@ -1,7 +1,7 @@
 ﻿#ifndef StaticallyBufferedStringLightH
 #define StaticallyBufferedStringLightH
 
-//// [!] Version 1.041 [!]
+//// [!] Version 1.042 [!]
 
 #include "..\..\FuncUtils.h"
 #include "..\..\HashUtils.h"
@@ -228,7 +228,8 @@ public:
   // Compatible with the ANY storage class which provides the null-terminated str. 
   //  by the public const member 'c_str'
   //   (like std::string, StaticallyBufferedStringLight<ANY SIZE> etc)
-  template<class TStorageType>
+  template<class TStorageType,
+           typename = typename std::enable_if<std::is_class<TStorageType>::value>::type>
   StaticallyBufferedStringLight& operator+=(const TStorageType& str) throw() {
     *this += str.c_str(); // invoking 'operator+=(const TElemType* const str)'
     tryShareHash(str);
@@ -605,7 +606,10 @@ public:
     data_[length_] = TElemType();
     // [!] We can NOT simply rollback the hash here, as the number could be easily overflowed
     //      during the hash code calculation (deaccumulation mechanics MAY did NOT work correctly) [!]
-    length_ <= decltype(length_)() ? clear() : modified_ = true;
+    if (length_ <= decltype(length_)()) {
+      clear();
+    } else modified_ = true;
+
     return c;
   }
   

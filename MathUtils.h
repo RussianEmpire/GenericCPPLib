@@ -1,7 +1,7 @@
 ﻿#ifndef MathUtilsH
 #define MathUtilsH
 
-//// [!] Version 1.014 [!]
+//// [!] Version 1.015 [!]
 
 #include "..\..\TypeHelpers.h"
 
@@ -972,10 +972,10 @@ public:
     typedef std::decay<decltype(*LOOKUP_TABLE)>::type TPartType;
     static const auto COUNT = std::extent<decltype(LOOKUP_TABLE)>::value;
 
-    static std::atomic<bool> LOOKUP_TABLE_FILLED = false;
+    static std::atomic<bool> LOOKUP_TABLE_FILLED(false);
     static std::mutex MUTEX;
 
-    auto fillLookupTable = [&]() throw() {
+    auto fillLookupTable = [&]() throw() -> void {
       
       union Separator {
         TPartType ui;
