@@ -41,6 +41,11 @@ public:
   // TO DO: add fractional numbers support ("минус ??? целых ??? <тысячных>")
   //  (see Fractions and decimals:
   //   http://en.wikipedia.org/wiki/English_numerals#Fractions_and_decimals)
+  /* 123,456 = [http://eng5.ru/en/numbers_translation]
+     [RU] сто двадцать три целые четыреста пятьдесят шесть тысячных
+     [BE] one hundred and twenty-three point four five six 
+     [AE] one hundred twenty-three point four five six
+  */
   // TO DO: add ordinal numbers support
   //  (http://en.wikipedia.org/wiki/English_numerals#Ordinal_numbers)
   // TO DO: add multiplicative adverbs support
