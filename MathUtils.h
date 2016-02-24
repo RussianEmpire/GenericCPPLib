@@ -1,7 +1,7 @@
 ﻿#ifndef MathUtilsH
 #define MathUtilsH
 
-//// [!] Version 1.015 [!]
+//// [!] Version 1.016 [!]
 
 #include "..\..\TypeHelpers.h"
 
@@ -181,6 +181,17 @@ public:
     return num / static_cast<TNumType>(getTenPositiveDegree(count - n)); // reduce
   }
   
+  // [!] Involves precison penalty on 'fractPart'
+  //      (999999999.99999905 -> 999999999.99999904632568359), use standart C 'modf' instead [!]
+  // [http://stackoverflow.com/questions/2594913/getting-the-fractional-part-of-a-float-without-using-modf]
+  // Separates fraction on integral AND fractional parts
+  // [!] Both parts will be non-negative regardless of the original num. sign. [!]
+  static void separateNum(double num, unsigned long long int& intPart, double& fractPart) throw() {
+    if (num < 0.0) num = -num; // revert; [std::abs]
+    intPart = static_cast<std::decay<decltype(intPart)>::type>(num);
+    fractPart = num - static_cast<double>(intPart);
+  }
+
   // [!] Do NOT confuse this with the std. C++ keyword 'xor'
   //  (which is an alias for the bitwise operator '^') [!]
   // Better use in logic utils
@@ -605,11 +616,11 @@ public:
     ////   See additional info here: https://msdn.microsoft.com/en-us/library/bb384809.aspx
     ////    http://x86.renejeschke.de/html/file_module_x86_id_20.html,
     ////     https://msdn.microsoft.com/ru-ru/library/hskdteyh.aspx
-    static const auto LZCNT_OK =
+    static auto LZCNT_OK =
       (32U == __lzcnt(0x0U) && 24U == __lzcnt(0xFFU) && 16U == __lzcnt(0xFFFFU));
-    static const auto BSR_OK =
+    static auto BSR_OK = // 'FF' is a one byte (255), 'FFFF' is two (65535) etc
       (7U == __lzcnt(0xFFU) && 15U == __lzcnt(0xFFFFU) && 31U == __lzcnt(0xFFFFFFFFU));
-    static const auto ANYONE_OK = XOR(LZCNT_OK, BSR_OK);
+    static auto ANYONE_OK = XOR(LZCNT_OK, BSR_OK);
 
     if (!ANYONE_OK) { // some WTF error
       *strBuf = '\0';
@@ -1017,28 +1028,13 @@ public:
 
   public:
 
-    static const ByteOrderTester INSTANCE;
+    static ByteOrderTester INSTANCE;
 
-    bool reversedOrder = false; // little-endian
+    const bool reversedOrder; // little-endian
 
   private:
     
-    ByteOrderTester() throw() {
-      // sizeof(char) SHOULD be ALWAYS 1U, due to the CPP standart
-      static_assert(sizeof(char) == 1U, "'char' type is NOT 1 byte large!");
-      static_assert(sizeof(size_t) > sizeof('A'), "Too small 'int' size");
-      
-      union Converter {
-        size_t i;
-        unsigned char c[sizeof(decltype(i))];
-      } converter = {};
-      
-      *converter.c = 'A'; // sets zero byte - then test is zero byte LSB OR MSB
-      // true if zero byte considered LSB (least significant byte)
-      //  => the bit order is left <- right (last byte is MSB - most significant byte)
-      reversedOrder = ('A' == converter.i);
-      // See C example here: https://ru.wikipedia.org/wiki/Порядок_байтов
-    }
+    ByteOrderTester() throw() : reversedOrder(isReversedOrder()) {}
 
     ~ByteOrderTester() = default;
 
@@ -1046,6 +1042,22 @@ public:
     ByteOrderTester(ByteOrderTester&&) throw() = delete;
     ByteOrderTester& operator=(const ByteOrderTester&) throw() = delete;
     ByteOrderTester& operator=(ByteOrderTester&&) throw() = delete;
+
+    static bool isReversedOrder() throw() {
+      // sizeof(char) SHOULD be ALWAYS 1U, due to the CPP standart
+      static_assert(sizeof(char) == 1U, "'char' type is NOT 1 byte large!");
+      static_assert(sizeof(size_t) > sizeof('A'), "Too small 'int' size");
+
+      union Converter {
+        size_t i;
+        unsigned char c[sizeof(decltype(i))];
+      } converter = {};
+
+      *converter.c = 'A'; // sets zero byte - then test is zero byte LSB OR MSB
+      // true if zero byte considered LSB (least significant byte)
+      //  => the bit order is left <- right (last byte is MSB - most significant byte)
+      return 'A' == converter.i; // see C example here: https://ru.wikipedia.org/wiki/Порядок_байтов
+    }
   };
 
   enum class ECompareStrategy {
