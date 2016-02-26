@@ -14,9 +14,6 @@
 #include <limits>
 #include <algorithm>
 
-// ---
-#include <iostream>
-
 // Abstract
 // [!] In C++14 many of this funcs can be 'constexpr' [!]
 class MathUtils {
