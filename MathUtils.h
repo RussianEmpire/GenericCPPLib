@@ -1,7 +1,7 @@
 ﻿#ifndef MathUtilsH
 #define MathUtilsH
 
-//// [!] Version 1.017 [!]
+//// [!] Version 1.018 [!]
 
 #include "..\..\TypeHelpers.h"
 
@@ -14,6 +14,9 @@
 #include <limits>
 #include <algorithm>
 
+// ---
+#include <iostream>
+
 // Abstract
 // [!] In C++14 many of this funcs can be 'constexpr' [!]
 class MathUtils {
@@ -23,6 +26,7 @@ public:
   static const double DEFAULT_CMP_EPSILON_NEIGHBORHOOD_;
 
   // Epsilon-neighborhood: https://en.wikipedia.org/wiki/Neighbourhood_(mathematics)#In_a_metric_space
+  // Complexity: constant O(1)
   static bool isEqualFractions(const double& fract1, const double& fract2,
                                const double& eps = DEFAULT_CMP_EPSILON_NEIGHBORHOOD_) throw()
   {
@@ -196,10 +200,157 @@ public:
   // [http://stackoverflow.com/questions/2594913/getting-the-fractional-part-of-a-float-without-using-modf]
   // Separates fraction on integral AND fractional parts
   // [!] Both parts will be non-negative regardless of the original num. sign. [!]
+  // Complexity: constant O(1)
   static void separateNum(double num, unsigned long long int& intPart, double& fractPart) throw() {
     if (num < 0.0) num = -num; // revert; [std::abs]
     intPart = static_cast<std::decay<decltype(intPart)>::type>(num);
     fractPart = num - static_cast<double>(intPart);
+  }
+
+  struct SeparateFractionData {
+    
+    SeparateFractionData(const long double fract_,
+                         const char** const errMsg_ = nullptr,
+                         char* const strBuf_ = nullptr, const size_t strBufSize_ = size_t()) throw()
+      : fract(fract_), errMsg(errMsg_), strBuf(strBuf_), strBufSize(strBufSize_)
+    {}
+    
+    ~SeparateFractionData() = default;
+
+    long double fract;
+
+    unsigned long long int intPart;
+    size_t intPartLen; // in digits [NOT including sign], at least one each (0.0)
+
+    // CAN have a precison penalty (12345.54321 -> 5432099999998174 instead of 54321)
+    unsigned long long int fractPart;
+    size_t fractPartlen;
+    size_t fractPartZeroesAheadSkippedCount;
+
+    size_t totalLen; // of the result str.
+    char fractionDelim = '.'; // OR ','
+
+    //// Optional
+
+    size_t errCount;
+    const char** errMsg = nullptr;
+
+    char* strBuf = nullptr;
+    size_t strBufSize = size_t();
+
+  private:
+
+    //// Drop as ref. can NOT be copied
+    SeparateFractionData(const SeparateFractionData&) throw() = delete;
+    SeparateFractionData(SeparateFractionData&&) throw() = delete;
+    SeparateFractionData& operator=(const SeparateFractionData&) throw() = delete;
+    SeparateFractionData& operator=(SeparateFractionData&&) throw() = delete;
+  };
+  
+  // [!] Involves precision penalty (like 'std::modf'), use standart 'sprintf' to get rid of it [!]
+  // Separate fraction, get it's integral AND fractional parts as a two unsigned ints (+ other data)
+  //  AND convert it to a str. (if correct buffer provided)
+  // [!] Remember about the int. type capacity limit which is ~1e20 (far less then double's 1e308) [!]
+  // Returns buf.; recommanded buf. size is at least 48 (20 + 20 + 2)
+  // Check 'errMsg' if ANY problem occured
+  //  (it will hold the LAST error msg., while func. will try to persevere)
+  // Returns false on ANY error
+  // Complexity: linear in the number's digit count
+  //  (INCLUDING additional digits from the precision penalty)
+  static bool separateFraction(SeparateFractionData& data) throw() {
+    auto strBuf_ = data.strBuf;
+    data.errCount = decltype(data.errCount)(); // reset
+
+    //// Separate
+    size_t signLen;
+    if (data.fract < 0.0L) { // if negative
+      data.fract = -data.fract; // revert [std::abs]
+      signLen = size_t(1U);
+    } else signLen = size_t();
+    long double intPartFraction;
+    long double fractPartFraction = std::modfl(data.fract, &intPartFraction);
+    
+    //// Check borders & set int. part (zeroise if too big)
+    static const auto VAL_UP_LIMIT_ = 18446744073709500000.0L; // ~ 2^64 [ULL]
+    if (data.fract > VAL_UP_LIMIT_) { // possible overflow
+      data.intPart = std::decay<decltype(data.intPart)>::type(); // reset
+      ++data.errCount;
+      if (data.errMsg) *data.errMsg = "too big value";
+    } else data.intPart = static_cast<decltype(data.intPart)>(intPartFraction);
+
+    //// Get int. part str. (if possible)
+    size_t currDigit;
+    const size_t intPartRealLen = static_cast<size_t>(std::log10(intPartFraction)) + size_t(1U);
+    auto tooShortOrNoBuf = false;
+    if (strBuf_) {
+      if (data.strBufSize > (intPartRealLen + signLen)) { // +1 for str. terminator
+        if (signLen) *strBuf_++ = '-';
+        auto const intPartBufEnd = strBuf_ + intPartRealLen;
+        strBuf_ = intPartBufEnd; // reversed filling
+        auto intPartRestLen = intPartRealLen;
+        while (intPartRestLen--) { // while int. part
+          currDigit = static_cast<decltype(currDigit)>(std::fmod(intPartFraction, 10.0L));
+          *--strBuf_ = currDigit + '0';
+          intPartFraction /= 10.0L;
+        }
+        strBuf_ = intPartBufEnd;
+      } else { // NOT enough free space
+        tooShortOrNoBuf = true;
+        ++data.errCount;
+        if (data.errMsg) *data.errMsg = "too short buffer";
+      }
+    } else tooShortOrNoBuf = true;
+    data.intPartLen = data.intPart ? intPartRealLen : decltype(data.intPartLen)(1U);
+
+    //// Get fract. part (AND fract. part str. if possible)
+
+    data.fractPart = decltype(data.fractPart)(); // reset
+    data.fractPartlen = decltype(data.fractPartlen)() + size_t(1U);
+    data.fractPartZeroesAheadSkippedCount = decltype(data.fractPartZeroesAheadSkippedCount)();
+    if (fractPartFraction) { // if exist
+      auto const strBufLast =
+        data.strBuf ? data.strBuf + data.strBufSize - size_t(1U) : nullptr;
+
+      //// Try add separator
+      if (strBuf_ < strBufLast) // if there still free space
+        *strBuf_++ = data.fractionDelim; // '1.' OR '.1' is OK
+
+      //// Main processing cycle
+      long double temp;
+      while (true) {
+        fractPartFraction *= 10.0L;
+        currDigit = static_cast<decltype(currDigit)>(std::fmod(fractPartFraction, 10.0L));
+        // An IEEE double has 53 significant bits (that's the value of DBL_MANT_DIG in <cfloat>)
+        // That's approximately 15.95 decimal digits (log10(2^53))
+        //  the implementation sets 'DBL_DIG' to 15, not 16, because it has to round down
+        data.fractPart += currDigit; // ULL can hold up to a 19 digits, so it SHOULD be ok
+        
+        //// Get fract. part str. (if possible)
+        if (!tooShortOrNoBuf) { // buf presented AND contains free
+          if (strBuf_ < strBufLast) { // last one for a str. terminator
+            *strBuf_++ = currDigit + '0';
+          } else { // NOT enough free space
+            tooShortOrNoBuf = true;
+            ++data.errCount;
+            if (data.errMsg) *data.errMsg = "too short buffer";
+          }
+        }
+        if (!std::modfl(fractPartFraction, &temp)) break; // NO fract. part
+        if (data.fractPart) { // skip zeroes ahead
+          data.fractPart *= size_t(10U);
+          ++data.fractPartlen;
+        } else ++data.fractPartZeroesAheadSkippedCount;
+      };
+    }
+    if (strBuf_ && data.strBufSize) *strBuf_ = '\0'; // finalize
+    data.totalLen = strBuf_ - data.strBuf;
+
+    if (data.errCount) { // if errors
+      return false;
+    } else { // NO error
+      if (data.errMsg) *data.errMsg = "";
+      return true;
+    }
   }
 
   // [!] Do NOT confuse this with the std. C++ keyword 'xor'
