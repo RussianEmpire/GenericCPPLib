@@ -1,7 +1,7 @@
 ﻿#ifndef MathUtilsH
 #define MathUtilsH
 
-//// [!] Version 1.019 [!]
+//// [!] Version 1.020 [!]
 
 #include "..\..\TypeHelpers.h"
 
@@ -23,6 +23,7 @@ public:
   static const long double DEFAULT_CMP_EPSILON_NEIGHBORHOOD_;
 
   // Epsilon-neighborhood: https://en.wikipedia.org/wiki/Neighbourhood_(mathematics)#In_a_metric_space
+  // 'long double' precision: 'LDBL_EPSILON'
   // Complexity: constant O(1)
   template<typename TType1, typename TType2>
   static bool isApproxEqual(const TType1& val1, const TType2& val2,
@@ -301,7 +302,9 @@ public:
     data.intPartLen = data.intPart ? intPartRealLen : decltype(data.intPartLen)(1U);
 
     //// Get fract. part (AND fract. part str. if possible)
-
+    // 64 bit ULL can hold up to a 19 digits ONLY
+    //  (while 'long double' type can have up to 'LDBL_DECIMAL_DIG' after '.')
+    static const auto PART_LEN_LIMIT_ = size_t(20U);
     data.fractPart = decltype(data.fractPart)(); // reset
     data.fractPartlen = decltype(data.fractPartlen)() + size_t(1U);
     data.fractPartZeroesAheadSkippedCount = decltype(data.fractPartZeroesAheadSkippedCount)();
@@ -315,7 +318,7 @@ public:
 
       //// Main processing cycle
       long double temp;
-      while (true) {
+      while (data.fractPartlen < PART_LEN_LIMIT_) {
         fractPartFraction *= 10.0L;
         currDigit = static_cast<decltype(currDigit)>(std::fmod(fractPartFraction, 10.0L));
         // An IEEE double has 53 significant bits (that's the value of DBL_MANT_DIG in <cfloat>)
