@@ -1,6 +1,6 @@
 ﻿#include "BitUtils.h"
 
-const double MathUtils::DEFAULT_CMP_EPSILON_NEIGHBORHOOD_ = 1e-9;
+const long double MathUtils::DEFAULT_CMP_EPSILON_NEIGHBORHOOD_ = 1e-9L;
 
 MathUtils::ByteOrderTester MathUtils::ByteOrderTester::INSTANCE;
 

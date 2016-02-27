@@ -1,7 +1,7 @@
 ﻿#ifndef MathUtilsH
 #define MathUtilsH
 
-//// [!] Version 1.018 [!]
+//// [!] Version 1.019 [!]
 
 #include "..\..\TypeHelpers.h"
 
@@ -20,15 +20,16 @@ class MathUtils {
 
 public:
 
-  static const double DEFAULT_CMP_EPSILON_NEIGHBORHOOD_;
+  static const long double DEFAULT_CMP_EPSILON_NEIGHBORHOOD_;
 
   // Epsilon-neighborhood: https://en.wikipedia.org/wiki/Neighbourhood_(mathematics)#In_a_metric_space
   // Complexity: constant O(1)
-  static bool isEqualFractions(const double& fract1, const double& fract2,
-                               const double& eps = DEFAULT_CMP_EPSILON_NEIGHBORHOOD_) throw()
+  template<typename TType1, typename TType2>
+  static bool isApproxEqual(const TType1& val1, const TType2& val2,
+                            const long double& eps = DEFAULT_CMP_EPSILON_NEIGHBORHOOD_) throw()
   {
     // https://ru.wikipedia.org/wiki/Эпсилон-окрестность
-    return std::abs(fract1 - fract2) < std::abs(eps);
+    return std::abs(val1 - val2) < std::abs(eps);
   }
 
   // Up to 10^18; returns zero if degree > 18
