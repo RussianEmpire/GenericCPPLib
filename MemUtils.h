@@ -1,12 +1,15 @@
 ﻿#ifndef MemUtilsH
 #define MemUtilsH
 
-//// [!] Version 1.002 [!]
+//// [!] Version 1.003 [!]
 
+namespace MemUtils {
 #ifndef AUTO_ADJUST_MEM
   #define AUTO_ADJUST_MEM(MemSize, Alignment) (MemSize) + (((MemSize) % (Alignment)) ?\
-                                                           ((Alignment) - ((MemSize) % (Alignment))) : 0U)
+                                                           ((Alignment) - ((MemSize) % (Alignment)))\
+                                                           : 0U)
 #endif
+};
 
 #include "TypeHelpers.h"
 #include "HardwareUtils.h"
