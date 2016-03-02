@@ -699,7 +699,7 @@ public:
     return true;
   }
   
-  // Constrcation, assertion OR appending strs can cause data truncation 
+  // Construction, assertion OR appending strs can cause data truncation 
   //  due to the strictly limited size of the internal buffer
   //   in case of the incoming data truncation occures appropriated flag will be set 
   //    AND this func. will return true
