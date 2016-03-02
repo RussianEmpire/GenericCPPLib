@@ -46,7 +46,8 @@ char* WinAPIUtils::getErrorMsg(char* const msgBuf, const size_t bufSize,
   char* currCharPtr = msgBuf + (count - 1U);
   while (' ' == *currCharPtr || '.' == *currCharPtr)
     *currCharPtr-- = '\0'; // erase end spacers and point
-  if (fromLowerCase) *msgBuf = tolower(*msgBuf);
+  if (fromLowerCase)
+    *msgBuf = static_cast<std::decay<decltype(*msgBuf)>::type>(tolower(*msgBuf));
   
   return msgBuf;
 }

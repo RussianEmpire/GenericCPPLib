@@ -75,7 +75,6 @@ private:
     // Check if bit is signaled
     return 0U != (LONG_MODE_BIT & cpuInfo[3U]); // from EDX (cpuInfo[3U])
   }
-
 };
 
 #endif // HardwareUtilsH
