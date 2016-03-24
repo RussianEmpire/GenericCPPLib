@@ -183,6 +183,7 @@ public:
 
   // 'fractPart' SHOULD be a decimal fraction with NO integral part (0.0, 0.1, 0.034503 etc)
   // Returns 0 for 0.0 / 0.1 / 0.123 / 0.4506, 1 for 0.03, 2 for 0.00632482 etc
+  // Complexity: logarithmic - O(log2(TABLE item count) + 1)
   static size_t getLeadingZeroesCount(long double fractPart) throw() {
     if (fractPart < 0.0L) fractPart = -fractPart; // revert [if negative]
     if (fractPart >= 1.0L) { // non-zero integral part
