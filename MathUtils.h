@@ -1,7 +1,7 @@
 ﻿#ifndef MathUtilsH
 #define MathUtilsH
 
-//// [!] Version 1.020 [!]
+//// [!] Version 1.021 [!]
 
 #include "..\..\TypeHelpers.h"
 
@@ -179,6 +179,56 @@ public:
     if (num < 0LL) num = -num; // reverse
     // Returns a ptr. to the first elem. in the range, which compares greater
     return std::upper_bound<>(TABLE, TABLE_END, num) - TABLE;
+  }
+
+  // 'fractPart' SHOULD be a decimal fraction with NO integral part (0.0, 0.1, 0.034503 etc)
+  // Returns 0 for 0.0 / 0.1 / 0.123 / 0.4506, 1 for 0.03, 2 for 0.00632482 etc
+  static size_t getLeadingZeroesCount(long double fractPart) throw() {
+    if (fractPart < 0.0L) fractPart = -fractPart; // revert [if negative]
+    if (fractPart >= 1.0L) { // non-zero integral part
+      long double intPart;
+      fractPart = modfl(fractPart, &intPart); // SHOULD NOT have an integral part
+    }
+    if (!fractPart) return size_t();
+    /* Through the tables might implies some precison penalty:
+         1.0000000000000001e-015
+         9.9999999999999998e-013
+         9.9999999999999994e-012
+         1.0000000000000001e-009
+         9.9999999999999995e-008
+         9.9999999999999995e-007
+         1.0000000000000001e-005
+         0.10000000000000001
+       the function itself passes tests
+    */
+    static const long double TABLE_15[] = // for IEEE 754 binary64
+      {0.000000000000001L /*15 dig.*/, 0.00000000000001L, 0.0000000000001L, 0.000000000001L,
+       0.00000000001L, 0.0000000001L, 0.000000001L, 0.00000001L, 0.0000001L, 0.000001L,
+       0.00001L, 0.0001L, 0.001L, 0.01L, 0.1L};
+    static_assert(std::extent<decltype(TABLE_15)>::value == size_t(15U), "Wrong table size");
+    
+    static const long double TABLE_16[] =
+      {0.0000000000000001L /*16 dig.*/, 0.000000000000001L, 0.00000000000001L, 0.0000000000001L,
+       0.000000000001L, 0.00000000001L, 0.0000000001L, 0.000000001L, 0.00000001L, 0.0000001L, 0.000001L,
+       0.00001L, 0.0001L, 0.001L, 0.01L, 0.1L};
+    static_assert(std::extent<decltype(TABLE_16)>::value == size_t(16U), "Wrong table size");
+    
+    static const long double TABLE_18[] =
+      {0.000000000000000001L /*18 dig.*/, 0.00000000000000001L, 0.0000000000000001L,
+       0.000000000000001L, 0.00000000000001L, 0.0000000000001L,
+       0.000000000001L, 0.00000000001L, 0.0000000001L, 0.000000001L, 0.00000001L, 0.0000001L, 0.000001L,
+       0.00001L, 0.0001L, 0.001L, 0.01L, 0.1L};
+    static_assert(std::extent<decltype(TABLE_18)>::value == size_t(18U), "Wrong table size");
+    
+    // 15: MS VS 2013 Community Update 5; 16: http://tigcc.ticalc.org/doc/float.html#LDBL_DIG
+    // 18: GCC 5.1.1 / 5.3.1, Borland C++ BuilderX
+    // OPTIMIZATION HINT: better use 'constexpr' here
+    static auto const TABLE = size_t(15U) == LDBL_DIG ? TABLE_15 :
+      (size_t(16U) == LDBL_DIG ? TABLE_16 : (size_t(18U) == LDBL_DIG ? TABLE_18 : nullptr));
+    assert(TABLE); // better use 'static_assert' with the 'constexpr' here
+    static auto const TABLE_END = TABLE + LDBL_DIG; // past the end [better use 'constexpr' here too]
+    // 'upper_bound' returns ptr. to the first elem. in the range, which compares greater
+    return TABLE_END - std::upper_bound<>(TABLE, TABLE_END, fractPart); // 'ptrdiff_t' to 'size_t'
   }
 
   // (0, <whatever>) -> 0; (97, 21) -> 21; (56453, 0) -> 0; (3, 546429) -> 546
