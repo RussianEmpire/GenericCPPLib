@@ -1,10 +1,13 @@
 ﻿#ifndef StringUtilsH
 #define StringUtilsH
 
+//// [!] Version 1.001 [!]
+
 #include <cstring>
 
 // Will use ALL available options by default
 // Pwd. complexity: 26 + 10 + 32 + 26 = 94^N
+// See: https://en.wikipedia.org/wiki/Password_strength
 struct GeneratePwdOptions {
   enum ECharSetType {
     CST_ALPHA,  // latin letters; low: [97, 122] AND up: [65, 90] (total of 26 unique)
@@ -52,7 +55,16 @@ char* generatePwd(char* pwdBuf, const size_t len = 16U,
   const size_t timeSeed =
     static_cast<size_t>(std::chrono::system_clock::now().time_since_epoch().count());
   const std::mt19937 engine(timeSeed);
-
+  
+  // SECURITY HINT: better use cryptographically secure pseudorandom number generator
+  //  [https://en.wikipedia.org/wiki/Cryptographically_secure_pseudorandom_number_generator]
+  /* A pseudo-random number generator, is initially seeded using the time_t, most commonly a 32-bit integer
+      containing the current number of seconds since January 1, 1970 (Unix time).
+     There are about 31 million seconds in a year, so an attacker who knows the year AND the process ID,
+      faces a relatively small number, by cryptographic standards, of choices to test.
+     If the attacker knows more accurately when the password was generated,
+      he faces an even smaller number of candidates to test – a serious flaw in this implementation
+  */ // PROBLEM: there also some other patterns (which leads to the potential security flwas) here
   const std::uniform_int_distribution<size_t> charIdxDistribution(size_t(), len - 1U);
   auto rollCharIdx = std::bind(charIdxDistribution, engine); // callable
 
