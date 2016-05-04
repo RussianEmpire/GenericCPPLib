@@ -919,6 +919,7 @@ public:
   
   // FNV-1a algorithm description: http://isthe.com/chongo/tech/comp/fnv/#FNV-1a
   // [?!] 'currByte' SHOULD have NO more then 8 bits meaningfull?? [?!]
+  // [?!] NOT sure if FNV-1a is designed to work with the multibyte char strings [?!]
   static void FNV1aAccumulate(size_t& hash, const size_t currByte) throw() {
     //// C++11 OPTIMIZATION HINT: better use 'constexpr' instead of 'const'
     static_assert(4U == sizeof(size_t) || 8U == sizeof(size_t),
