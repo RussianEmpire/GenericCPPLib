@@ -1,7 +1,7 @@
 ﻿#ifndef StaticallyBufferedStringLightH
 #define StaticallyBufferedStringLightH
 
-//// [!] Version 1.042 [!]
+//// [!] Version 1.043 [!]
 
 #include "..\..\FuncUtils.h"
 #include "..\..\HashUtils.h"
@@ -35,6 +35,7 @@ template<typename TElemType = char, const size_t MaxLen = 127U>
 class StaticallyBufferedStringLight; // forward declaration of the template class
 
 // 'TElemType' - char / wchar_t / char16_t / char32_t (provides POD C str. if 'TElemType' is a char)
+// [!] WARNING! Hash calc. mechanic currently would only work correct woth the classic chars [!]
 template<typename TElemType, const size_t MaxLen>
 // NOT thread safe, NO leaks, NO-throw guarantee
 // [!] Prefer using this class over the POD C strs AND STL strings
@@ -320,8 +321,9 @@ public:
     #endif
     // If actually updated AND hash WAS already known -
     //  update hash, using accumulation mechanics [OPTIMIZATION]
-    if (!modified_ && count > 0)
-      hash_ = MathUtils::getFNV1aHash(originEnd, hash_, size_t() < length_); // accumulte if was't empty
+    if (!modified_ && count > 0) // accumulte if was't empty
+      hash_ = MathUtils::getFNV1aHash(originEnd, hash_, size_t() < length_);
+    // [!] ^Would NOT work correctly with the multibyte chars, as stoppes on the first zero byte [!]
     length_ += count;
     if (actuallyAppended) *actuallyAppended = static_cast<size_t>(count);
     return *this;
@@ -525,6 +527,37 @@ public:
     return n <= MAX_LEN_;
   }
   
+  // Returns false at ANY error [ALSO CAN set truncation flag on invalid params]
+  // If 'n' < curr. str. len. - the str. is shortened [AND the 'c' is ignored]
+  //  otherwise the str. is extended with the 'c' symbols [if 'c' is NOT a str. terminator]
+  bool resize(size_t n, const TElemType c) throw() {
+    if (n == length()) return true; // do nothing
+    if (!n) {
+      clear();
+      return true;
+    }
+    if (n < length()) { // smaller, BUT NOT zero
+      length_ = n;
+      data_[length_] = TElemType();
+      modified_ = true;
+      truncated_ = false;
+      return true;
+    }
+    //// 'n' is clearly bigger, then the curr. len.
+    if (full()) {
+      truncated_ = true;
+      return false; // NO space
+    }
+    if (!c) return false; // can NOT append NULL chars
+    if (n > max_size()) { // too large
+      n = max_size(); // reduce
+      truncated_ = true;
+    } else truncated_ = false;
+    n -= length(); // how many we need to append
+    for (; n; --n) assert(push_back(c)); // SHOULD be NO problems here
+    return true;
+  }
+
   // 'Modifier' should be 'const' OR empty
   #define AT(Modifier, CompromiseHashFlag) \
   /* The first character in a string is denoted by a value of 0 (not 1)

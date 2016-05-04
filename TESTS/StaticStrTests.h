@@ -1,7 +1,7 @@
 ﻿#ifndef StaticStrTestsH
 #define StaticStrTestsH
 
-//// [!] Version 1.001 [!]
+//// [!] Version 1.002 [!]
 
 #include "StaticallyBufferedStringLight.h"
 #include "PerformanceTester.h"
@@ -340,6 +340,53 @@ void testStaticStr() throw() {
   }
   
   //// Tests for str.
+
+  //// Test 'resize'
+
+  {
+    StaticallyBufferedStringLight<char, 7U> str_1_;
+    auto knownHash = false;
+    
+    assert(str_1_.resize(1U, 'a'));
+    knownHash = false;
+    assert(!str_1_.empty() && 1U == str_1_.length() &&
+           str_1_.getHashIfKnown(knownHash) && knownHash && !str_1_.modified() &&
+           !str_1_.full() && !str_1_.truncated());
+    assert(!strcmp(str_1_.c_str(), "a"));
+
+    assert(str_1_.resize(4U, ' '));
+    knownHash = false;
+    assert(!str_1_.empty() && 4U == str_1_.length() &&
+           str_1_.getHashIfKnown(knownHash) && knownHash && !str_1_.modified() &&
+           !str_1_.full() && !str_1_.truncated());
+    assert(!strcmp(str_1_.c_str(), "a   "));
+
+    assert(str_1_.resize(0U, '\0'));
+    knownHash = false;
+    assert(str_1_.empty() && 0U == str_1_.length() &&
+           !str_1_.getHashIfKnown(knownHash) && knownHash && !str_1_.modified() &&
+           !str_1_.full() && !str_1_.truncated());
+    assert(!strcmp(str_1_.c_str(), ""));
+
+    assert(str_1_.resize(128U, '7'));
+    knownHash = false;
+    assert(!str_1_.empty() && str_1_.max_size() == str_1_.length() &&
+           str_1_.getHashIfKnown(knownHash) && knownHash && !str_1_.modified() &&
+           str_1_.full() && str_1_.truncated());
+    assert(!strcmp(str_1_.c_str(), "7777777"));
+    
+    str_1_.clear();
+    assert(!str_1_.resize(4U, '\0'));
+    knownHash = false;
+    assert(str_1_.empty() && 0U == str_1_.length() &&
+           !str_1_.getHashIfKnown(knownHash) && knownHash && !str_1_.modified() &&
+           !str_1_.full() && !str_1_.truncated());
+    assert(!strcmp(str_1_.c_str(), ""));
+  }
+
+  // bool resize(size_t n, const TElemType c)
+
+  ////
 
   {
     StaticallyBufferedStringLight<> str_1_;
