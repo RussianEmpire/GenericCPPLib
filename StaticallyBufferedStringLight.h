@@ -1,7 +1,7 @@
 ﻿#ifndef StaticallyBufferedStringLightH
 #define StaticallyBufferedStringLightH
 
-//// [!] Version 1.043 [!]
+//// [!] Version 1.044 [!]
 
 #include "FuncUtils.h"
 #include "HashUtils.h"

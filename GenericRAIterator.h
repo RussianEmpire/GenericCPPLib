@@ -2,6 +2,7 @@
 #define GenericRAIteratorH
 
 //// Random Access Iterator [http://en.cppreference.com/w/cpp/concept/RandomAccessIterator]
+//// [!] Version 1.001 [!]
 
 #include "CompareUtils.h"
 #include "TypeHelpers.h"

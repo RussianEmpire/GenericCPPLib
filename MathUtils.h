@@ -1,7 +1,7 @@
 ﻿#ifndef MathUtilsH
 #define MathUtilsH
 
-//// [!] Version 1.021 [!]
+//// [!] Version 1.022 [!]
 
 #include "TypeHelpers.h"
 
