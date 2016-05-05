@@ -3,9 +3,9 @@
 
 //// [!] Version 1.043 [!]
 
-#include "..\..\FuncUtils.h"
-#include "..\..\HashUtils.h"
-#include "..\..\MemUtils.h"
+#include "FuncUtils.h"
+#include "HashUtils.h"
+#include "MemUtils.h"
 #include "MathUtils.h"
 #include "AllocatorInterface.h"
 #include "GenericRAIterator.h"

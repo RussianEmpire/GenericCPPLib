@@ -3,7 +3,7 @@
 
 //// [!] Version 1.021 [!]
 
-#include "..\..\TypeHelpers.h"
+#include "TypeHelpers.h"
 
 #include <cstring>
 #include <cassert>

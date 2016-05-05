@@ -4,7 +4,7 @@
 //// Random Access Iterator [http://en.cppreference.com/w/cpp/concept/RandomAccessIterator]
 
 #include "CompareUtils.h"
-#include "..\..\TypeHelpers.h"
+#include "TypeHelpers.h"
 
 #include <limits>
 #include <iterator>
