@@ -1,13 +1,16 @@
 ﻿#ifndef MathUtilsH
 #define MathUtilsH
 
-//// [!] Version 1.022 [!]
+//// [!] Version 1.023 [!]
 
 #include "TypeHelpers.h"
 
 #include <cstring>
 #include <cassert>
+#include <cfloat> // for 'LDBL_DIG'
 #include <cstdio>
+
+#include <math.h> // for 'modfl'
 
 #include <mutex>
 #include <atomic>
@@ -318,7 +321,7 @@ public:
       signLen = size_t(1U);
     } else signLen = size_t();
     long double intPartFraction;
-    long double fractPartFraction = std::modfl(data.fract, &intPartFraction);
+    long double fractPartFraction = modfl(data.fract, &intPartFraction);
     
     //// Check borders & set int. part (zeroise if too big)
     static const auto VAL_UP_LIMIT_ = 18446744073709500000.0L; // ~ 2^64 [ULL]
@@ -387,7 +390,7 @@ public:
             if (data.errMsg) *data.errMsg = "too short buffer";
           }
         }
-        if (!std::modfl(fractPartFraction, &temp)) break; // NO fract. part
+        if (!modfl(fractPartFraction, &temp)) break; // NO fract. part
         if (data.fractPart) { // skip zeroes ahead
           data.fractPart *= size_t(10U);
           ++data.fractPartlen;
