@@ -1,7 +1,7 @@
 ﻿#ifndef ConvertionUtilsTestsH
 #define ConvertionUtilsTestsH
 
-//// [!] Version 1.111 [!]
+//// [!] Version 1.112 [!]
 
 #include "ConvertionUtils.h"
 
@@ -3237,6 +3237,31 @@ void testFractions() throw() {
   assert(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
+  num = -7289.120912091209L;
+  resultStr = "minus seven thousand two hundred and eighty-nine point one two o nine repeating";
+  errMsg = "";
+  localeSettings.shortFormat = true;
+  localeSettings.verySpecific = true;
+  localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
+  result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
+  assert(result);
+  assert(errMsg && !*errMsg);
+  assert(!STRCMPI(str__01_.c_str(), resultStr));
+
+  str__01_.clear();
+  num = 28364768.07310731L;
+  resultStr = "positive twenty-eight million three hundred sixty-four thousand seven hundred sixty-eight"
+              " point zero seven three one to infinity";
+  errMsg = "";
+  localeSettings.shortFormat = false;
+  localeSettings.verySpecific = false;
+  localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
+  result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
+  assert(result);
+  assert(errMsg && !*errMsg);
+  assert(!STRCMPI(str__01_.c_str(), resultStr));
+
+  str__01_.clear();
   num = -2.678678L;
   resultStr = "минус две целых и шестьсот семьдесят восемь в периоде";
   errMsg = "";
@@ -3306,6 +3331,23 @@ void testFractions() throw() {
   localeSettings.shortFormat = false;
   localeSettings.verySpecific = true;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
+  result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
+  assert(result);
+  assert(errMsg && !*errMsg);
+  assert(!STRCMPI(str__01_.c_str(), resultStr));
+
+  //// ALL flags turned ON
+
+  localeSettings.shortFormat = true;
+  localeSettings.verySpecific = true;
+  localeSettings.foldFraction = true;
+  localeSettings.positiveSign = true;
+  
+  str__01_.clear();
+  num = 0.0034013401L;
+  resultStr = "plus o point o o three four o one repeating";
+  errMsg = "";
+  localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
   assert(result);
   assert(errMsg && !*errMsg);

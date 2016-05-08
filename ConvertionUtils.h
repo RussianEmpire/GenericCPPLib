@@ -1,7 +1,7 @@
 ﻿#ifndef ConvertionUtilsH
 #define ConvertionUtilsH
 
-//// [!] Version 1.111 [!]
+//// [!] Version 1.112 [!]
 
 #include "FuncUtils.h" // for 'ExecIfPresent'
 #include "MemUtils.h"  // for 'AUTO_ADJUST_MEM'
@@ -217,8 +217,10 @@ namespace ConvertionUtils {
     auto tryFindPattern = [&](const char* const str, const size_t totalLen) throw() {
       const size_t maxPatternLen = totalLen / size_t(2U);
       auto const strEnd = str + totalLen; // past the end
-      for (auto patternSize = size_t(1U); patternSize <= maxPatternLen; ++patternSize)
+      for (auto patternSize = size_t(1U); patternSize <= maxPatternLen; ++patternSize) {
+        if (totalLen % patternSize) continue; // skip invalid dividers [OPTIMIZATION]
         if (!testPattern(str, strEnd, patternSize)) return patternSize;
+      }
       return size_t();
     };
 
