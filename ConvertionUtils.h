@@ -1,8 +1,9 @@
 ﻿#ifndef ConvertionUtilsH
 #define ConvertionUtilsH
 
-//// [!] Version 1.112 [!]
+//// [!] Version 1.113 [!]
 
+#include "MacroUtils.h"
 #include "FuncUtils.h" // for 'ExecIfPresent'
 #include "MemUtils.h"  // for 'AUTO_ADJUST_MEM'
 #include "MathUtils.h" // for 'getDigitOfOrder'
@@ -154,7 +155,8 @@ namespace ConvertionUtils {
         case ELocale::L_RU_RU: return positive ? "плюс" : "минус";
       }
       assert(false); // locale error
-      return "<invalid locale>";
+      // Design / implementation error, NOT runtime error!
+      return "<locale error [" MAKE_STR_(__LINE__) "]>"; // works OK in GCC
     };
     if (negativeNum || (localeSettings.positiveSign && num)) { // add sign
       if (!str.empty()) str += delimiter; // if needed
@@ -170,7 +172,7 @@ namespace ConvertionUtils {
     /* SOME compilers support a 'long double' format that has more precision than 'double'
         (Microsoft MSVC is NOT, BUT Borland C++ BuilderX has 'LDBL_DIG' = 18)
         'LDBL_DIG' is the number of decimal digits that can be represented without losing precision
-        */
+    */
     // 'printf("%.*Lf", 999, 1.1L)': '1.100000000000000000021684043449710088680149056017398834228515625'
     /* 'std::numeric_limits<T>::digits10': number of base-10 digits that can be represented by the type 'T'
         without change - ANY number with this many decimal digits can be converted to a value of type 'T'
@@ -195,6 +197,8 @@ namespace ConvertionUtils {
       return false;
     }
     //// Fraction repeated pattern recognition [123 from 1.123123, 7 from 123.777 etc]
+    //// [!] Warning: does NOT work with the zero ending patterns (like '0.15015') [!]
+    //    (add zeroes to the end of the str. to match correctly??)
 
     // Return nullptr if a pattern of such a len. is EXISTS (returns last NOT matched occurrence else)
     auto testPattern = [](const char* const str, const char* const strEnd,
@@ -399,7 +403,7 @@ namespace ConvertionUtils {
           return RU_TABLE[currDigit];
       }
       assert(false); // locale error
-      return "<invalid locale>";
+      return "<locale error [" MAKE_STR_(__LINE__) "]>";
     };
     // 10 - 19 [1]; 20 - 90 [10]
     auto getFirstOrderNumberStr = [&](const size_t currDigit, const size_t prevDigit,
@@ -464,7 +468,7 @@ namespace ConvertionUtils {
           }
         break;
         default: assert(false); // locale error
-          return "<invalid locale>";
+          return "<locale error [" MAKE_STR_(__LINE__) "]>";
       } // END switch (locale)
       const char* tempPtr;
       return getZeroOrderNumberStr(currDigit, size_t(), tempPtr, localeSettings);
@@ -494,7 +498,7 @@ namespace ConvertionUtils {
           return getZeroOrderNumberStr(currDigit, size_t(), infix, localeSettings);
       } // END switch (locale)
       assert(false); // locale error
-      return "<invalid locale>";
+      return "<locale error [" MAKE_STR_(__LINE__) "]>";
     };
     // Up to 10^99 [duotrigintillions]
     auto getOrderStr = [](size_t order, const size_t preLastDigit, const size_t lastDigit,
@@ -556,7 +560,7 @@ namespace ConvertionUtils {
           return RU_TABLE[order]; // [0, 33]
       }
       assert(false); // locale error
-      return "<invalid locale>";
+      return "<locale error [" MAKE_STR_(__LINE__) "]>";
     };
 
     // 'intPartPreLastDigit' AND 'intPartLastDigit' CAN be negative (in case of NO int. part)
@@ -575,7 +579,7 @@ namespace ConvertionUtils {
             "целых"; // ноль, пять - девять целЫХ; две - четыре целЫХ; десять цел ых
       }
       assert(false); // locale error
-      return "<invalid locale>";
+      return "<locale error [" MAKE_STR_(__LINE__) "]>";
     };
     
     auto getFoldedFractionEnding = [](const LocaleSettings& localeSettings) throw() {
@@ -586,7 +590,7 @@ namespace ConvertionUtils {
         case ELocale::L_RU_RU: return "в периоде";
       }
       assert(false); // locale error
-      return "<invalid locale>";
+      return "<locale error [" MAKE_STR_(__LINE__) "]>";
     };
 
     //// Language-specific processing lambdas
@@ -776,7 +780,7 @@ namespace ConvertionUtils {
         break;
         default: // locale NOT present
           assert(false); // locale error
-          str += "<invalid locale>";
+          str += "<locale error [" MAKE_STR_(__LINE__) "]>";
       }
     };
 
