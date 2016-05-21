@@ -1,7 +1,7 @@
 ﻿#ifndef ConvertionUtilsH
 #define ConvertionUtilsH
 
-//// [!] Version 1.113 [!]
+//// [!] Version 1.114 [!]
 
 #include "MacroUtils.h"
 #include "FuncUtils.h" // for 'ExecIfPresent'
@@ -331,14 +331,14 @@ namespace ConvertionUtils {
     const auto fractPartWillBeMentioned = fractPartLen || !localeSettings.shortFormat;
     currSymbPtr = strBuf; // start from the beginning, left-to-right (->)
 
-    //// Language-specific lambdas (a result of the morphological analysis)
+    //// Language-specific morphological lambdas (a result of the morphological analysis)
     ////  [by default they returns numerals in the nominative case]
 
-    /* Word can have up to a 3 morphems (affixes):
+    /* Word can have up to a 3 morphems (affixes) in addition to the root:
          1) prefix:   placed BEFORE the stem of a word
          2) infix:    inserted INSIDE a word stem
              OR
-            interfix: [linking] placed in BETWEEN two morphemes AND does NOT have a semantic meaning
+            interfix: [linkage] placed in BETWEEN two morphemes AND does NOT have a semantic meaning
          3) postfix:  (suffix OR ending) placed AFTER the stem of a word
        Word = [prefix]<root>[infix / interfix][postfix (suffix, ending)]
 
@@ -695,21 +695,6 @@ namespace ConvertionUtils {
       return size_t();
     };
     
-    auto intPartPreLastDigit = ptrdiff_t(-1), intPartLastDigit = ptrdiff_t(-1); // NO part by default
-    auto addFractionDelimiter = [&]() {
-      const char* postfix;
-      auto const fractionDelim =
-        getFractionDelimiter(intPartPreLastDigit, intPartLastDigit, postfix, folded, localeSettings);
-      if (*fractionDelim) { // if NOT empty
-        if (!str.empty()) str += delimiter;
-        str += fractionDelim;
-      }
-      if (*postfix) {
-        if (*fractionDelim) str += delimiter;
-        str += postfix;
-      }
-    };
-
     auto addFractionPrefix = [&]() {
       switch (localeSettings.locale) {
         case ELocale::L_EN_US: case ELocale::L_EN_GB: // 'nought nought nought' for 1.0003
@@ -784,8 +769,6 @@ namespace ConvertionUtils {
       }
     };
 
-    //// Generic processing lambdas
-
     // Also for 'and' in EN GB
     const auto minDigitsSubPartSizeToAddOrder = getMinDigitsSubPartSizeToAddOrder(localeSettings);
     auto totalAddedCount = size_t();
@@ -796,7 +779,7 @@ namespace ConvertionUtils {
         char delim_;
         switch (localeSettings.locale) { // choose delim.
           case ELocale::L_EN_US: case ELocale::L_EN_GB: delim_ = '-'; break; // 'thirty-four'
-          case ELocale::L_RU_RU: delim_ = delimiter; break; // 'тридцать четыре'
+          case ELocale::L_RU_RU: default : delim_ = delimiter; break; // 'тридцать четыре'
         }
         str += delim_;
       };
@@ -865,7 +848,24 @@ namespace ConvertionUtils {
       } // 'switch (subOrder)' END
     };
 
-    auto addedCount = size_t(); // during prcoessing curr. part
+    //// Generic processing lambdas
+
+    auto intPartPreLastDigit = ptrdiff_t(-1), intPartLastDigit = ptrdiff_t(-1); // NO part by default
+    auto addFractionDelimiter = [&]() {
+      const char* postfix;
+      auto const fractionDelim =
+        getFractionDelimiter(intPartPreLastDigit, intPartLastDigit, postfix, folded, localeSettings);
+      if (*fractionDelim) { // if NOT empty
+        if (!str.empty()) str += delimiter;
+        str += fractionDelim;
+      }
+      if (*postfix) {
+        if (*fractionDelim) str += delimiter;
+        str += postfix;
+      }
+    };
+
+    auto addedCount = size_t(); // during processing curr. part
     auto emptySubPartsCount = size_t();
     // Part order is an order of the last digit of the part (zero for 654, 3 for 456 of the 456654 etc)
     // Part (integral OR fractional) of the number is consists of the subparts of specified size
@@ -936,7 +936,7 @@ namespace ConvertionUtils {
         if (ReserveBeforeAdding) // optimization [CAN acquire more / less space then really required]
           str.reserve(str.length() + estimatePossibleLength(digitsPartSize, fractPart, localeSettings));
         do {
-          if (currDigitsSubPartSize > digitsPartSize) { // if last AND unnormal [due to the  % ]
+          if (currDigitsSubPartSize > digitsPartSize) { // if last AND unnormal [due to the '%']
             subPartOrderExt = currDigitsSubPartSize - digitsPartSize;
             partBonusOrder -= subPartOrderExt;
             currDigitsSubPartSize = digitsPartSize; // correct

@@ -1,7 +1,7 @@
 ﻿#ifndef ConvertionUtilsTestsH
 #define ConvertionUtilsTestsH
 
-//// [!] Version 1.112 [!]
+//// [!] Version 1.113 [!]
 
 #include "ConvertionUtils.h"
 
@@ -3364,6 +3364,38 @@ void testRusNumbers() throw() {
   localeSettings.shortFormat = false;
   localeSettings.verySpecific = true;
   TStrType str__01_;
+
+  str__01_ = "number:";
+  num = 5.1L;
+  resultStr = "number: пять целых одна десятая";
+  errMsg = "";
+  localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
+  result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
+  assert(result);
+  assert(errMsg && !*errMsg);
+  assert(!STRCMPI(str__01_.c_str(), resultStr));
+
+  str__01_ = "number:";
+  num = 1L;
+  resultStr = "number: один";
+  errMsg = "";
+  localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
+  localeSettings.shortFormat = true;
+  result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
+  localeSettings.shortFormat = false;
+  assert(result);
+  assert(errMsg && !*errMsg);
+  assert(!STRCMPI(str__01_.c_str(), resultStr));
+
+  str__01_ = "number:";
+  num = 1.5L;
+  resultStr = "number: одна целая пять десятых";
+  errMsg = "";
+  localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
+  result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
+  assert(result);
+  assert(errMsg && !*errMsg);
+  assert(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 1215.3405354L;
