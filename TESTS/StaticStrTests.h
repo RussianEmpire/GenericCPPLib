@@ -1,7 +1,7 @@
 ﻿#ifndef StaticStrTestsH
 #define StaticStrTestsH
 
-//// [!] Version 1.002 [!]
+//// [!] Version 1.003 [!]
 
 #include "StaticallyBufferedStringLight.h"
 #include "PerformanceTester.h"
@@ -116,7 +116,11 @@ long long int quickCmp(const void* const mem1, const void* const mem2, const siz
 
 // Both functional & performance tests (+a few CRT/STL integration tests)
 void testStaticStr() throw() {
-
+  char askUser[8U] = {0};
+  std::cout << "\nEnter '1' to perform ALL static str. tests: ";
+  std::cin >> askUser;
+  const bool runAll = '1' == *askUser && !askUser[1U];
+  
   //// Empty strs equality test
 
   {
@@ -300,13 +304,32 @@ void testStaticStr() throw() {
 
   //// Strs speed comparison
   
-  char askUser[8U] = {0};
-  std::cout << "\nEnter '1' to perform the concat. speed test: ";
-  std::cin >> askUser;
-  if ('1' == *askUser && !askUser[1U]) {
+  if (!runAll) {
+    std::cout << "\nEnter '1' to perform the concat. speed test: ";
+    memset(askUser, 0, sizeof(askUser));
+    std::cin >> askUser;
+  }
+  if (runAll || '1' == *askUser && !askUser[1U]) {
     static const auto STR_BUF_SIZE_ = 440U * 1024U;
-    CStr<STR_BUF_SIZE_ - 1U> cstr___1_;
-    StaticallyBufferedStringLight<char, STR_BUF_SIZE_ - 1U> static_str___1_;
+
+    auto const cstr___1_ptr_ = new(std::nothrow) CStr<STR_BUF_SIZE_ - 1U>;
+    if (!cstr___1_ptr_) {
+      std::cout << "\n[!] NOT enough memory [!]\n";
+      assert(false);
+      return;
+    }
+    std::unique_ptr<std::decay<decltype(*cstr___1_ptr_)>::type> autoDeleteCStr(cstr___1_ptr_);
+    CStr<STR_BUF_SIZE_ - 1U>& cstr___1_ = *cstr___1_ptr_;
+
+    auto const static_str___1_ptr_ =
+      new(std::nothrow) StaticallyBufferedStringLight<char, STR_BUF_SIZE_ - 1U>;
+    if (!static_str___1_ptr_) {
+      std::cout << "\n[!] NOT enough memory [!]\n";
+      assert(false);
+      return;
+    }
+    std::unique_ptr<std::decay<decltype(*static_str___1_ptr_)>::type> autoDeleteStaticStr(static_str___1_ptr_);
+    StaticallyBufferedStringLight<char, STR_BUF_SIZE_ - 1U>& static_str___1_ = *static_str___1_ptr_;
     std::string dynamic_str___1_;
 
     cstr___1_.clear();
@@ -801,9 +824,11 @@ void testStaticStr() throw() {
   
   // String performance tests
   char c_02_ = '\0';
-  std::cout << "\nEnter 1 to perform a speed comparison test: ";
-  std::cin >> c_02_;
-  if ('1' == c_02_) {
+  if (!runAll) {
+    std::cout << "\nEnter 1 to perform a speed comparison test: ";
+    std::cin >> c_02_;
+  }
+  if (runAll || '1' == c_02_) {
     const auto SIZE_ = 1024U * 1024U * 8U;
     auto mem1 = new char[SIZE_];
     memset(mem1, 200, SIZE_ - 1U);
@@ -929,6 +954,7 @@ void testStaticStr() throw() {
       ++idx_0001_;
     }
     delete[] mem1, delete[] mem2;
+    mem1 = mem2 = nullptr;
 
     // Speed test 2
     const char static_chars_01_[]
@@ -1192,10 +1218,12 @@ void testStaticStr() throw() {
 
   //// Speed test 4
 
-  memset(askUser, 0, sizeof(askUser));
-  std::cout << "\nEnter '1' to perform the alloc./dealloc. speed test: ";
-  std::cin >> askUser;
-  if ('1' == *askUser && !askUser[1U]) {
+  if (!runAll) {
+    memset(askUser, 0, sizeof(askUser));
+    std::cout << "\nEnter '1' to perform the alloc./dealloc. speed test: ";
+    std::cin >> askUser;
+  }
+  if (runAll || '1' == *askUser && !askUser[1U]) {
     std::cout << "\nTesting...\n";
 
     struct Funct1__ {
@@ -1225,10 +1253,12 @@ void testStaticStr() throw() {
 
   //// Speed test 5
 
-  memset(askUser, 0, sizeof(askUser));
-  std::cout << "\nEnter '1' to perform the mass equality comparison speed test: ";
-  std::cin >> askUser;
-  if ('1' == *askUser && !askUser[1U]) {
+  if (!runAll) {
+    memset(askUser, 0, sizeof(askUser));
+    std::cout << "\nEnter '1' to perform the mass equality comparison speed test: ";
+    std::cin >> askUser;
+  }
+  if (runAll || '1' == *askUser && !askUser[1U]) {
     std::cout << "\nTesting...\n";
 
     static auto const STR1
