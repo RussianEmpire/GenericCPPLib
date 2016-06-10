@@ -1,7 +1,7 @@
 ﻿#ifndef MathUtilsH
 #define MathUtilsH
 
-//// [!] Version 1.023 [!]
+//// [!] Version 1.024 [!]
 
 #include "TypeHelpers.h"
 
@@ -832,11 +832,13 @@ public:
     ////   See additional info here: https://msdn.microsoft.com/en-us/library/bb384809.aspx
     ////    http://x86.renejeschke.de/html/file_module_x86_id_20.html,
     ////     https://msdn.microsoft.com/ru-ru/library/hskdteyh.aspx
-    static auto LZCNT_OK =
+    //// [!] Marked as 'volatile' (AND should NOT be marked as 'constexpr') because the
+    ////      compiling AND running machines CAN have diff. instructions set [!]
+    static const volatile auto LZCNT_OK =
       (32U == __lzcnt(0x0U) && 24U == __lzcnt(0xFFU) && 16U == __lzcnt(0xFFFFU));
-    static auto BSR_OK = // 'FF' is a one byte (255), 'FFFF' is two (65535) etc
+    static const volatile auto BSR_OK = // 'FF' is a one byte (255), 'FFFF' is two (65535) etc
       (7U == __lzcnt(0xFFU) && 15U == __lzcnt(0xFFFFU) && 31U == __lzcnt(0xFFFFFFFFU));
-    static auto ANYONE_OK = XOR(LZCNT_OK, BSR_OK);
+    static const volatile auto ANYONE_OK = XOR(LZCNT_OK, BSR_OK);
 
     if (!ANYONE_OK) { // some WTF error
       *strBuf = '\0';
@@ -1241,13 +1243,15 @@ public:
     return ReverseBits<decltype(num), TPartType, ReverseBitsInWordFunctor>(num);
   }
 
+  // Static singleton
   class ByteOrderTester {
 
   public:
+    // [!] Better use C++11 'contexpr' here as it CAN be evaluated during the compile time [!]
+    //  (compiling AND running binary file machines SHOULD have the same endianness)
+    static const ByteOrderTester INSTANCE;
 
-    static ByteOrderTester INSTANCE;
-
-    const bool reversedOrder; // little-endian
+    bool reversedOrder; // true if little-endian
 
   private:
     
@@ -1260,6 +1264,7 @@ public:
     ByteOrderTester& operator=(const ByteOrderTester&) throw() = delete;
     ByteOrderTester& operator=(ByteOrderTester&&) throw() = delete;
 
+    // HINT: mark as a C++11 'contexpr'
     static bool isReversedOrder() throw() {
       // sizeof(char) SHOULD be ALWAYS 1U, due to the CPP standart
       static_assert(sizeof(char) == 1U, "'char' type is NOT 1 byte large!");
@@ -1273,7 +1278,7 @@ public:
       *converter.c = 'A'; // sets zero byte - then test is zero byte LSB OR MSB
       // true if zero byte considered LSB (least significant byte)
       //  => the bit order is left <- right (last byte is MSB - most significant byte)
-      return 'A' == converter.i; // see C example here: https://ru.wikipedia.org/wiki/Порядок_байтов
+      return size_t('A') == converter.i; // see C example here: https://ru.wikipedia.org/wiki/Порядок_байтов
     }
   };
 
