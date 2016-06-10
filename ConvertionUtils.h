@@ -1,7 +1,7 @@
 ﻿#ifndef ConvertionUtilsH
 #define ConvertionUtilsH
 
-//// [!] Version 1.114 [!]
+//// [!] Version 1.115 [!]
 
 #include "MacroUtils.h"
 #include "FuncUtils.h" // for 'ExecIfPresent'
@@ -352,6 +352,7 @@ namespace ConvertionUtils {
             http://eng5.ru/en/numbers_translation
             http://prutzkow.com/numbers/index_en.htm
             http://www.mathcats.com/explore/reallybignumbers.html
+            http://www.calculator.org/calculate-online/mathematics/text-number.aspx
         */
     /// RU: returns root, which can be used to add ending of the appropriate case
     ///  (by default, returns ending for the nominative case) [нолЬ / нолЯ / нолЮ | нулём! нолём?]
