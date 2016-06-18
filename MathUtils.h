@@ -1,7 +1,7 @@
 ﻿#ifndef MathUtilsH
 #define MathUtilsH
 
-//// [!] Version 1.024 [!]
+//// [!] Version 1.025 [!]
 
 #include "TypeHelpers.h"
 
@@ -1267,15 +1267,35 @@ public:
     // HINT: mark as a C++11 'contexpr'
     static bool isReversedOrder() throw() {
       // sizeof(char) SHOULD be ALWAYS 1U, due to the CPP standart
-      static_assert(sizeof(char) == 1U, "'char' type is NOT 1 byte large!");
-      static_assert(sizeof(size_t) > sizeof('A'), "Too small 'int' size");
+      static_assert(sizeof(unsigned char) == 1U, "'char' type is NOT 1 byte large!"); // NOT really needed
+      static_assert(sizeof(size_t) > sizeof('A'), "Too small 'size_t' size");
 
+      #pragma pack(push, 1) // disable alignment [in modern GCC SHOULD work too]
       union Converter {
+        // [!] Examination of the object representation of ANY object as an array of unsigned char is OK [!]
+        unsigned char c[sizeof(size_t)];
         size_t i;
-        unsigned char c[sizeof(decltype(i))];
-      } converter = {};
+      }
+      #ifdef __GNUC__
+        __attribute__((packed)) // disable alignment in old GCC
+      #endif
+      ;
+      #pragma pack(pop) // enable alignment (fileds AND padding)
+      // Check: NO additional bytes
+      static_assert(sizeof(size_t) == sizeof(Converter), "'Converter' aligned improperly");
+      
+      // Use C++11 'contexpr' here
+      // When a union is initialized by aggregate initialization,
+      //  only its first non-static data member is initialized,
+      //   making this member is the active member (sets the first byte, others are zero-initialized)
+      static const Converter converter = {'A'}; // sets zero byte - then test is zero byte LSB OR MSB
 
-      *converter.c = 'A'; // sets zero byte - then test is zero byte LSB OR MSB
+      /* [!] Details of an allocation in the union are implementation-defined,
+          AND it's undefined behavior to read from the member of the union that wasn't most recently written
+         BUT many compilers implement, as a non-standard language extension,
+          the ability to read inactive members of a union [!]
+      */ // Other way to check: https://ru.wikipedia.org/wiki/Порядок_байтов
+
       // true if zero byte considered LSB (least significant byte)
       //  => the bit order is left <- right (last byte is MSB - most significant byte)
       return size_t('A') == converter.i; // see C example here: https://ru.wikipedia.org/wiki/Порядок_байтов
