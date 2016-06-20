@@ -19,8 +19,8 @@ namespace ConvertionUtils {
   // A wrapper to the standart 'strtol' with the extended error recognition
   // In case of error sets 'errMsg' to the static non-empty str.
   //  ('strerror_s' can be used then to get a system specific error message (if exists))
-  static bool strToL(long int& num, const char* const str,
-                     const char*& errMsg, const int base = 10) throw()
+  bool strToL(long int& num, const char* const str,
+              const char*& errMsg, const int base = 10) throw()
   {
     if (!str) {
       num = std::decay<decltype(num)>::type(); // reset
@@ -124,10 +124,10 @@ namespace ConvertionUtils {
   // "Number to the numeric format string" (321 -> "three hundred twenty-one")
   // Accpets negative numbers AND fractions
   // Complexity: linear in the number's digit count
-  static bool numToNumFormatStr(long double num, TStrType& str,
-                                   LocaleSettings& localeSettings =
-                                     LocaleSettings::DEFAULT_LOCALE_SETTINGS,
-                                   const char** const errMsg = nullptr) {
+  bool numToNumFormatStr(long double num, TStrType& str,
+                         LocaleSettings& localeSettings =
+                           LocaleSettings::DEFAULT_LOCALE_SETTINGS,
+                         const char** const errMsg = nullptr) {
     auto negativeNum = false;
     if (num < 0.0L) {
       negativeNum = true;
