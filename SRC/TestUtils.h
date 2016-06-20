@@ -12,6 +12,7 @@ namespace TestUtils {
   #define ASSERT_(Assumption, CustomErrMsg)\
   if (const volatile auto result = !(Assumption)) {/**/\
     assert(! #Assumption);\
+    \
     static CONSTEXPR_ const char* const CUSTOM_ERR_MSG_ = "" CustomErrMsg;\
     static CONSTEXPR_ auto const AUTO_ERR_MSG_ =\
       "[!] '"#Assumption"' failed at line #" MAKE_STR_(__LINE__) " in file \"" __FILE__ "\"";\
