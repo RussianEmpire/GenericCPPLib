@@ -1,6 +1,8 @@
 ﻿#ifndef HardwareUtilsH
 #define HardwareUtilsH
 
+//// [!] Version 1.001 [!]
+
 #ifdef _MSC_VER
   #include <cstring>
   #include <intrin.h> // Microsoft Specific
@@ -44,6 +46,8 @@ private:
     
     unsigned int cpuInfo[4U] = {0}; // from EAX, EBX, ECX, and EDX
     #ifdef _MSC_VER
+      // OK conversion: 'T2 is the (possibly cv-qualified) signed or unsigned variant of T1'
+      //  see http://en.cppreference.com/w/cpp/language/reinterpret_cast
       auto const cpuInfoRe = reinterpret_cast<int*>(cpuInfo); // reinterpreted
       __cpuid(cpuInfoRe, GET_MAX_CMD_SUPPORTED);
       // Max. value of 'function_id' supported for extended functions

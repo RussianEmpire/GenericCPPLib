@@ -1,7 +1,7 @@
 ﻿#ifndef StaticallyBufferedStringLightH
 #define StaticallyBufferedStringLightH
 
-//// [!] Version 1.044 [!]
+//// [!] Version 1.045 [!]
 
 #include "FuncUtils.h"
 #include "HashUtils.h"
@@ -364,6 +364,11 @@ public:
     return !(*this == str); // invoking 'operator==(const TElemType* const str)'
   }
 
+  //// [!]   [!]   [!]   [!]   [!]   [!]   [!]   [!]   [!]   [!]   [!]   [!]   [!]   [!]   [!]   [!]   [!]
+  //// [!] 'operator==(const TElemType (&str)[ArrayElemCount])' AND 'operator==(const TStorageType& str)'
+  ////      might NOT be safe AND correct due to the 'isEqualMemD' aliasing rules violation,
+  ////       see 'MemUtils' comments [!]
+
   // 'str' SHOULD contain the POD C str.
   // [!] More efficient then 'operator==(POD C str.)' (coze providing array size),
   //  BUT less effective, then 'operator==(const TStorageType& str)' [!]
@@ -376,6 +381,7 @@ public:
     if (ArrayElemCount < (length_ + 1U)) return false; // optimization
     
     const auto thisStrMemChunkSize = sizeof(*data_) * (length_ + 1U); // in bytes
+    // [!] Might NOT be save: see 'MemUtils' comments [!]
     return isEqualMemD<>(data_, str, thisStrMemChunkSize);
   }
 
@@ -428,6 +434,7 @@ public:
     auto result = false;
 
     switch (SAME_CHAR_TYPE_) {
+      // [!] Might NOT be save: see 'MemUtils' comments [!]
       case true: result = isEqualMemD<>(data_, str.c_str(), sizeof(*data_) * length()); break;
       // Diff. types: call 'operator==(const TOtherElemType* const str)'
       default: result = (*this == str.c_str());

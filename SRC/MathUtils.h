@@ -1,7 +1,7 @@
 ﻿#ifndef MathUtilsH
 #define MathUtilsH
 
-//// [!] Version 1.025 [!]
+//// [!] Version 1.026 [!]
 
 #include "TypeHelpers.h"
 
@@ -1291,9 +1291,10 @@ public:
       static const Converter converter = {'A'}; // sets zero byte - then test is zero byte LSB OR MSB
 
       /* [!] Details of an allocation in the union are implementation-defined,
-          AND it's undefined behavior to read from the member of the union that wasn't most recently written
-         BUT many compilers implement, as a non-standard language extension,
-          the ability to read inactive members of a union [!]
+              AND it's undefined behavior to read from the member of the union that wasn't most recently written
+             BUT many compilers implement, as a non-standard language extension,
+              the ability to read inactive members of a union.
+             SHOULD work OK in GCC: https://gcc.gnu.org/bugs/#nonbugs [!]
       */ // Other way to check: https://ru.wikipedia.org/wiki/Порядок_байтов
 
       // true if zero byte considered LSB (least significant byte)
@@ -1319,7 +1320,28 @@ public:
     ReverseBytes_(obj);
   }
 
+  //// [!]   [!]   [!]   [!]   [!]   [!]   [!]   [!]   [!]   [!]   [!]   [!]   [!]   [!]
   //// [!] 'fastCompareMemChunks' AND 'compareMem' - BAD concept, slow, do NOT use [!]
+
+  /* [!] 'reinterpret_cast' here also might violate the aliasing rules
+          (http://en.cppreference.com/w/cpp/language/reinterpret_cast), so the program might OT might NOT
+           work correctly compiled on different compilers with diffirent compile options.
+     [!]
+         'reinterpret_cast' does NOT compile to any CPU instructions, it is purely a compiler directive
+          which instructs the compiler to treat the sequence of bits (object representation) of expression
+           as if it had the type 'new_type', so it's undefined, non-standart behavior is cleraly
+            compiler dependent.
+     [!]
+          See GCC example: https://gcc.gnu.org/bugs/#nonbugs
+          Casting does not work as expected when optimization is turned on.
+           This is often caused by a violation of aliasing rules, which are part of the ISO C standard.
+            These rules say that a program is invalid if you try to access a variable through a pointer
+             of an incompatible type. Dereferencing a pointer that violates the aliasing rules results
+              in undefined behavior.
+     [!]
+          To fix the code, you can use a UNION instead of a CAST
+           (note that this is a GCC extension which might not work with other compilers)
+  */
 
   // [!] WARNING: looks like can be slower then 'strcmp' OR 'memcmp' [!]
   // 'SampleChunkSize' SHOULD be {1, 2, 4, 8}

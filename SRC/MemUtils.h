@@ -1,7 +1,7 @@
 ﻿#ifndef MemUtilsH
 #define MemUtilsH
 
-//// [!] Version 1.003 [!]
+//// [!] Version 1.004 [!]
 
 namespace MemUtils {
 #ifndef AUTO_ADJUST_MEM
@@ -27,7 +27,7 @@ typename IntegralTypeBySize<CmpChunkSize, true>::Type
 // Used to compare strings with the diff. char types
 // Works almost as fast as a 'strcmp' (at least for 'char' AND on release)
 // [!] Does NOT checks an incoming args. on validity [!]
-  strCmp(const TElem1Type* mem1, const TElem2Type* mem2) throw()
+strCmp(const TElem1Type* mem1, const TElem2Type* mem2) throw()
 {
   typedef typename IntegralTypeBySize<sizeof(*mem1), false>::Type TUE1T; // unsigned both
   typedef typename IntegralTypeBySize<sizeof(*mem2), false>::Type TUE2T;
@@ -47,6 +47,31 @@ typename IntegralTypeBySize<CmpChunkSize, true>::Type
     ++mem1, ++mem2;
   }
 }
+
+//// [!]   [!]   [!]   [!]   [!]   [!]   [!]   [!]   [!]   [!]   [!]   [!]   [!]   [!]   [!]   [!]
+//// [!] Funcs below might violate the aliasing rules during casts, use them VERY CAREFULLY [!]
+/* [!] 'reinterpret_cast' here also might violate the aliasing rules
+         (http://en.cppreference.com/w/cpp/language/reinterpret_cast),
+          AND 'static_cast' too as well:
+           http://stackoverflow.com/questions/2771023/c99-strict-aliasing-rules-in-c-gcc
+            so the program might OT might NOT
+             work correctly compiled on different compilers with diffirent compile options.
+     [!]
+         'reinterpret_cast' does NOT compile to any CPU instructions, it is purely a compiler directive
+          which instructs the compiler to treat the sequence of bits (object representation) of expression
+           as if it had the type 'new_type', so it's undefined, non-standart behavior is cleraly
+            compiler dependent.
+     [!]
+          See GCC example: https://gcc.gnu.org/bugs/#nonbugs
+          Casting does not work as expected when optimization is turned on.
+           This is often caused by a violation of aliasing rules, which are part of the ISO C standard.
+            These rules say that a program is invalid if you try to access a variable through a pointer
+             of an incompatible type. Dereferencing a pointer that violates the aliasing rules results
+              in undefined behavior.
+     [!]
+          To fix the code, you can use a UNION instead of a CAST
+           (note that this is a GCC extension which might not work with other compilers)
+  */
 
 template<const size_t CmpChunkSize = 4U, // in bytes; [sizeof(std::uintptr_t) in 32 bit sys.]
          // As 'memcmp' by default (http://www.cplusplus.com/reference/cstring/memcmp/)
