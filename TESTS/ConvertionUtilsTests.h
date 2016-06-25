@@ -1,8 +1,9 @@
 ﻿#ifndef ConvertionUtilsTestsH
 #define ConvertionUtilsTestsH
 
-//// [!] Version 1.115 [!]
+//// [!] Version 1.116 [!]
 
+#include "TestUtils.h"
 #include "ConvertionUtils.h"
 
 #include <string>
@@ -23,7 +24,7 @@ namespace ConvertionUtilsTests {
 ////  http://www.codeproject.com/Questions/1086351/MS-VS-LDBL-DIG-const-From-float-h-is-incorrect [!]
 
 template <class TStrType = std::string>
-void test() throw() {
+static void test() {
   auto result = false;
   auto num = 0.0L;
   auto errMsg = "", resultStr = "";
@@ -42,9 +43,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 0.0L;
@@ -52,9 +53,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 0.0L;
@@ -62,9 +63,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   //// 9
   str__01_.clear();
@@ -73,9 +74,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 9.0L;
@@ -83,9 +84,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 9.0L;
@@ -93,9 +94,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   //// 4
   str__01_.clear();
@@ -104,9 +105,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 4.0L;
@@ -114,9 +115,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 4.0L;
@@ -124,9 +125,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   //// 10
   str__01_.clear();
@@ -135,9 +136,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 10.0L;
@@ -145,9 +146,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 10.0L;
@@ -155,9 +156,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   //// -13
   str__01_.clear();
@@ -166,9 +167,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = -13.0L;
@@ -176,9 +177,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = -13.0L;
@@ -186,9 +187,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   //// -19
   str__01_.clear();
@@ -197,9 +198,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = -19.0L;
@@ -207,9 +208,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = -19.0L;
@@ -217,9 +218,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   //// -20
   str__01_.clear();
@@ -228,9 +229,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = -20.0L;
@@ -238,9 +239,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = -20.0L;
@@ -248,9 +249,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   //// 20
   str__01_.clear();
@@ -259,9 +260,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 20.0L;
@@ -269,9 +270,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 20.0L;
@@ -279,9 +280,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   //// 90
   str__01_.clear();
@@ -290,9 +291,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 90.0L;
@@ -300,9 +301,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 90.0L;
@@ -310,9 +311,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   //// 21
   str__01_.clear();
@@ -321,9 +322,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 21.0L;
@@ -331,9 +332,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 21.0L;
@@ -341,9 +342,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 32.0L;
@@ -351,9 +352,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = -79.0L;
@@ -361,9 +362,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = -99.0L;
@@ -371,9 +372,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 100.0L;
@@ -381,9 +382,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = -900.0L;
@@ -391,9 +392,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 2000.0L;
@@ -401,9 +402,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = -85000.0L;
@@ -411,9 +412,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 999000.0L;
@@ -421,9 +422,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = -999000.0L;
@@ -431,9 +432,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 1000000.0L;
@@ -441,9 +442,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = -10000000.0L;
@@ -451,9 +452,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = -334.0L;
@@ -461,9 +462,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 208.0L;
@@ -471,9 +472,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 1000000000.0L;
@@ -481,9 +482,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 1000000000000.0L;
@@ -491,9 +492,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 1000000000000000000.0L;
@@ -501,9 +502,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 250000000.0L;
@@ -511,9 +512,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 1.0L;
@@ -521,9 +522,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 2.0L;
@@ -531,9 +532,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 3.0L;
@@ -541,9 +542,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 18.0L;
@@ -551,9 +552,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 80.0L;
@@ -561,9 +562,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 800.0L;
@@ -571,9 +572,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = -88888.0L;
@@ -581,9 +582,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 39.0L;
@@ -591,9 +592,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = -952.0L;
@@ -601,9 +602,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 732847047284204.0L;
@@ -613,9 +614,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = -732847047284204.0L;
@@ -625,9 +626,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 732847047284204.0L;
@@ -637,9 +638,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = -26748.0L;
@@ -647,9 +648,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 26748.0L;
@@ -657,9 +658,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = -26748.0L;
@@ -667,9 +668,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 10928374655466.0L;
@@ -679,9 +680,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = -10928374655466.0L;
@@ -691,9 +692,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = -10928374655466.0L;
@@ -703,9 +704,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 102030405.0L;
@@ -713,9 +714,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = -102030405.0L;
@@ -725,9 +726,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 192939495.0L;
@@ -737,9 +738,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = -192939495.0L;
@@ -749,9 +750,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 903204705.0L;
@@ -759,9 +760,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = -903204705.0L;
@@ -769,9 +770,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = -100305006.0L;
@@ -779,9 +780,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 102.0L;
@@ -789,9 +790,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = -102.0L;
@@ -799,9 +800,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 2001.0L;
@@ -809,9 +810,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = -2001.0L;
@@ -819,9 +820,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 2010.0L;
@@ -829,9 +830,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = -2010.0L;
@@ -839,9 +840,9 @@ void test() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   //// Test specific
 
@@ -852,9 +853,9 @@ void test() throw() {
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   localeSettings.verySpecific = true;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   localeSettings.verySpecific = false;
 
   str__01_.clear();
@@ -864,9 +865,9 @@ void test() throw() {
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   localeSettings.verySpecific = true;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   localeSettings.verySpecific = false;
 
   str__01_.clear();
@@ -876,9 +877,9 @@ void test() throw() {
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   localeSettings.verySpecific = true;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   localeSettings.verySpecific = false;
 
   str__01_.clear();
@@ -888,9 +889,9 @@ void test() throw() {
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   localeSettings.verySpecific = true;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   localeSettings.verySpecific = false;
 
   str__01_.clear();
@@ -900,9 +901,9 @@ void test() throw() {
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   localeSettings.verySpecific = true;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   localeSettings.verySpecific = false;
 
   str__01_.clear();
@@ -912,9 +913,9 @@ void test() throw() {
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   localeSettings.verySpecific = true;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   localeSettings.verySpecific = false;
 
   str__01_.clear();
@@ -924,9 +925,9 @@ void test() throw() {
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   localeSettings.verySpecific = true;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   localeSettings.verySpecific = false;
 
   str__01_.clear();
@@ -936,9 +937,9 @@ void test() throw() {
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   localeSettings.verySpecific = true;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   localeSettings.verySpecific = false;
 
   str__01_.clear();
@@ -948,14 +949,14 @@ void test() throw() {
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   localeSettings.verySpecific = true;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   localeSettings.verySpecific = false;
 }
 
 template <class TStrType = std::string>
-void testFractions() throw() {
+static void testFractions() {
   auto result = false;
   auto num = 0.0L;
   auto errMsg = "", resultStr = "";
@@ -969,9 +970,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = -122000.5476L;
@@ -979,9 +980,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = -122000.5476L;
@@ -989,9 +990,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   //
   str__01_.clear();
   num = 13000.010203L;
@@ -999,9 +1000,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   // 73.09080706050403
   str__01_.clear();
   num = 73.09080706050403L;
@@ -1010,9 +1011,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 73.09080706050403L;
@@ -1020,9 +1021,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   // -539.0123456789
   str__01_.clear();
   num = -539.0123456789L;
@@ -1031,9 +1032,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = -539.0123456789L;
@@ -1041,9 +1042,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   //
   str__01_.clear();
   num = 1930.34645L;
@@ -1051,9 +1052,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   // 9522.0
   str__01_.clear();
   num = 9522.0L;
@@ -1061,9 +1062,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 9522.0L;
@@ -1071,9 +1072,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 9522.0L;
@@ -1082,9 +1083,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = true;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   localeSettings.verySpecific = false;
 
   str__01_.clear();
@@ -1093,9 +1094,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 12406.006L;
@@ -1103,9 +1104,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = -78125.000000009L; // -78125.000000008993
@@ -1114,9 +1115,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 129862.0L;
@@ -1126,9 +1127,9 @@ void testFractions() throw() {
   localeSettings.shortFormat = true;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
   localeSettings.shortFormat = false;
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 129862.0L;
@@ -1136,9 +1137,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 0.000000000001L;
@@ -1148,9 +1149,9 @@ void testFractions() throw() {
   localeSettings.shortFormat = true;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
   localeSettings.shortFormat = false;
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = -620928.0010003005L;
@@ -1159,9 +1160,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 583950487.1030401L;
@@ -1170,9 +1171,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = -355411129.98761L;
@@ -1181,9 +1182,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 8004090871.0007L;
@@ -1192,9 +1193,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 14360122008.09L;
@@ -1203,9 +1204,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = -198980062333.5357L;
@@ -1214,9 +1215,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 1123980191425.0L;
@@ -1226,9 +1227,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.000005L;
@@ -1237,9 +1238,9 @@ void testFractions() throw() {
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   localeSettings.shortFormat = false;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = -15113888730099.91L;
@@ -1248,9 +1249,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 1.8L;
@@ -1258,9 +1259,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = -19.021L;
@@ -1268,9 +1269,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   // 0.000000000000000001
   str__01_.clear();
   num = 0.000000000000000001L;
@@ -1278,9 +1279,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 0.000000000000000001L;
@@ -1290,9 +1291,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   //
   str__01_.clear();
   num = -999000.0127908L;
@@ -1300,9 +1301,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 334.057603005L;
@@ -1310,9 +1311,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = -0.2500000543002L;
@@ -1320,9 +1321,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 212.4560053053041L;
@@ -1331,9 +1332,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = -27.0891230032109L;
@@ -1342,9 +1343,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = -0.54354354L;
@@ -1356,9 +1357,9 @@ void testFractions() throw() {
   localeSettings.precison = size_t(8U);
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
   localeSettings.precison = wasPrecison; // restore
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = -0.700080000907L;
@@ -1366,9 +1367,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.000005L;
@@ -1378,9 +1379,9 @@ void testFractions() throw() {
   localeSettings.shortFormat = true;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
   localeSettings.shortFormat = false;
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.1L;
@@ -1388,9 +1389,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.02L;
@@ -1398,9 +1399,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.023L;
@@ -1408,9 +1409,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.0044L;
@@ -1420,9 +1421,9 @@ void testFractions() throw() {
   localeSettings.foldFraction = false;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
   localeSettings.foldFraction = true;
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.5678L;
@@ -1430,9 +1431,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 10.7L;
@@ -1440,9 +1441,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.67L;
@@ -1450,9 +1451,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.75L;
@@ -1462,9 +1463,9 @@ void testFractions() throw() {
   localeSettings.shortFormat = true;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
   localeSettings.shortFormat = false;
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 1.12L;
@@ -1472,9 +1473,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.632L;
@@ -1482,9 +1483,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 3.18L;
@@ -1492,9 +1493,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 1.6L;
@@ -1502,9 +1503,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 22.49L;
@@ -1512,9 +1513,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.597L;
@@ -1522,9 +1523,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 3.85L;
@@ -1532,9 +1533,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 2.7L;
@@ -1542,9 +1543,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 11.4L;
@@ -1552,9 +1553,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 401.1L;
@@ -1562,9 +1563,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 667.8L;
@@ -1572,9 +1573,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.8L;
@@ -1582,9 +1583,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 9.9L;
@@ -1592,9 +1593,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 99.9L;
@@ -1605,9 +1606,9 @@ void testFractions() throw() {
   localeSettings.precison = size_t(6U);
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
   localeSettings.precison = wasPrecison;
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 909.9L;
@@ -1615,9 +1616,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 5.64L;
@@ -1625,9 +1626,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 21.87L;
@@ -1635,9 +1636,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 381.77L;
@@ -1647,9 +1648,9 @@ void testFractions() throw() {
   localeSettings.foldFraction = false;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
   localeSettings.foldFraction = true;
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 54.6L;
@@ -1657,9 +1658,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 2.81L;
@@ -1667,9 +1668,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.55L;
@@ -1679,9 +1680,9 @@ void testFractions() throw() {
   localeSettings.foldFraction = false;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
   localeSettings.foldFraction = true;
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.09L;
@@ -1689,9 +1690,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.77L;
@@ -1701,9 +1702,9 @@ void testFractions() throw() {
   localeSettings.foldFraction = false;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
   localeSettings.foldFraction = true;
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 1.579L;
@@ -1711,9 +1712,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 12.882L;
@@ -1721,9 +1722,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 326.703L;
@@ -1731,9 +1732,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 145.008L;
@@ -1741,9 +1742,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 21.094L;
@@ -1751,9 +1752,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.049L;
@@ -1761,9 +1762,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.001L;
@@ -1771,9 +1772,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 203.6L;
@@ -1781,9 +1782,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 20.36L;
@@ -1791,9 +1792,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.02036L;
@@ -1801,9 +1802,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.20506L;
@@ -1811,9 +1812,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.010101L;
@@ -1823,9 +1824,9 @@ void testFractions() throw() {
   localeSettings.foldFraction = false;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
   localeSettings.foldFraction = true;
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 43.7569L;
@@ -1833,9 +1834,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.2L;
@@ -1843,9 +1844,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 1.0L;
@@ -1855,9 +1856,9 @@ void testFractions() throw() {
   localeSettings.shortFormat = true;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
   localeSettings.shortFormat = false;
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 1.0L;
@@ -1865,9 +1866,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 2.01L;
@@ -1875,9 +1876,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 4.991L;
@@ -1885,9 +1886,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 5.1123L;
@@ -1895,9 +1896,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 10.12345L;
@@ -1905,9 +1906,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 11.213451L;
@@ -1915,9 +1916,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 12.43456789L;
@@ -1926,9 +1927,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 1.2999999999L;
@@ -1937,9 +1938,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.1234567891011L;
@@ -1948,9 +1949,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 121.0L;
@@ -1960,9 +1961,9 @@ void testFractions() throw() {
   localeSettings.shortFormat = true;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
   localeSettings.shortFormat = false;
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 121.22L;
@@ -1972,9 +1973,9 @@ void testFractions() throw() {
   localeSettings.foldFraction = false;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
   localeSettings.foldFraction = true;
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 1000.16L;
@@ -1982,9 +1983,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 1002.51L;
@@ -1992,9 +1993,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 120101.1L;
@@ -2002,9 +2003,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 2000000.0L;
@@ -2014,9 +2015,9 @@ void testFractions() throw() {
   localeSettings.shortFormat = true;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
   localeSettings.shortFormat = false;
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 11102345.23L;
@@ -2024,9 +2025,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 123456789.321234L;
@@ -2035,9 +2036,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 882077.5144L;
@@ -2045,9 +2046,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 424065.5382252L;
@@ -2056,9 +2057,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 930658.14L;
@@ -2066,9 +2067,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 876693.81506L;
@@ -2080,9 +2081,9 @@ void testFractions() throw() {
   localeSettings.precison = size_t(12U);
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
   localeSettings.precison = wasPrecison;
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 54.693L;
@@ -2090,9 +2091,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 14.65L;
@@ -2100,9 +2101,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 63.57L;
@@ -2110,9 +2111,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 6.785L;
@@ -2120,9 +2121,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 9.2416L;
@@ -2130,9 +2131,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 2.95L;
@@ -2140,9 +2141,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 3.04L;
@@ -2150,9 +2151,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 2.02L;
@@ -2160,9 +2161,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 5.06L;
@@ -2170,9 +2171,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 6.92L;
@@ -2180,9 +2181,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   // 14000000
   str__01_.clear();
   num = 14000000L;
@@ -2191,9 +2192,9 @@ void testFractions() throw() {
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   localeSettings.shortFormat = true;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 14000000L;
@@ -2201,9 +2202,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   //
   str__01_.clear();
   num = 433964.9L;
@@ -2211,9 +2212,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.0L;
@@ -2221,9 +2222,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 0.0L;
@@ -2232,9 +2233,9 @@ void testFractions() throw() {
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   localeSettings.shortFormat = false;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.0L;
@@ -2243,9 +2244,9 @@ void testFractions() throw() {
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   localeSettings.shortFormat = true;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.0L;
@@ -2254,9 +2255,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = true;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 0.0L;
@@ -2264,9 +2265,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   localeSettings.verySpecific = false;
   // 0.01 + '!shortFormat'
   str__01_.clear();
@@ -2276,9 +2277,9 @@ void testFractions() throw() {
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   localeSettings.shortFormat = false;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 0.01L;
@@ -2286,9 +2287,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.01L;
@@ -2296,9 +2297,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   // 0.01 + 'shortFormat'
   str__01_.clear();
   num = 0.01L;
@@ -2307,9 +2308,9 @@ void testFractions() throw() {
   localeSettings.shortFormat = true;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 0.01L;
@@ -2317,9 +2318,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 0.01L;
@@ -2327,9 +2328,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   localeSettings.shortFormat = false;
   // 10 + 'shortFormat'
   str__01_.clear();
@@ -2339,9 +2340,9 @@ void testFractions() throw() {
   localeSettings.shortFormat = true;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 10.0L;
@@ -2349,9 +2350,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 10.0L;
@@ -2359,9 +2360,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   localeSettings.shortFormat = false;
   
   str__01_.clear();
@@ -2371,9 +2372,9 @@ void testFractions() throw() {
   localeSettings.shortFormat = false;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.2L;
@@ -2382,9 +2383,9 @@ void testFractions() throw() {
   localeSettings.shortFormat = true;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   localeSettings.shortFormat = false;
   
   str__01_.clear();
@@ -2394,9 +2395,9 @@ void testFractions() throw() {
   localeSettings.shortFormat = true;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   localeSettings.shortFormat = false;
   
   str__01_.clear();
@@ -2405,9 +2406,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.7L;
@@ -2415,9 +2416,9 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.7L;
@@ -2427,9 +2428,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = true;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.7L;
@@ -2439,9 +2440,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = true;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.003L;
@@ -2451,9 +2452,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = false;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.2L;
@@ -2463,9 +2464,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = false;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.2L;
@@ -2475,9 +2476,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = false;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.00002L;
@@ -2487,9 +2488,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = false;
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.0000002L;
@@ -2499,9 +2500,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = false;
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 32107.0L;
@@ -2511,9 +2512,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = false;
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 32107.0L;
@@ -2523,9 +2524,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = false;
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.5L;
@@ -2535,9 +2536,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = false;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.25L;
@@ -2547,9 +2548,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = false;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.73L;
@@ -2559,9 +2560,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = false;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.05L;
@@ -2571,9 +2572,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = false;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.6529L;
@@ -2583,9 +2584,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = false;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.03L;
@@ -2595,9 +2596,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = false;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.03L;
@@ -2607,9 +2608,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = false;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.001L;
@@ -2619,9 +2620,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = false;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 1.02L;
@@ -2631,9 +2632,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = false;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.03L;
@@ -2643,9 +2644,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = false;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.03L;
@@ -2655,9 +2656,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = false;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.03L;
@@ -2667,9 +2668,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = false;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.43L;
@@ -2679,9 +2680,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = false;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 1.02L;
@@ -2691,9 +2692,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = false;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 1.02L;
@@ -2703,9 +2704,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = true;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.067L;
@@ -2715,9 +2716,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = false;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.067L;
@@ -2727,9 +2728,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = false;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 1200.004321L;
@@ -2739,9 +2740,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = true;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.000000001234L;
@@ -2751,9 +2752,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = true;
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 1.000000001234L;
@@ -2763,9 +2764,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = false;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.0001234L;
@@ -2775,9 +2776,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = false;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 1.0001234L;
@@ -2787,9 +2788,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = true;
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.0001L;
@@ -2799,9 +2800,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = true;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 22204.4604925L;
@@ -2811,9 +2812,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = false;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 2.22044604925L;
@@ -2823,9 +2824,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = false;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 123456L;
@@ -2835,9 +2836,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = true;
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 2220446.04925L;
@@ -2847,9 +2848,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = false;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 9L;
@@ -2859,9 +2860,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = true;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 22e-3L;
@@ -2873,9 +2874,9 @@ void testFractions() throw() {
   localeSettings.foldFraction = false;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
   localeSettings.foldFraction = true;
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 21e-3L;
@@ -2885,9 +2886,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = true;
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 123e30L;
@@ -2897,9 +2898,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = true;
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 321e-30L;
@@ -2909,9 +2910,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = true;
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 1.1L;
@@ -2921,9 +2922,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = true;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 12.12L;
@@ -2933,9 +2934,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = true;
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 123.123L;
@@ -2945,9 +2946,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = true;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.0L;
@@ -2957,9 +2958,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = false;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.0L;
@@ -2969,9 +2970,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = false;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 1000000287600.0L;
@@ -2981,9 +2982,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = false;
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 12.1e-3L;
@@ -2993,9 +2994,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = false;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 1.0021L;
@@ -3005,9 +3006,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = false;
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 1239.0e10L;
@@ -3017,9 +3018,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = true;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 123.9e0L;
@@ -3029,9 +3030,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = true;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 1.21e2L;
@@ -3041,9 +3042,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = true;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 123.456L;
@@ -3053,9 +3054,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = true;
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.0000123e-8L;
@@ -3065,9 +3066,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = true;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 1e30L;
@@ -3077,9 +3078,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = true;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 1e-30L;
@@ -3089,9 +3090,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = true;
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 12.1e-1L;
@@ -3101,9 +3102,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = true;
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 1.21e1L;
@@ -3113,9 +3114,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = false;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 186942862939.192e0L;
@@ -3126,9 +3127,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = true;
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.192416287965e0L;
@@ -3139,9 +3140,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = false;
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.1188916446365e0L;
@@ -3152,9 +3153,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = true;
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 1869428629.391L;
@@ -3165,9 +3166,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = false;
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.391618e0L;
@@ -3177,9 +3178,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = true;
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 1.12345671e0L;
@@ -3189,9 +3190,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = false;
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   //// Test too high / low values
 
@@ -3203,9 +3204,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = true;
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(!result);
-  assert(errMsg && *errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(!result);
+  ASSERT__(errMsg && *errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 1.0e-200L;
@@ -3215,9 +3216,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = false;
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(!result);
-  assert(errMsg && *errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(!result);
+  ASSERT__(errMsg && *errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   //// Test actual folding + positive sign
 
@@ -3232,9 +3233,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = false;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = -7289.120912091209L;
@@ -3244,9 +3245,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = true;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 28364768.07310731L;
@@ -3257,9 +3258,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = false;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = -2.678678L;
@@ -3269,9 +3270,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = true;
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.999999999L;
@@ -3281,9 +3282,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = false;
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
   
   str__01_.clear();
   num = 0.45454545L;
@@ -3293,9 +3294,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = true;
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 1.181818181818L;
@@ -3305,9 +3306,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = false;
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   localeSettings.foldFraction = false;
   localeSettings.positiveSign = false;
@@ -3320,9 +3321,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = false;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_.clear();
   num = 422.29L;
@@ -3332,9 +3333,9 @@ void testFractions() throw() {
   localeSettings.verySpecific = true;
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_US;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   //// ALL flags turned ON
 
@@ -3349,13 +3350,13 @@ void testFractions() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_EN_GB;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 }
 
 template <class TStrType = std::string>
-void testRusNumbers() throw() {
+static void testRusNumbers() {
   auto result = false;
   auto num = 0.0L;
   auto errMsg = "", resultStr = "";
@@ -3371,9 +3372,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 1L;
@@ -3383,9 +3384,9 @@ void testRusNumbers() throw() {
   localeSettings.shortFormat = true;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
   localeSettings.shortFormat = false;
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 1.5L;
@@ -3393,9 +3394,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 1215.3405354L;
@@ -3404,9 +3405,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 1984.6594646L;
@@ -3415,9 +3416,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 1976.0404423L;
@@ -3426,9 +3427,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 1223.9595577L;
@@ -3437,9 +3438,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 31187.4417319L;
@@ -3448,9 +3449,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 8812.5582681L;
@@ -3459,9 +3460,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = -14467.9375518L;
@@ -3470,9 +3471,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 25532.0624482L;
@@ -3481,9 +3482,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 0.00003L;
@@ -3491,9 +3492,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = -0.000975L;
@@ -3501,9 +3502,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 0.001125L;
@@ -3511,9 +3512,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 0.001275L;
@@ -3521,9 +3522,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 89.0L;
@@ -3531,9 +3532,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 0.0015L;
@@ -3541,9 +3542,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 0.001395L;
@@ -3551,9 +3552,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 38798.027L;
@@ -3561,9 +3562,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   localeSettings.foldFraction = false;
 
@@ -3573,9 +3574,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   localeSettings.shortFormat = true;
 
@@ -3585,9 +3586,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 11600.0L;
@@ -3595,9 +3596,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 1400.0L;
@@ -3605,9 +3606,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 2000000.0L;
@@ -3615,9 +3616,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 1000.0L;
@@ -3625,9 +3626,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 2000000000.0L;
@@ -3635,9 +3636,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 23500000000.0L;
@@ -3645,9 +3646,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 20456.09L;
@@ -3655,9 +3656,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 3652.93L;
@@ -3665,9 +3666,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 81.81L;
@@ -3675,9 +3676,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 14408.81L;
@@ -3685,9 +3686,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 17145.81L;
@@ -3695,9 +3696,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 111.29L;
@@ -3705,9 +3706,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 1423.68L;
@@ -3715,9 +3716,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 23500000000.0L;
@@ -3725,9 +3726,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 100.0L;
@@ -3735,9 +3736,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 164182200.0L;
@@ -3745,9 +3746,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 1641822.0L;
@@ -3755,9 +3756,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 200000001.0L;
@@ -3765,9 +3766,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 1451401033.0L;
@@ -3775,9 +3776,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 0.01L;
@@ -3787,9 +3788,9 @@ void testRusNumbers() throw() {
   localeSettings.shortFormat = false;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
   localeSettings.shortFormat = true;
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 27352942.0L;
@@ -3797,9 +3798,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 27352942.0L;
@@ -3807,9 +3808,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 500000000.0L;
@@ -3817,9 +3818,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 14299060.61L;
@@ -3827,9 +3828,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 1429906060.0L;
@@ -3837,9 +3838,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 396562485.81L;
@@ -3848,9 +3849,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 39656248581.0L;
@@ -3859,9 +3860,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 2005380419.0L;
@@ -3869,9 +3870,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 20053804.19L;
@@ -3879,9 +3880,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 7872.81L;
@@ -3889,9 +3890,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 12516366381.0L;
@@ -3900,9 +3901,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 120163663.81L;
@@ -3911,9 +3912,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 0.309393L;
@@ -3922,9 +3923,9 @@ void testRusNumbers() throw() {
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   localeSettings.shortFormat = false;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 0.3L;
@@ -3934,9 +3935,9 @@ void testRusNumbers() throw() {
   localeSettings.shortFormat = true;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
   localeSettings.shortFormat = false;
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 5.01L;
@@ -3944,9 +3945,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 4.015L;
@@ -3954,9 +3955,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 150.000003L;
@@ -3964,9 +3965,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 1.00421L;
@@ -3974,9 +3975,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 7.8L;
@@ -3984,9 +3985,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 5.45L;
@@ -3994,9 +3995,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 0.007L;
@@ -4004,9 +4005,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 33.0008L;
@@ -4014,9 +4015,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 0.1L;
@@ -4024,9 +4025,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 0.2L;
@@ -4034,9 +4035,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 121.0L;
@@ -4045,9 +4046,9 @@ void testRusNumbers() throw() {
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   localeSettings.shortFormat = true;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 121000.0L;
@@ -4055,9 +4056,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 121000000.0L;
@@ -4065,9 +4066,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 122.0L;
@@ -4075,9 +4076,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 122000.0L;
@@ -4085,9 +4086,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 122000000.0L;
@@ -4095,9 +4096,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 123.0L;
@@ -4105,9 +4106,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 123000.0L;
@@ -4115,9 +4116,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 123000000.0L;
@@ -4125,9 +4126,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 129.0L;
@@ -4135,9 +4136,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 129000.0L;
@@ -4145,9 +4146,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 129000000.0L;
@@ -4155,9 +4156,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 111000.0L;
@@ -4165,9 +4166,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 7.034L;
@@ -4175,9 +4176,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 8.01L;
@@ -4185,9 +4186,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 3.000003L;
@@ -4195,9 +4196,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 42.52L;
@@ -4205,9 +4206,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 1.05L;
@@ -4215,9 +4216,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 4.601L;
@@ -4225,9 +4226,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 9521.0L;
@@ -4236,9 +4237,9 @@ void testRusNumbers() throw() {
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   localeSettings.shortFormat = true;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 9521.0L;
@@ -4247,9 +4248,9 @@ void testRusNumbers() throw() {
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   localeSettings.shortFormat = false;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 22.2L;
@@ -4257,9 +4258,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 9521.1L;
@@ -4267,9 +4268,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   str__01_ = "number:";
   num = 22.22L;
@@ -4277,9 +4278,9 @@ void testRusNumbers() throw() {
   errMsg = "";
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 
   ////
 
@@ -4290,146 +4291,146 @@ void testRusNumbers() throw() {
   localeSettings.locale = ConvertionUtils::ELocale::L_RU_RU;
   localeSettings.shortFormat = true;
   result = ConvertionUtils::numToNumFormatStr(num, str__01_, localeSettings, &errMsg);
-  assert(result);
-  assert(errMsg && !*errMsg);
-  assert(!STRCMPI(str__01_.c_str(), resultStr));
+  ASSERT__(result);
+  ASSERT__(errMsg && !*errMsg);
+  ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
 }
 
-static void testStrToL() throw() {
+static void testStrToL() {
   auto val = 0L;
   auto result = false;
   const char* errMsg = nullptr;
 
   result = ConvertionUtils::strToL(val, "", errMsg);
-  assert(!result && !val && errMsg && *errMsg);
+  ASSERT__(!result && !val && errMsg && *errMsg);
 
   val = decltype(val)(); // reset
   errMsg = nullptr;
   result = ConvertionUtils::strToL(val, nullptr, errMsg);
-  assert(!result && !val && errMsg && *errMsg);
+  ASSERT__(!result && !val && errMsg && *errMsg);
 
   val = decltype(val)(); // reset
   errMsg = nullptr;
   result = ConvertionUtils::strToL(val, "-9999999999999999999999999999999999", errMsg);
-  assert(!result && !val && errMsg && *errMsg);
+  ASSERT__(!result && !val && errMsg && *errMsg);
 
   val = decltype(val)(); // reset
   errMsg = nullptr;
   result = ConvertionUtils::strToL(val, "9999999999999999999999999999999999", errMsg);
-  assert(!result && !val && errMsg && *errMsg);
+  ASSERT__(!result && !val && errMsg && *errMsg);
 
   val = decltype(val)(); // reset
   errMsg = nullptr;
   result = ConvertionUtils::strToL(val, "-", errMsg);
-  assert(!result && !val && errMsg && *errMsg);
+  ASSERT__(!result && !val && errMsg && *errMsg);
 
   val = decltype(val)(); // reset
   errMsg = nullptr;
   result = ConvertionUtils::strToL(val, "fg659", errMsg);
-  assert(!result && !val && errMsg && *errMsg);
+  ASSERT__(!result && !val && errMsg && *errMsg);
 
   val = decltype(val)(); // reset
   errMsg = nullptr;
   result = ConvertionUtils::strToL(val, "-683.0", errMsg);
-  assert(!result && !val && errMsg && *errMsg);
+  ASSERT__(!result && !val && errMsg && *errMsg);
 
   val = decltype(val)(); // reset
   errMsg = nullptr;
   result = ConvertionUtils::strToL(val, "dcrthctrchd", errMsg);
-  assert(!result && !val && errMsg && *errMsg);
+  ASSERT__(!result && !val && errMsg && *errMsg);
 
   val = decltype(val)(); // reset
   errMsg = nullptr;
   result = ConvertionUtils::strToL(val, "+683.0", errMsg);
-  assert(!result && !val && errMsg && *errMsg);
+  ASSERT__(!result && !val && errMsg && *errMsg);
 
   val = decltype(val)(); // reset
   errMsg = nullptr;
   result = ConvertionUtils::strToL(val, ".0", errMsg);
-  assert(!result && !val && errMsg && *errMsg);
+  ASSERT__(!result && !val && errMsg && *errMsg);
 
   val = decltype(val)(); // reset
   errMsg = nullptr;
   result = ConvertionUtils::strToL(val, "134.", errMsg);
-  assert(!result && !val && errMsg && *errMsg);
+  ASSERT__(!result && !val && errMsg && *errMsg);
 
   val = decltype(val)(); // reset
   errMsg = nullptr;
   result = ConvertionUtils::strToL(val, "23433353h", errMsg);
-  assert(!result && !val && errMsg && *errMsg);
+  ASSERT__(!result && !val && errMsg && *errMsg);
 
   val = decltype(val)(); // reset
   errMsg = nullptr;
   result = ConvertionUtils::strToL(val, "4w65465654w &", errMsg);
-  assert(!result && !val && errMsg && *errMsg);
+  ASSERT__(!result && !val && errMsg && *errMsg);
 
   val = decltype(val)(); // reset
   errMsg = nullptr;
   result = ConvertionUtils::strToL(val, "4323235 ", errMsg);
-  assert(!result && !val && errMsg && *errMsg);
+  ASSERT__(!result && !val && errMsg && *errMsg);
 
   val = decltype(val)(); // reset
   errMsg = nullptr;
   result = ConvertionUtils::strToL(val, "+8", errMsg);
-  assert(result && 8L == val && errMsg && !*errMsg);
+  ASSERT__(result && 8L == val && errMsg && !*errMsg);
 
   val = decltype(val)(); // reset
   errMsg = nullptr;
   result = ConvertionUtils::strToL(val, "-8", errMsg);
-  assert(result && -8L == val && errMsg && !*errMsg);
+  ASSERT__(result && -8L == val && errMsg && !*errMsg);
 
   val = decltype(val)(); // reset
   errMsg = nullptr;
   result = ConvertionUtils::strToL(val, "+845353", errMsg);
-  assert(result && 845353L == val && errMsg && !*errMsg);
+  ASSERT__(result && 845353L == val && errMsg && !*errMsg);
 
   val = decltype(val)(); // reset
   errMsg = nullptr;
   result = ConvertionUtils::strToL(val, "-2112845353", errMsg);
-  assert(result && -2112845353L == val && errMsg && !*errMsg);
+  ASSERT__(result && -2112845353L == val && errMsg && !*errMsg);
 
   val = decltype(val)(); // reset
   errMsg = nullptr;
   result = ConvertionUtils::strToL(val, "-0", errMsg);
-  assert(result && 0L == val && errMsg && !*errMsg);
+  ASSERT__(result && 0L == val && errMsg && !*errMsg);
 
   val = decltype(val)(); // reset
   errMsg = nullptr;
   result = ConvertionUtils::strToL(val, "+0", errMsg);
-  assert(result && 0L == val && errMsg && !*errMsg);
+  ASSERT__(result && 0L == val && errMsg && !*errMsg);
 
   val = decltype(val)(); // reset
   errMsg = nullptr;
   result = ConvertionUtils::strToL(val, "0", errMsg);
-  assert(result && 0L == val && errMsg && !*errMsg);
+  ASSERT__(result && 0L == val && errMsg && !*errMsg);
 
   val = decltype(val)(); // reset
   errMsg = nullptr;
   result = ConvertionUtils::strToL(val, "0.0", errMsg);
-  assert(!result && !val && errMsg && *errMsg);
+  ASSERT__(!result && !val && errMsg && *errMsg);
 
   char strBuf[32U] = {};
   sprintf(strBuf, "%Ld", LONG_MIN);
   val = decltype(val)(); // reset
   errMsg = nullptr;
   result = ConvertionUtils::strToL(val, strBuf, errMsg);
-  assert(result && LONG_MIN == val && errMsg && !*errMsg);
+  ASSERT__(result && LONG_MIN == val && errMsg && !*errMsg);
 
   sprintf(strBuf, "%Ld", LONG_MAX);
   val = decltype(val)(); // reset
   errMsg = nullptr;
   result = ConvertionUtils::strToL(val, strBuf, errMsg);
-  assert(result && LONG_MAX == val && errMsg && !*errMsg);
+  ASSERT__(result && LONG_MAX == val && errMsg && !*errMsg);
 
   val = decltype(val)(); // reset
   errMsg = nullptr;
   result = ConvertionUtils::strToL(val, "-006", errMsg);
-  assert(result && -6L == val && errMsg && !*errMsg);
+  ASSERT__(result && -6L == val && errMsg && !*errMsg);
 
   val = decltype(val)(); // reset
   errMsg = nullptr;
   result = ConvertionUtils::strToL(val, "+09", errMsg);
-  assert(result && 9L == val && errMsg && !*errMsg);
+  ASSERT__(result && 9L == val && errMsg && !*errMsg);
 }
 
 } // namespace END

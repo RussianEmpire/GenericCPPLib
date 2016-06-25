@@ -1,15 +1,16 @@
 ﻿#ifndef StaticStrTestsH
 #define StaticStrTestsH
 
-//// [!] Version 1.004 [!]
+//// [!] Version 1.005 [!]
 
-#include "StaticallyBufferedStringLight.h"
+#include "TestUtils.h"
 #include "PerformanceTester.h"
+#include "StaticallyBufferedStringLight.h"
 
-#include <vector>
-#include <deque>
 #include <set>
 #include <list>
+#include <deque>
+#include <vector>
 #include <unordered_set>
 
 ADD_STD_HASHER_FOR(StrLight)
@@ -100,6 +101,7 @@ auto TestConcat(TStrType& str, const size_t maxLen) throw()
 }
 
 // Comparing chunk should be as a register size
+// [!] WARNING! Aliasing rules violation! [!]
 static long long int quickCmp(const void* const mem1, const void* const mem2, const size_t memSize) throw() {
   auto mem1reinterpreted = static_cast<const unsigned long int*>(mem1);
   auto mem2reinterpreted = static_cast<const unsigned long int*>(mem2);
@@ -115,7 +117,7 @@ static long long int quickCmp(const void* const mem1, const void* const mem2, co
 }
 
 // Both functional & performance tests (+a few CRT/STL integration tests)
-static void testStaticStr() throw() {
+static void testStaticStr() {
   char askUser[8U] = {0};
   std::cout << "\nEnter '1' to perform ALL static str. tests: ";
   std::cin >> askUser;
@@ -125,22 +127,22 @@ static void testStaticStr() throw() {
 
   {
     const StaticallyBufferedStringLight<> str_1_, str_2_;
-    assert(str_1_ == str_2_ && str_2_ == str_1_);
-    assert(!strcmp(str_1_.c_str(), str_2_.c_str()));
-    assert(str_1_.hash() == str_2_.hash() && !str_1_.hash());
-    assert(str_1_.length() == str_2_.length() && !str_1_.length());
+    ASSERT__(str_1_ == str_2_ && str_2_ == str_1_);
+    ASSERT__(!strcmp(str_1_.c_str(), str_2_.c_str()));
+    ASSERT__(str_1_.hash() == str_2_.hash() && !str_1_.hash());
+    ASSERT__(str_1_.length() == str_2_.length() && !str_1_.length());
 
     const StaticallyBufferedStringLight<char, 7U> str_0_;
     const StaticallyBufferedStringLight<char, 31U> str_3_;
-    assert(str_0_ == str_3_ && str_3_ == str_0_);
-    assert(!strcmp(str_0_.c_str(), str_3_.c_str()));
-    assert(str_0_.hash() == str_3_.hash() && !str_0_.hash());
-    assert(str_0_.length() == str_3_.length() && !str_0_.length());
+    ASSERT__(str_0_ == str_3_ && str_3_ == str_0_);
+    ASSERT__(!strcmp(str_0_.c_str(), str_3_.c_str()));
+    ASSERT__(str_0_.hash() == str_3_.hash() && !str_0_.hash());
+    ASSERT__(str_0_.length() == str_3_.length() && !str_0_.length());
 
     std::string str_4_;
-    assert(str_1_ == str_4_);
-    assert(!strcmp(str_1_.c_str(), str_4_.c_str()));
-    assert(str_1_.length() == str_4_.length());
+    ASSERT__(str_1_ == str_4_);
+    ASSERT__(!strcmp(str_1_.c_str(), str_4_.c_str()));
+    ASSERT__(str_1_.length() == str_4_.length());
   }
 
   //// Tests for 'getFNV1aHash'
@@ -163,142 +165,142 @@ static void testStaticStr() throw() {
     // Uses FNV1_32A_INIT as the 'hval' arg on the first call [offset basis]
     auto fnv_a = fnv_32a_str(fnv_str, (size_t)0x811c9dc5);
     auto fnv_b = MathUtils::getFNV1aHash(fnv_str);
-    assert(fnv_a == fnv_b);
+    ASSERT__(fnv_a == fnv_b);
 
     StaticallyBufferedStringLight<> s_str_1_ = "7xtm3g";
     fnv_str = s_str_1_.c_str();
     fnv_a = fnv_32a_str(fnv_str, (size_t)0x811c9dc5);
     fnv_b = s_str_1_.hash();
-    assert(fnv_a == fnv_b);
+    ASSERT__(fnv_a == fnv_b);
 
     //// Hash prolongation check
 
     auto isHashKnown_1_ = false;
 
     s_str_1_ += " 73x3gt3 g 387bg 378 $@%(U ";
-    assert(!s_str_1_.modified() && !s_str_1_.truncated());
+    ASSERT__(!s_str_1_.modified() && !s_str_1_.truncated());
     fnv_str = s_str_1_.c_str(); // NOT really needed
     fnv_a = fnv_32a_str(fnv_str, (size_t)0x811c9dc5);
     isHashKnown_1_ = false;
     fnv_b = s_str_1_.getHashIfKnown(isHashKnown_1_);
-    assert(fnv_a == fnv_b);
+    ASSERT__(fnv_a == fnv_b);
 
     s_str_1_ += '&';
-    assert(!s_str_1_.modified() && !s_str_1_.truncated());
+    ASSERT__(!s_str_1_.modified() && !s_str_1_.truncated());
     fnv_str = s_str_1_.c_str(); // NOT really needed
     fnv_a = fnv_32a_str(fnv_str, (size_t)0x811c9dc5);
     isHashKnown_1_ = false;
     fnv_b = s_str_1_.getHashIfKnown(isHashKnown_1_);
-    assert(fnv_a == fnv_b);
+    ASSERT__(fnv_a == fnv_b);
 
     auto actuallyAppended_ = size_t();
     s_str_1_.append(1234567890UL, &actuallyAppended_);
-    assert(!s_str_1_.modified() && !s_str_1_.truncated() && actuallyAppended_);
+    ASSERT__(!s_str_1_.modified() && !s_str_1_.truncated() && actuallyAppended_);
     fnv_str = s_str_1_.c_str(); // NOT really needed
     fnv_a = fnv_32a_str(fnv_str, (size_t)0x811c9dc5);
     isHashKnown_1_ = false;
     fnv_b = s_str_1_.getHashIfKnown(isHashKnown_1_);
-    assert(fnv_a == fnv_b);
+    ASSERT__(fnv_a == fnv_b);
 
     ////
 
     s_str_1_.pop_back(); // drop hash
-    assert(s_str_1_.modified() && !s_str_1_.truncated());
+    ASSERT__(s_str_1_.modified() && !s_str_1_.truncated());
     auto s_str_2_ = s_str_1_; // 's_str_2_' will have a hash AND SHOULD share it
-    assert(!s_str_2_.modified() && !s_str_2_.truncated());
-    assert(!s_str_1_.modified() && !s_str_1_.truncated());
+    ASSERT__(!s_str_2_.modified() && !s_str_2_.truncated());
+    ASSERT__(!s_str_1_.modified() && !s_str_1_.truncated());
 
     isHashKnown_1_ = false;
     auto hash_1_ = s_str_1_.getHashIfKnown(isHashKnown_1_);
-    assert(hash_1_); // SHOULD be konwn - shared from 's_str_2_'
+    ASSERT__(hash_1_); // SHOULD be konwn - shared from 's_str_2_'
     isHashKnown_1_ = false;
-    assert(s_str_2_.getHashIfKnown(isHashKnown_1_) &&
+    ASSERT__(s_str_2_.getHashIfKnown(isHashKnown_1_) &&
            hash_1_ == s_str_2_.getHashIfKnown(isHashKnown_1_));
     fnv_str = s_str_1_.c_str(); // NOT really needed
     fnv_a = fnv_32a_str(fnv_str, (size_t)0x811c9dc5);
     fnv_b = s_str_1_.hash();
-    assert(fnv_a == fnv_b);
-    assert(!strcmp(s_str_1_.c_str(), s_str_2_.c_str()));
+    ASSERT__(fnv_a == fnv_b);
+    ASSERT__(!strcmp(s_str_1_.c_str(), s_str_2_.c_str()));
 
     ////
 
     s_str_2_.clear();
-    assert(!s_str_2_.modified() && !s_str_2_.truncated());
+    ASSERT__(!s_str_2_.modified() && !s_str_2_.truncated());
     s_str_1_.pop_back(); // drop hash
-    assert(s_str_1_.modified() && !s_str_1_.truncated());
+    ASSERT__(s_str_1_.modified() && !s_str_1_.truncated());
     s_str_2_ = s_str_1_; // SHOULD get & share hash
-    assert(!s_str_2_.modified() && !s_str_2_.truncated());
-    assert(!s_str_1_.modified() && !s_str_1_.truncated());
+    ASSERT__(!s_str_2_.modified() && !s_str_2_.truncated());
+    ASSERT__(!s_str_1_.modified() && !s_str_1_.truncated());
 
     isHashKnown_1_ = false;
     hash_1_ = s_str_1_.getHashIfKnown(isHashKnown_1_);
-    assert(hash_1_); // SHOULD be konwn - shared from 's_str_2_'
+    ASSERT__(hash_1_); // SHOULD be konwn - shared from 's_str_2_'
     isHashKnown_1_ = false;
-    assert(s_str_2_.getHashIfKnown(isHashKnown_1_) &&
+    ASSERT__(s_str_2_.getHashIfKnown(isHashKnown_1_) &&
            hash_1_ == s_str_2_.getHashIfKnown(isHashKnown_1_));
     fnv_str = s_str_1_.c_str(); // NOT really needed
     fnv_a = fnv_32a_str(fnv_str, (size_t)0x811c9dc5);
     fnv_b = s_str_1_.hash();
-    assert(fnv_a == fnv_b);
-    assert(!strcmp(s_str_1_.c_str(), s_str_2_.c_str()));
+    ASSERT__(fnv_a == fnv_b);
+    ASSERT__(!strcmp(s_str_1_.c_str(), s_str_2_.c_str()));
    
     s_str_1_.pop_back(); // drop hash
-    assert(s_str_1_.modified() && !s_str_1_.truncated());
+    ASSERT__(s_str_1_.modified() && !s_str_1_.truncated());
     s_str_2_.pop_back();
-    assert(s_str_2_.modified() && !s_str_2_.truncated());
+    ASSERT__(s_str_2_.modified() && !s_str_2_.truncated());
     hash_1_ = s_str_1_.hash();
-    assert(!s_str_1_.modified() && !s_str_1_.truncated());
-    assert(hash_1_);
+    ASSERT__(!s_str_1_.modified() && !s_str_1_.truncated());
+    ASSERT__(hash_1_);
     fnv_str = s_str_1_.c_str(); // NOT really needed
     fnv_a = fnv_32a_str(fnv_str, (size_t)0x811c9dc5);
-    assert(fnv_a == hash_1_);
-    assert(s_str_1_ == s_str_2_); // SHOULD hsare hash
-    assert(!s_str_1_.modified() && !s_str_1_.truncated());
-    assert(!s_str_2_.modified() && !s_str_2_.truncated());
+    ASSERT__(fnv_a == hash_1_);
+    ASSERT__(s_str_1_ == s_str_2_); // SHOULD hsare hash
+    ASSERT__(!s_str_1_.modified() && !s_str_1_.truncated());
+    ASSERT__(!s_str_2_.modified() && !s_str_2_.truncated());
     isHashKnown_1_ = false;
-    assert(s_str_2_.getHashIfKnown(isHashKnown_1_) &&
+    ASSERT__(s_str_2_.getHashIfKnown(isHashKnown_1_) &&
            hash_1_ == s_str_2_.getHashIfKnown(isHashKnown_1_));
-    assert(!strcmp(s_str_1_.c_str(), s_str_2_.c_str()));
+    ASSERT__(!strcmp(s_str_1_.c_str(), s_str_2_.c_str()));
     
     actuallyAppended_ = decltype(actuallyAppended_)();
     s_str_1_.append(" c98a4tmxth hbr a her %$$& ", 12U, &actuallyAppended_);
-    assert(!s_str_1_.modified() && !s_str_1_.truncated() && 12U == actuallyAppended_);
+    ASSERT__(!s_str_1_.modified() && !s_str_1_.truncated() && 12U == actuallyAppended_);
     fnv_str = s_str_1_.c_str(); // NOT really needed
     fnv_a = fnv_32a_str(fnv_str, (size_t)0x811c9dc5);
     isHashKnown_1_ = false;
-    assert(s_str_1_.getHashIfKnown(isHashKnown_1_) &&
+    ASSERT__(s_str_1_.getHashIfKnown(isHashKnown_1_) &&
            fnv_a == s_str_1_.getHashIfKnown(isHashKnown_1_));
     
     s_str_1_ = " 7348cg3ctg 34tg 34gt 4g $%* ";
     isHashKnown_1_ = false;
-    assert(!s_str_1_.modified() && !s_str_1_.truncated() &&
+    ASSERT__(!s_str_1_.modified() && !s_str_1_.truncated() &&
            s_str_1_.getHashIfKnown(isHashKnown_1_));
     s_str_2_.clear();
     isHashKnown_1_ = false;
-    assert(!s_str_2_.modified() && !s_str_2_.truncated() &&
+    ASSERT__(!s_str_2_.modified() && !s_str_2_.truncated() &&
            !s_str_2_.getHashIfKnown(isHashKnown_1_));
     s_str_2_ = std::move(s_str_1_);
-    assert(!s_str_1_.modified() && !s_str_1_.truncated());
-    assert(!strcmp(s_str_1_.c_str(), s_str_2_.c_str()));
+    ASSERT__(!s_str_1_.modified() && !s_str_1_.truncated());
+    ASSERT__(!strcmp(s_str_1_.c_str(), s_str_2_.c_str()));
     isHashKnown_1_ = false;
-    assert(s_str_2_.getHashIfKnown(isHashKnown_1_) &&
+    ASSERT__(s_str_2_.getHashIfKnown(isHashKnown_1_) &&
            s_str_1_.getHashIfKnown(isHashKnown_1_) == s_str_2_.getHashIfKnown(isHashKnown_1_));
-    assert(s_str_2_ == s_str_1_);
-    assert(s_str_2_.getHashIfKnown(isHashKnown_1_) &&
+    ASSERT__(s_str_2_ == s_str_1_);
+    ASSERT__(s_str_2_.getHashIfKnown(isHashKnown_1_) &&
            s_str_1_.getHashIfKnown(isHashKnown_1_) == s_str_2_.getHashIfKnown(isHashKnown_1_));
     
     s_str_1_ = "  7h34ch8 73thv uibdfj djf5^&  ";
     isHashKnown_1_ = false;
-    assert(!s_str_1_.modified() && !s_str_1_.truncated() && s_str_1_.getHashIfKnown(isHashKnown_1_));
+    ASSERT__(!s_str_1_.modified() && !s_str_1_.truncated() && s_str_1_.getHashIfKnown(isHashKnown_1_));
     auto s_str_3_(s_str_1_);
-    assert(!s_str_3_.modified() && !s_str_3_.truncated());
-    assert(!strcmp(s_str_3_.c_str(), s_str_1_.c_str()));
+    ASSERT__(!s_str_3_.modified() && !s_str_3_.truncated());
+    ASSERT__(!strcmp(s_str_3_.c_str(), s_str_1_.c_str()));
     isHashKnown_1_ = false;
-    assert(s_str_3_.getHashIfKnown(isHashKnown_1_) &&
+    ASSERT__(s_str_3_.getHashIfKnown(isHashKnown_1_) &&
            s_str_1_.getHashIfKnown(isHashKnown_1_) == s_str_3_.getHashIfKnown(isHashKnown_1_));
-    assert(s_str_3_ == s_str_1_);
+    ASSERT__(s_str_3_ == s_str_1_);
     isHashKnown_1_ = false;
-    assert(s_str_1_.getHashIfKnown(isHashKnown_1_) &&
+    ASSERT__(s_str_1_.getHashIfKnown(isHashKnown_1_) &&
            s_str_1_.getHashIfKnown(isHashKnown_1_) == s_str_3_.getHashIfKnown(isHashKnown_1_));
   }
 
@@ -315,7 +317,7 @@ static void testStaticStr() throw() {
     auto const cstr___1_ptr_ = new(std::nothrow) CStr<STR_BUF_SIZE_ - 1U>;
     if (!cstr___1_ptr_) {
       std::cout << "\n[!] NOT enough memory [!]\n";
-      assert(false);
+      ASSERT__(false);
       return;
     }
     std::unique_ptr<std::decay<decltype(*cstr___1_ptr_)>::type> autoDeleteCStr(cstr___1_ptr_);
@@ -325,7 +327,7 @@ static void testStaticStr() throw() {
       new(std::nothrow) StaticallyBufferedStringLight<char, STR_BUF_SIZE_ - 1U>;
     if (!static_str___1_ptr_) {
       std::cout << "\n[!] NOT enough memory [!]\n";
-      assert(false);
+      ASSERT__(false);
       return;
     }
     std::unique_ptr<std::decay<decltype(*static_str___1_ptr_)>::type> autoDeleteStaticStr(static_str___1_ptr_);
@@ -370,41 +372,41 @@ static void testStaticStr() throw() {
     StaticallyBufferedStringLight<char, 7U> str_1_;
     auto knownHash = false;
     
-    assert(str_1_.resize(1U, 'a'));
+    ASSERT__(str_1_.resize(1U, 'a'));
     knownHash = false;
-    assert(!str_1_.empty() && 1U == str_1_.length() &&
+    ASSERT__(!str_1_.empty() && 1U == str_1_.length() &&
            str_1_.getHashIfKnown(knownHash) && knownHash && !str_1_.modified() &&
            !str_1_.full() && !str_1_.truncated());
-    assert(!strcmp(str_1_.c_str(), "a"));
+    ASSERT__(!strcmp(str_1_.c_str(), "a"));
 
-    assert(str_1_.resize(4U, ' '));
+    ASSERT__(str_1_.resize(4U, ' '));
     knownHash = false;
-    assert(!str_1_.empty() && 4U == str_1_.length() &&
+    ASSERT__(!str_1_.empty() && 4U == str_1_.length() &&
            str_1_.getHashIfKnown(knownHash) && knownHash && !str_1_.modified() &&
            !str_1_.full() && !str_1_.truncated());
-    assert(!strcmp(str_1_.c_str(), "a   "));
+    ASSERT__(!strcmp(str_1_.c_str(), "a   "));
 
-    assert(str_1_.resize(0U, '\0'));
+    ASSERT__(str_1_.resize(0U, '\0'));
     knownHash = false;
-    assert(str_1_.empty() && 0U == str_1_.length() &&
+    ASSERT__(str_1_.empty() && 0U == str_1_.length() &&
            !str_1_.getHashIfKnown(knownHash) && knownHash && !str_1_.modified() &&
            !str_1_.full() && !str_1_.truncated());
-    assert(!strcmp(str_1_.c_str(), ""));
+    ASSERT__(!strcmp(str_1_.c_str(), ""));
 
-    assert(str_1_.resize(128U, '7'));
+    ASSERT__(str_1_.resize(128U, '7'));
     knownHash = false;
-    assert(!str_1_.empty() && str_1_.max_size() == str_1_.length() &&
+    ASSERT__(!str_1_.empty() && str_1_.max_size() == str_1_.length() &&
            str_1_.getHashIfKnown(knownHash) && knownHash && !str_1_.modified() &&
            str_1_.full() && str_1_.truncated());
-    assert(!strcmp(str_1_.c_str(), "7777777"));
+    ASSERT__(!strcmp(str_1_.c_str(), "7777777"));
     
     str_1_.clear();
-    assert(!str_1_.resize(4U, '\0'));
+    ASSERT__(!str_1_.resize(4U, '\0'));
     knownHash = false;
-    assert(str_1_.empty() && 0U == str_1_.length() &&
+    ASSERT__(str_1_.empty() && 0U == str_1_.length() &&
            !str_1_.getHashIfKnown(knownHash) && knownHash && !str_1_.modified() &&
            !str_1_.full() && !str_1_.truncated());
-    assert(!strcmp(str_1_.c_str(), ""));
+    ASSERT__(!strcmp(str_1_.c_str(), ""));
   }
 
   // bool resize(size_t n, const TElemType c)
@@ -413,163 +415,163 @@ static void testStaticStr() throw() {
 
   {
     StaticallyBufferedStringLight<> str_1_;
-    assert(!str_1_.size() && !str_1_.length() && !*str_1_.c_str());
+    ASSERT__(!str_1_.size() && !str_1_.length() && !*str_1_.c_str());
 
     auto r_1_ = str_1_.pop_back();
 
     const char c_1_[] = {"7y3c47x3778xg43xmxh3g"};
     str_1_ += c_1_;
-    assert(strlen(c_1_) == str_1_.length() && !strcmp(c_1_, str_1_.c_str()));
+    ASSERT__(strlen(c_1_) == str_1_.length() && !strcmp(c_1_, str_1_.c_str()));
   }
 
   {
     const StaticallyBufferedStringLight<char, 7U> emptyStr1;
     const StaticallyBufferedStringLight<char, 31U> emptyStr2("");
     const StaticallyBufferedStringLight<char, 63U> emptyStr3 = nullptr;
-    assert(!strcmp("", emptyStr1.c_str()) &&
+    ASSERT__(!strcmp("", emptyStr1.c_str()) &&
            !strcmp("", emptyStr2.c_str()) && !strcmp("", emptyStr3.c_str()));
 
-    assert((emptyStr1 == emptyStr2) && (emptyStr1 == emptyStr3) && (emptyStr2 == emptyStr3));
-    assert(!(emptyStr1 != emptyStr2) && !(emptyStr1 != emptyStr3) && !(emptyStr2 != emptyStr3));
-    assert((emptyStr1 == "") && (emptyStr2 == "") && (emptyStr3 == ""));
+    ASSERT__((emptyStr1 == emptyStr2) && (emptyStr1 == emptyStr3) && (emptyStr2 == emptyStr3));
+    ASSERT__(!(emptyStr1 != emptyStr2) && !(emptyStr1 != emptyStr3) && !(emptyStr2 != emptyStr3));
+    ASSERT__((emptyStr1 == "") && (emptyStr2 == "") && (emptyStr3 == ""));
 
     const StaticallyBufferedStringLight<char, 7U> str1 = "1234567890";
     const StaticallyBufferedStringLight<char> str2 = "1234567890";
-    assert(str1 != str2);
-    assert(!(str1 == str2));
+    ASSERT__(str1 != str2);
+    ASSERT__(!(str1 == str2));
 
-    assert(strcmp("1234567890", str1.c_str()));
-    assert(!strcmp("1234567", str1.c_str()));
-    assert(str1 == "1234567");
-    assert(str1 != str2);
-    assert(!strcmp("1234567890", str2.c_str()));
-    assert(str2 == "1234567890");
+    ASSERT__(strcmp("1234567890", str1.c_str()));
+    ASSERT__(!strcmp("1234567", str1.c_str()));
+    ASSERT__(str1 == "1234567");
+    ASSERT__(str1 != str2);
+    ASSERT__(!strcmp("1234567890", str2.c_str()));
+    ASSERT__(str2 == "1234567890");
 
     const StaticallyBufferedStringLight<char, 15U> str3 = str2;
-    assert(str3 == str2);
-    assert(!strcmp(str2.c_str(), str2.c_str()));
+    ASSERT__(str3 == str2);
+    ASSERT__(!strcmp(str2.c_str(), str2.c_str()));
     {
       const std::string dynamicStr1_ = "x9a3mtx9x3498xn8ghxrerishm7x39";
       StaticallyBufferedStringLight<char, 63U> static_str4_ = dynamicStr1_;
-      assert(static_str4_ == dynamicStr1_);
-      assert(!strcmp(static_str4_.c_str(), dynamicStr1_.c_str()));
-      assert(!(static_str4_ != dynamicStr1_));
+      ASSERT__(static_str4_ == dynamicStr1_);
+      ASSERT__(!strcmp(static_str4_.c_str(), dynamicStr1_.c_str()));
+      ASSERT__(!(static_str4_ != dynamicStr1_));
     }
     std::string dynamicStr2_;
     StaticallyBufferedStringLight<char, 63U> static_str5_;
-    assert(static_str5_ == dynamicStr2_);
-    assert(!strcmp(static_str5_.c_str(), dynamicStr2_.c_str()));
-    assert(!(static_str5_ != dynamicStr2_));
+    ASSERT__(static_str5_ == dynamicStr2_);
+    ASSERT__(!strcmp(static_str5_.c_str(), dynamicStr2_.c_str()));
+    ASSERT__(!(static_str5_ != dynamicStr2_));
 
     auto const str_literal_1_ = "ca498cy3m4cmch,89yc,ds5su36c5c!@#$%_";
     dynamicStr2_ = str_literal_1_;
     static_str5_ = str_literal_1_;
-    assert(static_str5_ == dynamicStr2_);
-    assert(!strcmp(static_str5_.c_str(), dynamicStr2_.c_str()));
-    assert(static_str5_ == dynamicStr2_.c_str());
-    assert(!(static_str5_ != dynamicStr2_));
+    ASSERT__(static_str5_ == dynamicStr2_);
+    ASSERT__(!strcmp(static_str5_.c_str(), dynamicStr2_.c_str()));
+    ASSERT__(static_str5_ == dynamicStr2_.c_str());
+    ASSERT__(!(static_str5_ != dynamicStr2_));
 
     StaticallyBufferedStringLight<char, 63U> static_str6_;
     static_str6_ = dynamicStr2_;
-    assert(static_str6_ == dynamicStr2_);
-    assert(!strcmp(static_str6_.c_str(), dynamicStr2_.c_str()));
-    assert(static_str6_ == dynamicStr2_.c_str());
-    assert(!(static_str6_ != dynamicStr2_));
+    ASSERT__(static_str6_ == dynamicStr2_);
+    ASSERT__(!strcmp(static_str6_.c_str(), dynamicStr2_.c_str()));
+    ASSERT__(static_str6_ == dynamicStr2_.c_str());
+    ASSERT__(!(static_str6_ != dynamicStr2_));
 
     static_str6_.clear();
-    assert(static_str6_ == "");
-    assert(static_str6_ == nullptr);
-    assert(static_str6_.empty());
-    assert(!(static_str6_ != ""));
-    assert(!(static_str6_ != nullptr));
+    ASSERT__(static_str6_ == "");
+    ASSERT__(static_str6_ == nullptr);
+    ASSERT__(static_str6_.empty());
+    ASSERT__(!(static_str6_ != ""));
+    ASSERT__(!(static_str6_ != nullptr));
 
     StaticallyBufferedStringLight<char, 63U> static_str7_;
-    assert(static_str6_ == static_str7_);
-    assert(!strcmp(static_str6_.c_str(), static_str7_.c_str()));
-    assert(static_str6_ == static_str7_.c_str());
+    ASSERT__(static_str6_ == static_str7_);
+    ASSERT__(!strcmp(static_str6_.c_str(), static_str7_.c_str()));
+    ASSERT__(static_str6_ == static_str7_.c_str());
     std::string dynamicStr3_;
-    assert(static_str6_ == dynamicStr3_);
-    assert(!strcmp(static_str6_.c_str(), dynamicStr3_.c_str()));
-    assert(static_str6_ == dynamicStr3_.c_str());
+    ASSERT__(static_str6_ == dynamicStr3_);
+    ASSERT__(!strcmp(static_str6_.c_str(), dynamicStr3_.c_str()));
+    ASSERT__(static_str6_ == dynamicStr3_.c_str());
 
     auto const str_literal_2_ = "!@#$%^&*()_+_)(*&^%$#@xhn87ae9c";
     static_str6_ += str_literal_2_;
     dynamicStr3_ += str_literal_2_;
-    assert(static_str6_ != nullptr);
-    assert(static_str6_ == dynamicStr3_);
-    assert(!strcmp(static_str6_.c_str(), dynamicStr3_.c_str()));
-    assert(static_str6_ == dynamicStr3_.c_str());
-    assert(static_str6_ != (dynamicStr3_.c_str() + 3U));
+    ASSERT__(static_str6_ != nullptr);
+    ASSERT__(static_str6_ == dynamicStr3_);
+    ASSERT__(!strcmp(static_str6_.c_str(), dynamicStr3_.c_str()));
+    ASSERT__(static_str6_ == dynamicStr3_.c_str());
+    ASSERT__(static_str6_ != (dynamicStr3_.c_str() + 3U));
 
     static_str6_ += str_literal_2_;
     dynamicStr3_ += str_literal_2_;
-    assert(static_str6_ == dynamicStr3_);
-    assert(!strcmp(static_str6_.c_str(), dynamicStr3_.c_str()));
-    assert(static_str6_ == dynamicStr3_.c_str());
-    assert(static_str6_ != (dynamicStr3_.c_str() + 2U));
+    ASSERT__(static_str6_ == dynamicStr3_);
+    ASSERT__(!strcmp(static_str6_.c_str(), dynamicStr3_.c_str()));
+    ASSERT__(static_str6_ == dynamicStr3_.c_str());
+    ASSERT__(static_str6_ != (dynamicStr3_.c_str() + 2U));
 
     static_str6_ += "";
     static_str6_ += nullptr;
     dynamicStr3_ += "";
-    assert(static_str6_ == dynamicStr3_);
-    assert(!strcmp(static_str6_.c_str(), dynamicStr3_.c_str()));
-    assert(static_str6_ == dynamicStr3_.c_str());
-    assert(static_str6_ != (dynamicStr3_.c_str() + 1U));
+    ASSERT__(static_str6_ == dynamicStr3_);
+    ASSERT__(!strcmp(static_str6_.c_str(), dynamicStr3_.c_str()));
+    ASSERT__(static_str6_ == dynamicStr3_.c_str());
+    ASSERT__(static_str6_ != (dynamicStr3_.c_str() + 1U));
 
     char char_array_1_[128U] = {0};
     memcpy(char_array_1_, static_str6_.c_str(), static_str6_.length());
-    assert(static_str6_ == char_array_1_);
-    assert(!(static_str6_ != char_array_1_));
+    ASSERT__(static_str6_ == char_array_1_);
+    ASSERT__(!(static_str6_ != char_array_1_));
 
-    assert(!strcmp(static_str6_.c_str(), static_str6_.data()));
-    assert(static_str6_.length() == static_str6_.size());
-    assert(static_str6_.length() == strlen(static_str6_.c_str()));
-    assert(static_str6_.max_size() >= static_str6_.length());
-    assert(static_str6_.max_size() <= static_str6_.capacity());
-    assert(!static_str6_.empty());
-    assert(static_str6_.reserve(static_str6_.length()) &&
+    ASSERT__(!strcmp(static_str6_.c_str(), static_str6_.data()));
+    ASSERT__(static_str6_.length() == static_str6_.size());
+    ASSERT__(static_str6_.length() == strlen(static_str6_.c_str()));
+    ASSERT__(static_str6_.max_size() >= static_str6_.length());
+    ASSERT__(static_str6_.max_size() <= static_str6_.capacity());
+    ASSERT__(!static_str6_.empty());
+    ASSERT__(static_str6_.reserve(static_str6_.length()) &&
            static_str6_.reserve(static_str6_.max_size()));
 
     auto static_str6_copy_ = static_str6_;
     static_str6_.shrink_to_fit();
-    assert(static_str6_copy_ == static_str6_);
+    ASSERT__(static_str6_copy_ == static_str6_);
 
     const char char_array___0_[] = "xmq8934yx49,qxto,4htz8otxmh,olxlj,x_";
     StaticallyBufferedStringLight<char, 63U> static_str8_ = char_array___0_;
-    assert(static_str8_ == static_str8_);
-    assert(!(static_str8_ != static_str8_));
+    ASSERT__(static_str8_ == static_str8_);
+    ASSERT__(!(static_str8_ != static_str8_));
     for (size_t charIdx = 0U;
          charIdx < (std::extent<decltype(char_array___0_)>::value - 1U);
          ++charIdx)
     {
-      assert(static_str8_.at(charIdx) == char_array___0_[charIdx]);
-      assert(static_str8_[charIdx] == char_array___0_[charIdx]);
+      ASSERT__(static_str8_.at(charIdx) == char_array___0_[charIdx]);
+      ASSERT__(static_str8_[charIdx] == char_array___0_[charIdx]);
     }
-    assert(static_str8_.back() == char_array___0_[std::extent<decltype(char_array___0_)>::value - 2U]);
-    assert(static_str8_.front() == *char_array___0_);
+    ASSERT__(static_str8_.back() == char_array___0_[std::extent<decltype(char_array___0_)>::value - 2U]);
+    ASSERT__(static_str8_.front() == *char_array___0_);
 
     const auto currLen__1_ = static_str8_.length();
-    assert(static_str8_.back() != '6');
+    ASSERT__(static_str8_.back() != '6');
     static_str8_.push_back('6');
-    assert(static_str8_.length() > currLen__1_);
-    assert(static_str8_.back() == '6');
-    assert(static_str8_.pop_back() == '6');
-    assert(static_str8_.length() == currLen__1_);
-    assert(static_str8_.back() != '6');
+    ASSERT__(static_str8_.length() > currLen__1_);
+    ASSERT__(static_str8_.back() == '6');
+    ASSERT__(static_str8_.pop_back() == '6');
+    ASSERT__(static_str8_.length() == currLen__1_);
+    ASSERT__(static_str8_.back() != '6');
 
     auto isHashKnown_2_ = false;
-    assert(!static_str8_.getHashIfKnown(isHashKnown_2_));
-    assert(static_str8_.hash());
+    ASSERT__(!static_str8_.getHashIfKnown(isHashKnown_2_));
+    ASSERT__(static_str8_.hash());
     isHashKnown_2_ = false;
-    assert(static_str8_.getHashIfKnown(isHashKnown_2_));
+    ASSERT__(static_str8_.getHashIfKnown(isHashKnown_2_));
     isHashKnown_2_ = false;
-    assert(static_str8_.hash() == static_str8_.getHashIfKnown(isHashKnown_2_));
+    ASSERT__(static_str8_.hash() == static_str8_.getHashIfKnown(isHashKnown_2_));
 
     const StaticallyBufferedStringLight<char, 63U> static_str9_ = "abc";
     const StaticallyBufferedStringLight<char, 63U> static_str10_ = "abcd";
-    assert(static_str9_ < "abcd" && static_str9_ < static_str10_);
-    assert(!(static_str9_ < "abc") && !(static_str10_ < "abcd"));
-    assert(!(static_str10_ < static_str9_));
+    ASSERT__(static_str9_ < "abcd" && static_str9_ < static_str10_);
+    ASSERT__(!(static_str9_ < "abc") && !(static_str10_ < "abcd"));
+    ASSERT__(!(static_str10_ < static_str9_));
   }
 
   { // C++11 range loop + const. rev. iters + hash container + sort. tests
@@ -586,16 +588,16 @@ static void testStaticStr() throw() {
 
     auto idx_1_ = 0U;
     for (const auto c_1_ : static_str10_) {
-      assert(c_1_ == staticChars_1_[idx_1_++]);
+      ASSERT__(c_1_ == staticChars_1_[idx_1_++]);
       dstr_1_ += c_1_;
 
       //// Constructs 'StrLight' from 'std::string'
       const auto emplaceResult = uset_10_.emplace(dstr_1_);
-      assert(*emplaceResult.first == dstr_1_ && dstr_1_ == (*emplaceResult.first).c_str());
-      assert(emplaceResult.second);
+      ASSERT__(*emplaceResult.first == dstr_1_ && dstr_1_ == (*emplaceResult.first).c_str());
+      ASSERT__(emplaceResult.second);
       const auto findResult = uset_10_.find(dstr_1_);
-      assert(findResult != uset_10_.end());
-      assert(*findResult == dstr_1_ && dstr_1_ == (*findResult).c_str());
+      ASSERT__(findResult != uset_10_.end());
+      ASSERT__(*findResult == dstr_1_ && dstr_1_ == (*findResult).c_str());
 
       vec_10_.emplace_back(dstr_1_);
       vec_11_.emplace_back(const_cast<const decltype(dstr_1_)&>(dstr_1_));
@@ -603,16 +605,16 @@ static void testStaticStr() throw() {
       list_10_.emplace_back(dstr_1_);
       
       const auto setEmplaceResult = set_10_.emplace(dstr_1_);
-      assert(*setEmplaceResult.first == dstr_1_ && dstr_1_ == (*setEmplaceResult.first).c_str());
-      assert(setEmplaceResult.second);
+      ASSERT__(*setEmplaceResult.first == dstr_1_ && dstr_1_ == (*setEmplaceResult.first).c_str());
+      ASSERT__(setEmplaceResult.second);
       const auto setFindResult = set_10_.find(dstr_1_);
-      assert(setFindResult != set_10_.end());
-      assert(*setFindResult == dstr_1_ && dstr_1_ == (*setFindResult).c_str());
+      ASSERT__(setFindResult != set_10_.end());
+      ASSERT__(*setFindResult == dstr_1_ && dstr_1_ == (*setFindResult).c_str());
     }
-    assert(idx_1_ == static_str10_.length());
-    assert(idx_1_ == std::extent<decltype(staticChars_1_)>::value - 1U);
-    assert(dstr_1_ == static_str10_.c_str());
-    assert(static_str10_ == dstr_1_);
+    ASSERT__(idx_1_ == static_str10_.length());
+    ASSERT__(idx_1_ == std::extent<decltype(staticChars_1_)>::value - 1U);
+    ASSERT__(dstr_1_ == static_str10_.c_str());
+    ASSERT__(static_str10_ == dstr_1_);
 
     std::remove_const<decltype(staticChars_1_)>::type staticChars_2_ = {0};
     idx_1_ = 0U;
@@ -620,20 +622,20 @@ static void testStaticStr() throw() {
     while (iter_2_ != static_str10_.crend()) {
       const auto elem_1_ = *iter_2_++;
       const auto elem_2_ = staticChars_1_[std::extent<decltype(staticChars_1_)>::value - idx_1_ - 2U];
-      assert(elem_1_ == elem_2_);
+      ASSERT__(elem_1_ == elem_2_);
       staticChars_2_[idx_1_] = elem_1_; // reversed fill
       ++idx_1_;
     }
     std::reverse(staticChars_2_, staticChars_2_ + strlen(staticChars_2_));
-    assert(!strcmp(staticChars_2_, staticChars_1_));
-    assert(static_str10_ == staticChars_2_);
-    assert(dstr_1_ == staticChars_2_);
+    ASSERT__(!strcmp(staticChars_2_, staticChars_1_));
+    ASSERT__(static_str10_ == staticChars_2_);
+    ASSERT__(dstr_1_ == staticChars_2_);
 
     decltype(vec_11_) vec_12_;
     for (const auto& elem : vec_10_) {
       vec_12_.emplace_back(elem.c_str());
     }
-    assert(vec_11_ == vec_12_); // i. e. vec_11_ == vec_10_, as 'vec_12_' constructed from 'vec_10_'
+    ASSERT__(vec_11_ == vec_12_); // i. e. vec_11_ == vec_10_, as 'vec_12_' constructed from 'vec_10_'
 
     std::reverse(vec_10_.begin(), vec_10_.end());
     std::reverse(vec_11_.begin(), vec_11_.end());
@@ -644,65 +646,65 @@ static void testStaticStr() throw() {
     for (const auto& elem : vec_10_) {
       vec_12_.emplace_back(elem.c_str());
     }
-    assert(vec_11_ == vec_12_); // i. e. vec_11_ == vec_10_, as 'vec_12_' constructed from 'vec_10_'
+    ASSERT__(vec_11_ == vec_12_); // i. e. vec_11_ == vec_10_, as 'vec_12_' constructed from 'vec_10_'
   }
   
   { // Sort test B
     StrLight strLight_1_ = "a", strLight_2_;
-    assert(strLight_1_ < "b");
+    ASSERT__(strLight_1_ < "b");
     strLight_1_ = "aba";
-    assert(strLight_1_ < "abb");
+    ASSERT__(strLight_1_ < "abb");
     strLight_1_ = "bba";
-    assert(strLight_1_ < "cbb");
+    ASSERT__(strLight_1_ < "cbb");
     strLight_1_ = "bbc";
-    assert(!(strLight_1_ < "bbb"));
+    ASSERT__(!(strLight_1_ < "bbb"));
 
     strLight_1_ = "a";
     strLight_2_ = "b";
-    assert(strLight_1_ < strLight_2_);
-    assert(!(strLight_2_ < strLight_1_));
+    ASSERT__(strLight_1_ < strLight_2_);
+    ASSERT__(!(strLight_2_ < strLight_1_));
     strLight_1_ = "aa";
     strLight_2_ = "ba";
-    assert(strLight_1_ < strLight_2_);
-    assert(!(strLight_2_ < strLight_1_));
+    ASSERT__(strLight_1_ < strLight_2_);
+    ASSERT__(!(strLight_2_ < strLight_1_));
     strLight_1_ = "aa";
     strLight_2_ = "ab";
-    assert(strLight_1_ < strLight_2_);
-    assert(!(strLight_2_ < strLight_1_));
+    ASSERT__(strLight_1_ < strLight_2_);
+    ASSERT__(!(strLight_2_ < strLight_1_));
     strLight_1_ = "aab";
     strLight_2_ = "aac";
-    assert(strLight_1_ < strLight_2_);
-    assert(!(strLight_2_ < strLight_1_));
+    ASSERT__(strLight_1_ < strLight_2_);
+    ASSERT__(!(strLight_2_ < strLight_1_));
     strLight_1_ = "aac";
     strLight_2_ = "abb";
-    assert(strLight_1_ < strLight_2_);
-    assert(!(strLight_2_ < strLight_1_));
+    ASSERT__(strLight_1_ < strLight_2_);
+    ASSERT__(!(strLight_2_ < strLight_1_));
 
     strLight_1_ = "aaaaaaaaaaaab";
-    assert(strLight_1_ < "aaaaaaaaaaaac");
+    ASSERT__(strLight_1_ < "aaaaaaaaaaaac");
     strLight_2_ = "aaaaaaaaaaaac";
-    assert(strLight_1_ < strLight_2_);
-    assert(strLight_1_ < "baaaaaaaaaaab");
+    ASSERT__(strLight_1_ < strLight_2_);
+    ASSERT__(strLight_1_ < "baaaaaaaaaaab");
     strLight_2_ = "baaaaaaaaaaab";
-    assert(strLight_1_ < strLight_2_);
-    assert(strLight_1_ < "aaaaaaaaaaabb");
+    ASSERT__(strLight_1_ < strLight_2_);
+    ASSERT__(strLight_1_ < "aaaaaaaaaaabb");
     strLight_2_ = "aaaaaaaaaaabb";
-    assert(strLight_1_ < strLight_2_);
-    assert(strLight_1_ < "aaaaaabaaaaab");
+    ASSERT__(strLight_1_ < strLight_2_);
+    ASSERT__(strLight_1_ < "aaaaaabaaaaab");
     strLight_2_ = "aaaaaabaaaaab";
-    assert(strLight_1_ < strLight_2_);
-    assert(strLight_1_ < "aaabaaaaaaaab");
+    ASSERT__(strLight_1_ < strLight_2_);
+    ASSERT__(strLight_1_ < "aaabaaaaaaaab");
     strLight_2_ = "aaabaaaaaaaab";
-    assert(strLight_1_ < strLight_2_);
+    ASSERT__(strLight_1_ < strLight_2_);
 
     strLight_1_ = "aa";
-    assert(strLight_1_ < "aaa");
+    ASSERT__(strLight_1_ < "aaa");
     strLight_2_ = "aaa";
-    assert(strLight_1_ < strLight_2_);
+    ASSERT__(strLight_1_ < strLight_2_);
     strLight_1_ = "2acaa_abaaamaa&aaeaa1a";
-    assert(strLight_1_ < "2acaa_abazamaa&aaeaa1a");
+    ASSERT__(strLight_1_ < "2acaa_abazamaa&aaeaa1a");
     strLight_2_ = "2acaa_abazamaa&aaeaa1a";
-    assert(strLight_1_ < strLight_2_);
+    ASSERT__(strLight_1_ < strLight_2_);
 
     union u1 {
       unsigned int ui;
@@ -745,7 +747,7 @@ static void testStaticStr() throw() {
     }
     // Check SortTesterHelper::vec_dynamic_str_ == SortTesterHelper::vec_static_str_,
     //  as 'vec_13_' constructed from 'SortTesterHelper::vec_static_str_'
-    assert(SortTesterHelper::vec_dynamic_str_ == vec_13_);
+    ASSERT__(SortTesterHelper::vec_dynamic_str_ == vec_13_);
 
     SortTesterHelper::clean();
   }
@@ -754,25 +756,25 @@ static void testStaticStr() throw() {
     const char auto_arr_1_[] = "a";
     const char auto_arr_2_[] = "b";
     StrLight strLight_1_ = auto_arr_1_;
-    assert(strLight_1_ < auto_arr_2_);
-    assert(!(strLight_1_ < auto_arr_1_));
+    ASSERT__(strLight_1_ < auto_arr_2_);
+    ASSERT__(!(strLight_1_ < auto_arr_1_));
 
     const char auto_arr_3_[] = "aba";
     const char auto_arr_4_[] = "abb";
     strLight_1_ = auto_arr_3_;
-    assert(strLight_1_ < auto_arr_4_);
-    assert(!(strLight_1_ < auto_arr_3_));
+    ASSERT__(strLight_1_ < auto_arr_4_);
+    ASSERT__(!(strLight_1_ < auto_arr_3_));
 
     const char auto_arr_5_[] = "bba";
     const char auto_arr_6_[] = "cbb";
     strLight_1_ = auto_arr_5_;
-    assert(strLight_1_ < auto_arr_6_);
-    assert(!(strLight_1_ < auto_arr_5_));
+    ASSERT__(strLight_1_ < auto_arr_6_);
+    ASSERT__(!(strLight_1_ < auto_arr_5_));
 
     const char auto_arr_7_[] = "aba";
     const char auto_arr_8_[] = "abb";
     strLight_1_ = auto_arr_8_;
-    assert(!(strLight_1_ < auto_arr_7_));
+    ASSERT__(!(strLight_1_ < auto_arr_7_));
     
     const char auto_arr_9a_[][24U] =
       { {"aa"}, {"aa"}, {"aab"}, {"aaaaaaaaaaaab"}, {"aaaaaaaaaaaac"}, {"aaaaaaaaaaaac"},
@@ -786,40 +788,40 @@ static void testStaticStr() throw() {
     strLight_1_.clear();
     for (size_t idx = 0U; idx < std::extent<decltype(auto_arr_9a_)>::value; ++idx) {
       strLight_1_ = auto_arr_9a_[idx];
-      assert(strLight_1_ < auto_arr_9b_[idx]);
-      assert(!(strLight_1_ < auto_arr_9a_[idx]));
+      ASSERT__(strLight_1_ < auto_arr_9b_[idx]);
+      ASSERT__(!(strLight_1_ < auto_arr_9a_[idx]));
 
       strLight_1_ = auto_arr_9b_[idx];
-      assert(!(strLight_1_ < auto_arr_9a_[idx]));
-      assert(!(strLight_1_ < auto_arr_9b_[idx]));
+      ASSERT__(!(strLight_1_ < auto_arr_9a_[idx]));
+      ASSERT__(!(strLight_1_ < auto_arr_9b_[idx]));
     }
   }
 
   {
     StrLight st_str_33_;
-    assert(!st_str_33_.modified() && !st_str_33_.truncated() && !st_str_33_.full());
+    ASSERT__(!st_str_33_.modified() && !st_str_33_.truncated() && !st_str_33_.full());
 
-    assert(!st_str_33_.setCharAt(0U, 'a') && !st_str_33_.setCharAt(1U, 'b'));
-    assert(!st_str_33_.modified() && !st_str_33_.truncated() && !st_str_33_.full());
+    ASSERT__(!st_str_33_.setCharAt(0U, 'a') && !st_str_33_.setCharAt(1U, 'b'));
+    ASSERT__(!st_str_33_.modified() && !st_str_33_.truncated() && !st_str_33_.full());
 
     st_str_33_ = "abc";
-    assert(!st_str_33_.modified() && !st_str_33_.truncated() && !st_str_33_.full());
+    ASSERT__(!st_str_33_.modified() && !st_str_33_.truncated() && !st_str_33_.full());
 
-    assert(st_str_33_.setCharAt(1U, 'a'));
-    assert(st_str_33_.modified() && 'a' == st_str_33_[1U] &&
+    ASSERT__(st_str_33_.setCharAt(1U, 'a'));
+    ASSERT__(st_str_33_.modified() && 'a' == st_str_33_[1U] &&
            !st_str_33_.truncated() && !st_str_33_.full());
 
     auto isHashKnown_3_ = false;
     st_str_33_.getHashIfKnown(isHashKnown_3_);
-    assert(st_str_33_.modified() && !st_str_33_.truncated() && !st_str_33_.full());
-    assert(st_str_33_.hash());
-    assert(!st_str_33_.modified() && !st_str_33_.truncated() && !st_str_33_.full());
+    ASSERT__(st_str_33_.modified() && !st_str_33_.truncated() && !st_str_33_.full());
+    ASSERT__(st_str_33_.hash());
+    ASSERT__(!st_str_33_.modified() && !st_str_33_.truncated() && !st_str_33_.full());
 
     for (size_t idx = 0U; idx < st_str_33_.max_size() + 8U; ++idx) {
       const char c = 'A' + idx / 3U;
       st_str_33_ += c;
     }
-    assert(!st_str_33_.modified() && st_str_33_.truncated() && st_str_33_.full());
+    ASSERT__(!st_str_33_.modified() && st_str_33_.truncated() && st_str_33_.full());
   }
   
   // String performance tests
@@ -926,7 +928,7 @@ static void testStaticStr() throw() {
       std::cout << "count1 - quickCmp          : " << counts[1] << "\n";
       std::cout << "count0 - strCmp<>          : " << *counts   << "\n";
       std::cout << "\n" << static_cast<double>(counts[3]) / counts[1] << "\n";
-      assert(r1 == r2);
+      ASSERT__(r1 == r2);
 
       if (counts[4] < counts[2]) ++memCmp_faster_then_memcmp_count;
       if (counts[4] < counts[1]) ++memCmp_faster_then_quickCmp;
@@ -969,13 +971,13 @@ static void testStaticStr() throw() {
       " Belfast (The Sun) and Dublin (The Irish Sun) respectively."};
     StaticallyBufferedStringLight<char, 799U> s_str_01_ = static_chars_01_;
     const auto pos = static_cast<size_t>(s_str_01_.length() * 0.7);
-    assert(s_str_01_.setCharAt(pos, '^'));
+    ASSERT__(s_str_01_.setCharAt(pos, '^'));
 
     TestFunctor<decltype(s_str_01_), decltype(static_chars_01_)>
       testLessThen1(s_str_01_, static_chars_01_, 0U);
 
     std::string dstr_01_ = s_str_01_.c_str();
-    assert(s_str_01_ == dstr_01_ && dstr_01_ == s_str_01_.c_str());
+    ASSERT__(s_str_01_ == dstr_01_ && dstr_01_ == s_str_01_.c_str());
 
     TestFunctor<decltype(dstr_01_), decltype(static_chars_01_)>
       testLessThen2(dstr_01_, static_chars_01_, 0U);
@@ -1024,8 +1026,8 @@ static void testStaticStr() throw() {
   {
     StaticallyBufferedStringLight<> str_45_ = "xrXR2C";
     str_45_ += str_45_;
-    assert(str_45_ == "xrXR2C""xrXR2C");
-    assert(!strcmp(str_45_.c_str(), "xrXR2C""xrXR2C"));
+    ASSERT__(str_45_ == "xrXR2C""xrXR2C");
+    ASSERT__(!strcmp(str_45_.c_str(), "xrXR2C""xrXR2C"));
   }
 
   {
@@ -1034,18 +1036,18 @@ static void testStaticStr() throw() {
     const auto pos_02_ = static_cast<size_t>(d_str_03_.length() * 0.57);
     const std::string d_str_04_(d_str_03_, pos_02_, std::string::npos);
     const StaticallyBufferedStringLight<> st_str_01_(d_str_03_, pos_02_, std::string::npos);
-    assert(d_str_04_ == st_str_01_ && st_str_01_ == d_str_04_);
+    ASSERT__(d_str_04_ == st_str_01_ && st_str_01_ == d_str_04_);
 
     const std::string d_str_05_;
     const auto pos_03_ = 999U;
     try { // mmm incorrect test, throws at the very first lint in a 'try' block
       const std::string d_str_06_(d_str_05_, pos_03_, 99U);
       const StaticallyBufferedStringLight<> st_str_02_(d_str_05_, pos_03_, 99U);
-      assert(d_str_06_ == st_str_02_ && st_str_02_ == d_str_06_);
+      ASSERT__(d_str_06_ == st_str_02_ && st_str_02_ == d_str_06_);
 
       const StaticallyBufferedStringLight<> st_str_03_(st_str_01_, size_t());
       const StaticallyBufferedStringLight<> st_str_04_(st_str_02_, size_t());
-      assert(st_str_03_ == st_str_01_ && st_str_04_ == st_str_02_);
+      ASSERT__(st_str_03_ == st_str_01_ && st_str_04_ == st_str_02_);
     } catch (...) {}
   }
   
@@ -1059,8 +1061,8 @@ static void testStaticStr() throw() {
       vec_s_str_02_(vec_d_str_02_.begin(), vec_d_str_02_.end());
     auto iter_02_ = vec_s_str_02_.begin();
     for (const auto& str : vec_d_str_02_) {
-      assert(str == *iter_02_);
-      assert(*iter_02_ == str);
+      ASSERT__(str == *iter_02_);
+      ASSERT__(*iter_02_ == str);
       ++iter_02_;
     }
     std::sort(vec_d_str_02_.begin(), vec_d_str_02_.end());
@@ -1073,47 +1075,47 @@ static void testStaticStr() throw() {
     const auto r_01_ = strcmp("оcклавд", "свнсы");
     const auto r_02_ = strCmp<>("оcклавд", "свнсы");
     const auto r_03_ = memcmp("оcклавд", "свнсы", std::min<>(strlen("оcклавд"), strlen("свнсы")) + 1U);
-    assert(r_01_ > 0 == r_02_ > 0 && r_01_ > 0 == r_03_ > 0); // check equal sign
+    ASSERT__(r_01_ > 0 == r_02_ > 0 && r_01_ > 0 == r_03_ > 0); // check equal sign
     
     StaticallyBufferedStringLight<> s01_ = "оcклавд", s02_ = "свнсы";
     const auto r_00_ = s01_ < s02_;
-    assert(r_00_ == (r_01_ < 0));
+    ASSERT__(r_00_ == (r_01_ < 0));
     
     auto r_04_ = strcmp("свнсы", "ваыпcwцо");
     auto r_05_ = strCmp<>("свнсы", "ваыпcwцо");
     auto r_06_ = memcmp("свнсы", "ваыпcwцо", std::min<>(strlen("оcклавд"), strlen("свнсы")) + 1U);
-    assert(r_04_ > 0 == r_05_ > 0 && r_04_ > 0 == r_06_ > 0); // check equal sign
+    ASSERT__(r_04_ > 0 == r_05_ > 0 && r_04_ > 0 == r_06_ > 0); // check equal sign
 
     s01_ = "свнсы", s02_ = "ваыпcwцо";
     auto r_07_ = s01_ < s02_;
-    assert(r_07_ == (r_04_ < 0));
+    ASSERT__(r_07_ == (r_04_ < 0));
     
     r_04_ = strcmp("оcклавд", "опc4x3вый3пвл");
     r_05_ = strCmp<>("оcклавд", "опc4x3вый3пвл");
     r_06_ = memcmp("оcклавд", "опc4x3вый3пвл",
                    std::min<>(strlen("оcклавд"), strlen("опc4x3вый3пвл")) + 1U);
-    assert(r_04_ > 0 == r_05_ > 0 && r_04_ > 0 == r_06_ > 0); // check equal sign
+    ASSERT__(r_04_ > 0 == r_05_ > 0 && r_04_ > 0 == r_06_ > 0); // check equal sign
 
     s01_ = "оcклавд", s02_ = "опc4x3вый3пвл";
     r_07_ = s01_ < s02_;
-    assert(r_07_ == (r_04_ < 0));
+    ASSERT__(r_07_ == (r_04_ < 0));
 
-    assert(vec_d_str_03_ == vec_d_str_02_);
+    ASSERT__(vec_d_str_03_ == vec_d_str_02_);
   }
   
   {
     StaticallyBufferedStringLight<> s_001_;
     std::string str_001_;
-    assert(str_001_ == s_001_ && s_001_ == str_001_);
+    ASSERT__(str_001_ == s_001_ && s_001_ == str_001_);
 
     const char* const c_001_ = "xa34,7a3hxt873tx4378xta43o4zg,t37iz,3gtnc67ixsgtx37x";
     s_001_ = c_001_;
     str_001_ = c_001_;
-    assert(str_001_ == s_001_ && s_001_ == str_001_);
+    ASSERT__(str_001_ == s_001_ && s_001_ == str_001_);
 
     s_001_.clear();
     str_001_.clear();
-    assert(str_001_ == s_001_ && s_001_ == str_001_);
+    ASSERT__(str_001_ == s_001_ && s_001_ == str_001_);
   }
   
   {
@@ -1121,7 +1123,7 @@ static void testStaticStr() throw() {
     for (size_t i = 0U; i < s_001_.length(); ++i) {
       s_001_[i] = s_001_.back() - i; // NOTE that such an actions compromises an internall hash
     }
-    assert(s_001_ == "876543210");
+    ASSERT__(s_001_ == "876543210");
     
     struct Functor {
       char operator()(char& c) const throw() {
@@ -1131,26 +1133,26 @@ static void testStaticStr() throw() {
     };
 
     std::for_each(s_001_.begin(), s_001_.end(), Functor());
-    assert(s_001_ == "987654321");
+    ASSERT__(s_001_ == "987654321");
     
     std::reverse(s_001_.rbegin(), s_001_.rend());
-    assert(s_001_ == "123456789");
+    ASSERT__(s_001_ == "123456789");
     
     std::rotate(s_001_.begin(), s_001_.begin() + s_001_.length() / 2U, s_001_.end());
-    assert(s_001_ == "567891234");
+    ASSERT__(s_001_ == "567891234");
     
     const auto s_001_2 = s_001_; // restore the correct hash here
-    assert(s_001_2 == s_001_ && s_001_ == s_001_2);
+    ASSERT__(s_001_2 == s_001_ && s_001_ == s_001_2);
     
     std::random_shuffle(s_001_.rbegin(), s_001_.rend());
 
     s_001_.front() = 'T';
     s_001_.back() = 'X';
-    assert('T' == s_001_.front() && 'X' == s_001_.back());
+    ASSERT__('T' == s_001_.front() && 'X' == s_001_.back());
 
     auto s_001_2_ = s_001_;
     s_001_2_ += 'Q';
-    assert(s_001_ < s_001_2_);
+    ASSERT__(s_001_ < s_001_2_);
   }
   
   {
@@ -1165,34 +1167,34 @@ static void testStaticStr() throw() {
       strLight_56_.clear();
       strLight_56_.append(val_56_);
 
-      assert(strLight_56_ == ch56_);
-      assert(!strcmp(strLight_56_.c_str(), ch56_));
-      assert(strlen(ch56_) == strLight_56_.length());
-      assert(!strLight_56_.truncated() && !strLight_56_.modified());
+      ASSERT__(strLight_56_ == ch56_);
+      ASSERT__(!strcmp(strLight_56_.c_str(), ch56_));
+      ASSERT__(strlen(ch56_) == strLight_56_.length());
+      ASSERT__(!strLight_56_.truncated() && !strLight_56_.modified());
 
       memset(ch56_, 0, sizeof(ch56_));
       sprintf(ch56_, "%f", val_66_);
       strLight_56_.clear();
       strLight_56_.append(val_66_);
 
-      assert(strLight_56_ == ch56_);
-      assert(!strcmp(strLight_56_.c_str(), ch56_));
-      assert(strlen(ch56_) == strLight_56_.length());
-      assert(!strLight_56_.truncated() && !strLight_56_.modified());
+      ASSERT__(strLight_56_ == ch56_);
+      ASSERT__(!strcmp(strLight_56_.c_str(), ch56_));
+      ASSERT__(strlen(ch56_) == strLight_56_.length());
+      ASSERT__(!strLight_56_.truncated() && !strLight_56_.modified());
     }
     
     StaticallyBufferedStringLight<char, 7U> strLight_57_ = "123456";
-    assert(!strLight_57_.truncated() && !strLight_57_.modified());
+    ASSERT__(!strLight_57_.truncated() && !strLight_57_.modified());
     strLight_57_.append(99UL);
-    assert(strLight_57_.truncated() && !strLight_57_.modified());
-    assert(strlen(strLight_57_.c_str()) == strLight_57_.length());
+    ASSERT__(strLight_57_.truncated() && !strLight_57_.modified());
+    ASSERT__(strlen(strLight_57_.c_str()) == strLight_57_.length());
 
     std::cout << "\nTest insert: " << strLight_57_ << std::endl;
 
     strLight_57_.clear();
     std::cout << "Enter smth.: ";
     std::cin >> strLight_57_;
-    assert(strLight_57_.length() && !strLight_57_.modified());
+    ASSERT__(strLight_57_.length() && !strLight_57_.modified());
     std::cout << "         -> '" << strLight_57_ << "'\n";
 
     const auto val_34_ = 16.42L;
@@ -1200,20 +1202,20 @@ static void testStaticStr() throw() {
     strLight_56_ << val_34_;
     memset(ch56_, 0, sizeof(ch56_));
     sprintf(ch56_, "%Lf", val_34_);
-    assert(strLight_56_ == ch56_);
-    assert(!strcmp(strLight_56_.c_str(), ch56_));
-    assert(strlen(ch56_) == strLight_56_.length());
-    assert(!strLight_56_.truncated() && !strLight_56_.modified());
+    ASSERT__(strLight_56_ == ch56_);
+    ASSERT__(!strcmp(strLight_56_.c_str(), ch56_));
+    ASSERT__(strlen(ch56_) == strLight_56_.length());
+    ASSERT__(!strLight_56_.truncated() && !strLight_56_.modified());
 
     strLight_56_.clear();
     strLight_56_ << 134.4374565L;
     strLight_56_ << "  test test    " << 123456 << " good   " << 129134.437;
     memset(ch56_, 0, sizeof(ch56_));
     sprintf(ch56_, "%Lf  test test    %i good   %f", 134.4374565L, 123456, 129134.437);
-    assert(strLight_56_ == ch56_);
-    assert(!strcmp(strLight_56_.c_str(), ch56_));
-    assert(strlen(ch56_) == strLight_56_.length());
-    assert(!strLight_56_.truncated() && !strLight_56_.modified());
+    ASSERT__(strLight_56_ == ch56_);
+    ASSERT__(!strcmp(strLight_56_.c_str(), ch56_));
+    ASSERT__(strlen(ch56_) == strLight_56_.length());
+    ASSERT__(!strLight_56_.truncated() && !strLight_56_.modified());
   }
 
   //// Speed test 4
@@ -1247,8 +1249,8 @@ static void testStaticStr() throw() {
 
   {
     StaticallyBufferedStringLight<> str__001_ = "uxy4a73", str__002_ = "uxy!a73";
-    assert(str__001_ != str__002_);
-    assert(!(str__001_ == str__002_));
+    ASSERT__(str__001_ != str__002_);
+    ASSERT__(!(str__001_ == str__002_));
   }
 
   //// Speed test 5

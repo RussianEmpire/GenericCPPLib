@@ -1,7 +1,7 @@
 ﻿#ifndef ConvertionUtilsH
 #define ConvertionUtilsH
 
-//// [!] Version 1.116 [!]
+//// [!] Version 1.117 [!]
 
 #include "MacroUtils.h"
 #include "FuncUtils.h" // for 'ExecIfPresent'
@@ -124,10 +124,10 @@ namespace ConvertionUtils {
   // "Number to the numeric format string" (321 -> "three hundred twenty-one")
   // Accpets negative numbers AND fractions
   // Complexity: linear in the number's digit count
-  bool numToNumFormatStr(long double num, TStrType& str,
-                         LocaleSettings& localeSettings =
-                           LocaleSettings::DEFAULT_LOCALE_SETTINGS,
-                         const char** const errMsg = nullptr) {
+  static bool numToNumFormatStr(long double num, TStrType& str,
+                                LocaleSettings& localeSettings =
+                                  LocaleSettings::DEFAULT_LOCALE_SETTINGS,
+                                const char** const errMsg = nullptr) {
     auto negativeNum = false;
     if (num < 0.0L) {
       negativeNum = true;
