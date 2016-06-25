@@ -1,7 +1,7 @@
 ﻿#ifndef ConvertionUtilsTestsH
 #define ConvertionUtilsTestsH
 
-//// [!] Version 1.114 [!]
+//// [!] Version 1.115 [!]
 
 #include "ConvertionUtils.h"
 
@@ -4295,7 +4295,7 @@ void testRusNumbers() throw() {
   assert(!STRCMPI(str__01_.c_str(), resultStr));
 }
 
-void testStrToL() throw() {
+static void testStrToL() throw() {
   auto val = 0L;
   auto result = false;
   const char* errMsg = nullptr;

@@ -1,7 +1,7 @@
 ﻿#ifndef StaticStrTestsH
 #define StaticStrTestsH
 
-//// [!] Version 1.003 [!]
+//// [!] Version 1.004 [!]
 
 #include "StaticallyBufferedStringLight.h"
 #include "PerformanceTester.h"
@@ -100,7 +100,7 @@ auto TestConcat(TStrType& str, const size_t maxLen) throw()
 }
 
 // Comparing chunk should be as a register size
-long long int quickCmp(const void* const mem1, const void* const mem2, const size_t memSize) throw() {
+static long long int quickCmp(const void* const mem1, const void* const mem2, const size_t memSize) throw() {
   auto mem1reinterpreted = static_cast<const unsigned long int*>(mem1);
   auto mem2reinterpreted = static_cast<const unsigned long int*>(mem2);
 
@@ -115,7 +115,7 @@ long long int quickCmp(const void* const mem1, const void* const mem2, const siz
 }
 
 // Both functional & performance tests (+a few CRT/STL integration tests)
-void testStaticStr() throw() {
+static void testStaticStr() throw() {
   char askUser[8U] = {0};
   std::cout << "\nEnter '1' to perform ALL static str. tests: ";
   std::cin >> askUser;
