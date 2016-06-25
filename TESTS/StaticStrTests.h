@@ -1,7 +1,7 @@
 ﻿#ifndef StaticStrTestsH
 #define StaticStrTestsH
 
-//// [!] Version 1.005 [!]
+//// [!] Version 1.006 [!]
 
 #include "TestUtils.h"
 #include "PerformanceTester.h"
@@ -984,11 +984,13 @@ static void testStaticStr() {
 
     //// On release static. str COULD be a bit slower (~7%) [OR COULD be NOT]
 
+    std::cout << "\nSecond SHOULD be slower!\n";
     PerformanceTester::TestResults results1;
     PerformanceTester::test(testLessThen1, testLessThen2, 6000000U, results1); // less then
 
     testLessThen1.mode = testLessThen2.mode = 1U; // equality comparing speed test
     PerformanceTester::TestResults results2;
+    std::cout << "\nSecond SHOULD be slower!\n";
     PerformanceTester::test(testLessThen1, testLessThen2, 6000000U, results2);
 
     // Another speed test
@@ -1019,8 +1021,10 @@ static void testStaticStr() {
 
     volatile auto diff = static_cast<double>(counts[2]) / counts[1];
     std::cout << "\nStatic str. 'operator<' " << diff << " times faster then the dynamic one\n";
+    if (diff < 1.0) std::cout << "[!] SLOW [!]\n";
     diff = static_cast<double>(counts[3]) / counts[1];
     std::cout << "  and " << diff << " times faster then the 'strcmp'\n";
+    if (diff < 1.0) std::cout << "[!] SLOW [!]\n";
   }
    
   {
@@ -1244,6 +1248,7 @@ static void testStaticStr() {
     } funct2__;
 
     PerformanceTester::TestResults results1;
+    std::cout << "\nSecond SHOULD be slower!\n";
     PerformanceTester::test(funct1__, funct2__, 9999999U, results1);
   }
 
@@ -1298,6 +1303,7 @@ static void testStaticStr() {
     } funct2__;
 
     PerformanceTester::TestResults results1;
+    std::cout << "\nSecond SHOULD be slower!\n";
     PerformanceTester::test(funct1__, funct2__, 9999999U, results1);
   }
 }
