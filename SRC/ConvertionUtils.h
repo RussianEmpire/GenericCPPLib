@@ -1,7 +1,7 @@
 ﻿#ifndef ConvertionUtilsH
 #define ConvertionUtilsH
 
-//// [!] Version 1.115 [!]
+//// [!] Version 1.116 [!]
 
 #include "MacroUtils.h"
 #include "FuncUtils.h" // for 'ExecIfPresent'
@@ -19,8 +19,8 @@ namespace ConvertionUtils {
   // A wrapper to the standart 'strtol' with the extended error recognition
   // In case of error sets 'errMsg' to the static non-empty str.
   //  ('strerror_s' can be used then to get a system specific error message (if exists))
-  bool strToL(long int& num, const char* const str,
-              const char*& errMsg, const int base = 10) throw()
+  static bool strToL(long int& num, const char* const str,
+                     const char*& errMsg, const int base = 10) throw()
   {
     if (!str) {
       num = std::decay<decltype(num)>::type(); // reset
