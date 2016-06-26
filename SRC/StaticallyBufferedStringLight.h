@@ -1,8 +1,9 @@
 ﻿#ifndef StaticallyBufferedStringLightH
 #define StaticallyBufferedStringLightH
 
-//// [!] Version 1.045 [!]
+//// [!] Version 1.046 [!]
 
+#include "CPPUtils.h"  // for 'CONSTEXPR_14_'
 #include "FuncUtils.h"
 #include "HashUtils.h"
 #include "MemUtils.h"
@@ -411,9 +412,8 @@ public:
     if (str.length() != length()) return false;
     
     // Using hash code. algo. ID to identify if the same algo. is used by the 'str' instance
-    // OPTIMIZATION HINT: use C++14 'constexpr' here
     // HINT: static. check also if the storage str. type size <= sizeof(size_t) (to fit hash.)
-    static const auto SAME_HASHING_ = (hashAlgoID() == hashAlgoID::ExecIfPresent(str));
+    static CONSTEXPR_11_ const auto SAME_HASHING_ = (hashAlgoID() == hashAlgoID::ExecIfPresent(str));
     if (SAME_HASHING_) {
       if (!modified_) { // if this hash is relevant
         // If 'TStorageType' provides hash code 
@@ -538,12 +538,13 @@ public:
   // If 'n' < curr. str. len. - the str. is shortened [AND the 'c' is ignored]
   //  otherwise the str. is extended with the 'c' symbols [if 'c' is NOT a str. terminator]
   bool resize(size_t n, const TElemType c) throw() {
-    if (n == length()) return true; // do nothing
+    const auto currLen = length();
+    if (n == currLen) return true; // do nothing
     if (!n) {
       clear();
       return true;
     }
-    if (n < length()) { // smaller, BUT NOT zero
+    if (n < currLen) { // smaller, BUT NOT zero
       length_ = n;
       data_[length_] = TElemType();
       modified_ = true;
@@ -560,8 +561,13 @@ public:
       n = max_size(); // reduce
       truncated_ = true;
     } else truncated_ = false;
-    n -= length(); // how many we need to append
-    for (; n; --n) assert(push_back(c)); // SHOULD be NO problems here
+    n -= currLen; // how many we need to append
+
+    bool result;
+    for (; n; --n) {
+      result = push_back(c);
+      assert(result); // SHOULD be NO problems here
+    }
     return true;
   }
 
@@ -578,8 +584,8 @@ public:
   };
   
   #define PLACEHOLDER // to remove the warning
-  AT(PLACEHOLDER, true); // [!] compromises hash, so use ONLY if you really want to change smth. [!]
-  AT(const, false); // use when you want to just access a specific symbol [does NOT compromises hash]
+  AT(PLACEHOLDER, true) // [!] compromises hash, so use ONLY if you really want to change smth. [!]
+  AT(const, false) // use when you want to just access a specific symbol [does NOT compromises hash]
   
   //// [!] If using none-const version of the 'at' OR 'operator[]' etc 
   ////      beware of the inadequate actions such as altering the actual str. len.
@@ -632,7 +638,7 @@ public:
     if (!modified_) {
       if (decltype(length_)(1U) == length_)// if WAS empty 
         hash_ = MathUtils::getFNV1aStdOffsetBasis(); // prepare hash
-      MathUtils::FNV1aAccumulate(hash_, c); // add last
+      hash_ = MathUtils::FNV1aAccumulate(hash_, c); // add last
     }
     return true;
   }
@@ -671,16 +677,13 @@ public:
   // [!] SHOULD never return zero [!]
   // Define AND use this if you planning to compare this instance with the other instances
   //  which using the same hash code calculation algorithm [OPTIMIZATION]
-  // OPTIMIZATION HINT : use C++14 'constexpr' here
-  static size_t hashAlgoID() throw() {
-    // OPTIMIZATION HINT: use C++11 'constexpr' here
-    static const size_t ID_ = 'F' + 'N' + 'V' + '-' + '1' + 'a';
-    return ID_;
+  static CONSTEXPR_11_ size_t hashAlgoID() throw() {
+    return static_cast<size_t>('F') + 'N' + 'V' + '-' + '1' + 'a';
   }
 
   // Used in some specific optimizations
   //  (do NOT alter unless you are clearly understands what are you doing)
-  static bool isIdealHash() throw() {
+  static CONSTEXPR_11_ bool isIdealHash() throw() {
     /*
     For a 32 bit (4 byte) hash AND
      a str. which consists of 10 arabic numbers (0..9),
@@ -717,7 +720,7 @@ public:
   bool setHash(const size_t hash) const throw() {
     if (!modified_) // curr. hash value is relevant
       assert(hash_ == hash); // DEBUG check ONLY
-    // Check actual hash is equal to new [ONLY in the debug mode]
+    // Check actual hash is equal to the new [ONLY in the debug mode]
     assert((modified_ = true,       // compromise, force recalc.
             this->hash() == hash)); // check new (AND old) hash is correct
 
@@ -790,8 +793,7 @@ public:
   template<class TStorageType>
   bool operator<(const TStorageType& str) const throw() {
     // Using hash code. algo. ID to identify if the same algo. is used by the 'str' instance
-    // OPTIMIZATION HINT: use C++14 'constexpr' here
-    static const auto SAME_HASHING_ = (hashAlgoID() == hashAlgoID::ExecIfPresent(str));
+    static CONSTEXPR_11_ const auto SAME_HASHING_ = (hashAlgoID() == hashAlgoID::ExecIfPresent(str));
     // If proved that the hash code of a larger str. is larger - 
     //  we can just check the hash code here [OPTIMIZATION]
     //   (ONLY if the hash code algo. is ALWAYS generates a lager hash for a larger str., FNV-1a is NOT)
@@ -879,9 +881,8 @@ private:
   // If possible; strs. SHOULD be equal AND use the same hashing algo!
   bool tryShareHash(const TStorageType& storage) const throw() {
     // Using hash code. algo. ID to identify if the same algo. is used by the 'storage' instance
-    // OPTIMIZATION HINT: use C++11 'constexpr' here
     // HINT: static. check also if the storage str. type size <= sizeof(size_t) (to fit hash.)
-    static const auto SAME_HASHING_ = (hashAlgoID() == hashAlgoID::ExecIfPresent(storage));
+    static CONSTEXPR_11_ const auto SAME_HASHING_ = (hashAlgoID() == hashAlgoID::ExecIfPresent(storage));
     if (!SAME_HASHING_) return false; // diff. algo.
 
     if (static_cast<const void*>(this) == static_cast<const void*>(std::addressof(storage)))
@@ -909,8 +910,7 @@ private:
     if (!std::is_same<typename std::decay<decltype(*str.c_str())>::type, TElemType>::value)
       return false; // diff. elem. type (diff. memory representation)
     
-    // OPTIMIZATION HINT: use C++11 'constexpr' here
-    static const auto SAME_HASHING_ = (hashAlgoID() == hashAlgoID::ExecIfPresent(str));
+    static CONSTEXPR_11_ const auto SAME_HASHING_ = (hashAlgoID() == hashAlgoID::ExecIfPresent(str));
     if (!SAME_HASHING_) return false; // diff. algos
     
     if (static_cast<const void*>(this) == static_cast<const void*>(std::addressof(str)))
@@ -1008,7 +1008,7 @@ namespace std {
     }
     return stream;
   }
-};
+}
 
 typedef StaticallyBufferedStringLight<> StrLight;
 

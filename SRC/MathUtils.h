@@ -1,8 +1,9 @@
 ﻿#ifndef MathUtilsH
 #define MathUtilsH
 
-//// [!] Version 1.026 [!]
+//// [!] Version 1.027 [!]
 
+#include "CPPUtils.h"    // for 'CONSTEXPR_14_'
 #include "TypeHelpers.h"
 
 #include <cstring>
@@ -93,7 +94,7 @@ public:
     }
     const bool negative = num < 0LL;
     if (negative) num = -num; // revert ('%' for the negative numbers produces negative results)
-    char currDigit;
+    unsigned char currDigit;
     
     auto getCurrCharUpdateIfReqAndAdd = [&]() throw() {
       currDigit = num % 10LL;
@@ -205,19 +206,19 @@ public:
          0.10000000000000001
        the function itself passes tests
     */
-    static const long double TABLE_15[] = // for IEEE 754 binary64
+    static CONSTEXPR_11_ const long double TABLE_15[] = // for IEEE 754 binary64
       {0.000000000000001L /*15 dig.*/, 0.00000000000001L, 0.0000000000001L, 0.000000000001L,
        0.00000000001L, 0.0000000001L, 0.000000001L, 0.00000001L, 0.0000001L, 0.000001L,
        0.00001L, 0.0001L, 0.001L, 0.01L, 0.1L};
     static_assert(std::extent<decltype(TABLE_15)>::value == size_t(15U), "Wrong table size");
     
-    static const long double TABLE_16[] =
+    static CONSTEXPR_11_ const long double TABLE_16[] =
       {0.0000000000000001L /*16 dig.*/, 0.000000000000001L, 0.00000000000001L, 0.0000000000001L,
        0.000000000001L, 0.00000000001L, 0.0000000001L, 0.000000001L, 0.00000001L, 0.0000001L, 0.000001L,
        0.00001L, 0.0001L, 0.001L, 0.01L, 0.1L};
     static_assert(std::extent<decltype(TABLE_16)>::value == size_t(16U), "Wrong table size");
     
-    static const long double TABLE_18[] =
+    static CONSTEXPR_11_ const long double TABLE_18[] =
       {0.000000000000000001L /*18 dig.*/, 0.00000000000000001L, 0.0000000000000001L,
        0.000000000000001L, 0.00000000000001L, 0.0000000000001L,
        0.000000000001L, 0.00000000001L, 0.0000000001L, 0.000000001L, 0.00000001L, 0.0000001L, 0.000001L,
@@ -226,11 +227,10 @@ public:
     
     // 15: MS VS 2013 Community Update 5; 16: http://tigcc.ticalc.org/doc/float.html#LDBL_DIG
     // 18: GCC 5.1.1 / 5.3.1, Borland C++ BuilderX
-    // OPTIMIZATION HINT: better use 'constexpr' here
-    static auto const TABLE = size_t(15U) == LDBL_DIG ? TABLE_15 :
+    static CONSTEXPR_11_ auto const TABLE = size_t(15U) == LDBL_DIG ? TABLE_15 :
       (size_t(16U) == LDBL_DIG ? TABLE_16 : (size_t(18U) == LDBL_DIG ? TABLE_18 : nullptr));
-    assert(TABLE); // better use 'static_assert' with the 'constexpr' here
-    static auto const TABLE_END = TABLE + LDBL_DIG; // past the end [better use 'constexpr' here too]
+    assert(TABLE);
+    static CONSTEXPR_11_ auto const TABLE_END = TABLE + LDBL_DIG;
     // 'upper_bound' returns ptr. to the first elem. in the range, which compares greater
     return TABLE_END - std::upper_bound<>(TABLE, TABLE_END, fractPart); // 'ptrdiff_t' to 'size_t'
   }
@@ -418,8 +418,8 @@ public:
   // Returns zero if too high pow. (if > 63)
   // [!] Use 63 idx. very carefully - ONLY to get the appropriate bit. mask
   //  (zeroes + sign bit set), BUT NOT the appropriate value (returns negative num.) [!]
-  static long long int getPowerOf2(const size_t pow) throw() {
-    static const long long int POWERS[] = { // 0 - 62
+  static CONSTEXPR_14_ long long int getPowerOf2(const size_t pow) throw() {
+    CONSTEXPR_11_ const long long int POWERS[] = { // 0 - 62
       1LL, 2LL, 4LL, 8LL, 16LL, 32LL, 64LL, // 8 bit
       128LL, 256LL, 512LL, 1024LL, 2048LL, 4096LL, 8192LL, 16384LL, 32768LL, // 16 bit
       //// 32 bit
@@ -433,19 +433,18 @@ public:
       140737488355328LL, 281474976710656LL, 562949953421312LL, 1125899906842624LL, 2251799813685248LL,
       4503599627370496LL, 9007199254740992LL, 18014398509481984LL, 36028797018963968LL,
       72057594037927936LL, 144115188075855872LL, 288230376151711744LL, 576460752303423488LL,
-      1152921504606846976LL, 2305843009213693952LL, 4611686018427387904LL,
-      -9223372036854775808LL // 63-th bit (sign bit) set bit mask
+      1152921504606846976LL, 2305843009213693952LL, 4611686018427387904LL
+      //, -9223372036854775808LL // 63-th bit (sign bit) set bit mask
     };
     return pow >= std::extent<decltype(POWERS)>::value ? 0LL : POWERS[pow];
   }
 
   // [!] Use standart 'exp2' instead [!]
-  // In C++11 better use templated constexpr version
   // Supports negative power, uses lazy evaluation
   // Returns zero if absolute pow. is too high (> 63)
   // [!] Does NOT thread safe lazy init.; slower [!]
   static long double getPowerOf2Ex(const int pow) throw() {
-    static const auto MAX_POWER = 63U; // hello, Homer!
+    static const auto MAX_POWER = 63; // hello, Homer!
     if (std::abs(pow) > MAX_POWER) return 0.0L; // too high
 
     static bool INITED = false; // false does NOT really needed here, coze static
@@ -880,9 +879,9 @@ public:
     static char BIT_STRS[65536U][sizeof(num) * 8U + 8U]; // 1.5 mb, zero initialized as a static
     static const auto COUNT = std::extent<decltype(BIT_STRS)>::value;
 
-    static const size_t NUM_TYPE_CAPACITY =
+    static CONSTEXPR_14_ const size_t NUM_TYPE_CAPACITY =
       static_cast<size_t>(getPowerOf2(sizeof(num) * 8U));
-    assert(NUM_TYPE_CAPACITY == COUNT); // C++14: use 'constexpr' & 'static_assert' here
+    assert(NUM_TYPE_CAPACITY == COUNT); // C++11: if 'constexpr' then 'static_assert' CAN be used here
     
     if (!INITED) {
       auto currNum = 0U;
@@ -925,30 +924,30 @@ public:
   // FNV-1a algorithm description: http://isthe.com/chongo/tech/comp/fnv/#FNV-1a
   // [?!] 'currByte' SHOULD have NO more then 8 bits meaningfull?? [?!]
   // [?!] NOT sure if FNV-1a is designed to work with the multibyte char strings [?!]
-  static void FNV1aAccumulate(size_t& hash, const size_t currByte) throw() {
-    //// C++11 OPTIMIZATION HINT: better use 'constexpr' instead of 'const'
+  // Returns the result number
+  static CONSTEXPR_14_ size_t FNV1aAccumulate(size_t hash, const size_t currByte) throw() {
     static_assert(4U == sizeof(size_t) || 8U == sizeof(size_t),
                   "Known primes & offsets for 32 OR 64 bit hashes ONLY");
 
     // Some primes do hash better than other primes for a given integer size
-    static const unsigned long long int PRIMES[] =
+    CONSTEXPR_11_ const unsigned long long int PRIMES[] =
       {16777619ULL, 1099511628211ULL}; // 32 bit, 64 bit
-    static const auto PRIME =
+    CONSTEXPR_11_ const auto PRIME =
       static_cast<size_t>(PRIMES[sizeof(size_t) / 4U - 1U]);
 
     hash ^= currByte; // xor is performed on the low order octet (8 bits) of hash
     hash *= PRIME;
+    return hash;
   }
 
-  static size_t getFNV1aStdOffsetBasis() throw() {
-    //// C++11 OPTIMIZATION HINT: better use 'constexpr' instead of 'const'
+  static CONSTEXPR_14_ size_t getFNV1aStdOffsetBasis() throw() {
     static_assert(4U == sizeof(size_t) || 8U == sizeof(size_t),
                   "Known primes & offsets for 32 OR 64 bit hashes ONLY");
 
     // In the general case, almost any offset basis will serve so long as it is non - zero
-    static const unsigned long long int BASISES[] =
+    CONSTEXPR_11_ const unsigned long long int BASISES[] =
       {2166136261ULL, 14695981039346656037ULL}; // 32 bit, 64 bit
-    static const size_t OFFSET_BASIS =
+    CONSTEXPR_11_ const size_t OFFSET_BASIS =
       static_cast<decltype(OFFSET_BASIS)>(BASISES[sizeof(size_t) / 4U - 1U]);
 
     return OFFSET_BASIS;
@@ -965,7 +964,7 @@ public:
     if (str && *str) {
       if (!accumulate) preHash = getFNV1aStdOffsetBasis(); // considering 'str' points to the start
       do {
-        FNV1aAccumulate(preHash, *str++);
+        preHash = FNV1aAccumulate(preHash, *str++);
       } while (*str);
       assert(preHash); // NOT an error; used to detect the none-empty strs. with the zero hash
     }
@@ -1017,11 +1016,11 @@ public:
     resultsCount = resultIdx;
   }
   
-  #pragma warning(disable: 4005)
   #ifdef _MSC_VER
-    #define _CRT_SECURE_NO_WARNINGS
+    #ifndef _CRT_SECURE_NO_WARNINGS
+      #define _CRT_SECURE_NO_WARNINGS
+    #endif
   #endif
-  #pragma warning(default: 4005)
 
   // Date/time str. wil be added (concatenated) to the provided 'str'; returns 'str'
   // 'TStrType' should support '+=' operator on the POD C strs AND chars

@@ -2,10 +2,12 @@
 #define GenericRAIteratorH
 
 //// Random Access Iterator [http://en.cppreference.com/w/cpp/concept/RandomAccessIterator]
-//// [!] Version 1.001 [!]
+//// [!] Version 1.002 [!]
 
 #include "CompareUtils.h"
 #include "TypeHelpers.h"
+
+#include <cassert>
 
 #include <limits>
 #include <iterator>
@@ -46,6 +48,8 @@ template <typename TContainerType, class TContainerElemType,
 //   offering the same functionality as pointers (to constants if 'Constant' is true)
 // [!] Does NOT thread safe (BUT satisfy BASIC STL thread safety guarantee: 
 //      http://en.cppreference.com/w/cpp/container#Iterator_invalidation) [!]
+// [!] 'difference_type' would be probably an 'int', so do NOT use with the exteremely large containers
+//      (with more then one billion = 10^9 elements on 32 bit systems) [!]
 class GenericRAIterator : public std::iterator<std::random_access_iterator_tag, TContainerElemType> {
   
 public:
@@ -132,13 +136,13 @@ public:
     static_assert(EIterPosType::IPT_BEFORE_BEGIN < EIterPosType::IPT_NORMAL &&
                   EIterPosType::IPT_NORMAL < EIterPosType::IPT_PAST_THE_END,
                   "Incorrect 'EIterPosType' values order");
-
-    if (pos() < 0) return reversed() ? EIterPosType::IPT_PAST_THE_REVERSED_END
-                                     : EIterPosType::IPT_BEFORE_BEGIN;
-    #pragma warning(disable: 4018) // signed/unsigned mismatch: 'pos() >= container()->size()'
-    if (pos() >= container()->size()) return reversed() ? EIterPosType::IPT_BEFORE_REVERSED_BEGIN
-                                                        : EIterPosType::IPT_PAST_THE_END;
-    #pragma warning(default: 4018)
+    const auto currPos = pos();
+    if (currPos < 0) return reversed() ? EIterPosType::IPT_PAST_THE_REVERSED_END
+                                       : EIterPosType::IPT_BEFORE_BEGIN;
+    if (currPos >= static_cast<decltype(pos())>(container()->size())) {
+      return reversed() ? EIterPosType::IPT_BEFORE_REVERSED_BEGIN
+                        : EIterPosType::IPT_PAST_THE_END;
+    }
     return EIterPosType::IPT_NORMAL;
   }
   
@@ -250,9 +254,11 @@ public:
   // Called with NO data provided will partially invalidate the iterator - 
   //  partially invalid iterator will be left in the valid, BUT unlinked state
   // Also resets pos.
-  void linkToTheContainer(TMutableContainerType* const container = nullptr) throw() {
-    setContainer(container);
+  // Returns false at ANY error, on error unlinks
+  bool linkToTheContainer(TMutableContainerType* const container = nullptr) throw() {
+    const auto result = setContainer(container);
     reset();
+    return result;
   }
   
   // Returns false if unlinked
@@ -264,10 +270,11 @@ public:
   
   bool dereferencable() const throw() {
     if (!valid()) return false; // invalid
-    #pragma warning(disable: 4018) // signed/unsigned mismatch: 'pos() < container()->size()'
+    assert(container()->size() <
+           static_cast<decltype(container()->size())>(std::numeric_limits<decltype(pos())>::max()));
     // Valid pos. (NOT 'past-the-end' NOR 'before-begin')
-    return ((pos() > -1) && (pos() < container()->size()));
-    #pragma warning(default: 4018)
+    const auto currPos = pos();
+    return ((currPos > -1) && (currPos < static_cast<decltype(currPos)>(container()->size())));
   }
   
 private:
@@ -283,16 +290,16 @@ private:
 
 public:
   
-  TMutableValueType& at(const decltype(pos__) pos) const throw() {
+  TMutableValueType& at(const decltype(pos__) pos_) const throw() {
     static TMutableValueType DUMMY = TMutableValueType();
 
     if (container()) {
-      #pragma warning(disable: 4018) // signed/unsigned mismatch: 'pos > containerPtr->size()'
-      if (pos < 0 || pos > container()->size()) {
+      assert(container()->size() <
+             static_cast<decltype(container()->size())>(std::numeric_limits<decltype(pos_)>::max()));
+      if (pos_ < decltype(pos_)() || pos_ > static_cast<decltype(pos_)>(container()->size())) {
         return DUMMY; // attempt to dereference a before-begin OR past-the-end iterato
       }
-      #pragma warning(default: 4018)
-      return (*container())[pos];
+      return (*container())[pos_];
     }
     return DUMMY; // attempt to dereference an unlinked (singular) iterator
   }
@@ -323,15 +330,25 @@ public:
 
 private:
   
-  void setPos(const decltype(pos__) pos = 0) throw() {
+  void setPos(const decltype(pos__) pos = difference_type()) throw() {
     pos__ = pos;
   }
 
-  void setContainer(decltype(container_) const container = nullptr) throw() {
+  // Returns false at ANY error, on error unlinks
+  bool setContainer(decltype(container_) const container = nullptr) throw() {
+    if (container) { // check size
+      if (container->size() >=
+          static_cast<decltype(container->size())>(std::numeric_limits<decltype(pos())>::max() / 2)) {
+        container_ = nullptr;
+        assert(false);
+        return false;
+      }
+    }
     container_ = container;
+    return true;
   }
 
-  auto getShiftedPos(const difference_type shift = 0U) const throw() -> decltype(pos__) {
+  auto getShiftedPos(const difference_type shift = difference_type()) const throw() -> decltype(pos__) {
     return pos__ + (reversed_ ? -shift : shift);
   }
 };

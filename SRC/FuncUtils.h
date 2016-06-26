@@ -1,7 +1,9 @@
 ﻿#ifndef FuncUtilsH
 #define FuncUtilsH
 
-//// [!] Version 1.012 [!]
+//// [!] Version 1.013 [!]
+
+#include "CPPUtils.h"  // for 'CONSTEXPR_11_'
 
 #include <utility>     // for 'std::move', 'std::forward'
 #include <type_traits> // for 'std::is_same'
@@ -41,24 +43,27 @@ Example:
                   " which returns nothing (void)");\
     obj.ProcName(std::forward<TArgs>(args)...); /*MS VS is OK with the 'return void'*/\
   }\
-};
+}
 
 // If NOT exists - returns the 'DefaultValue',
 //  which SHOULD be the same type as a decltype(*.FuncName())
 // Works with static/const/virtual funcs
 #define EXEC_MEMBER_FUNC_IF_PRESENT(FuncName, DefaultValue) namespace FuncName {\
   template <typename TReturnType = decltype(DefaultValue), typename... TArgs>\
-  auto ExecIfPresent(TArgs&&... args) -> TReturnType {\
+  CONSTEXPR_11_ auto ExecIfPresent(TArgs&&... args) -> TReturnType {\
     return std::move(DefaultValue);\
   }\
   \
   template <class C, typename... TArgs>\
-  auto ExecIfPresent(C& obj, TArgs&&... args)\
+  /* The template function 'ExecIfPresent' would be constexpr if 'obj.FuncName' is, see here:
+      http://stackoverflow.com/questions/37991911
+  */\
+  CONSTEXPR_11_ auto ExecIfPresent(C& obj, TArgs&&... args)\
     /*Remove prototype from the overload resolution if such a callable (func./functor) is NOT exist*/\
     -> decltype(obj.FuncName(std::forward<TArgs>(args)...)) /*NOT 'const C& obj' NOR 'C::FuncName()'*/\
   {\
     return std::move(obj.FuncName(std::forward<TArgs>(args)...));\
   }\
-};
+}
 
 #endif // FuncUtilsH

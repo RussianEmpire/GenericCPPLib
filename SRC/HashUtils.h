@@ -1,6 +1,8 @@
 ﻿#ifndef HashUtilsH
 #define HashUtilsH
 
+//// [!] Version 1.001 [!]
+
 #include <stdlib.h>
 #include <ctime>
 #include <cmath>
@@ -200,7 +202,7 @@ private:
     static const auto STR_TIME_BUF_SIZE_ = 32U;
     char strTimeBuf[STR_TIME_BUF_SIZE_] = {0};
     // Better use C++11 http://en.cppreference.com/w/cpp/chrono/high_resolution_clock
-    const auto nowTime = time(nullptr);
+    const long long int nowTime = time(nullptr);
     #ifdef _MSC_VER // MS VS specific
       sprintf_s(strTimeBuf, sizeof(strTimeBuf), "%lli", nowTime);
       strncat_s(fileNameBuf, fileNameBufSize, strTimeBuf, fileNameBufSize - 1U);
@@ -234,6 +236,6 @@ namespace std {\
       return obj.hash();\
     }\
   };\
-};
+}
 
 #endif // HashUtilsH

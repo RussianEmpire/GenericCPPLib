@@ -56,7 +56,4 @@ bool HashCodeChecker::ishashOfLargerStrLarger() throw() {
   return !nextHashLowerCount && result && HashChecker::NEXT_HASH_LARGER_OR_EQ;
 }
 
-#ifdef _MSC_VER
-  // GCC might NOT build with this, while MS VS 2013 will NOT build withOUT this
-  const HashCodeChecker HashCodeChecker::INSTANCE;
-#endif
+const HashCodeChecker HashCodeChecker::INSTANCE;
