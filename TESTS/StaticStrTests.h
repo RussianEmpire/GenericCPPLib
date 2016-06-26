@@ -1,7 +1,7 @@
 ﻿#ifndef StaticStrTestsH
 #define StaticStrTestsH
 
-//// [!] Version 1.006 [!]
+//// [!] Version 1.007 [!]
 
 #include "TestUtils.h"
 #include "PerformanceTester.h"
@@ -11,6 +11,7 @@
 #include <list>
 #include <deque>
 #include <vector>
+#include <random>
 #include <unordered_set>
 
 ADD_STD_HASHER_FOR(StrLight)
@@ -311,7 +312,7 @@ static void testStaticStr() {
     memset(askUser, 0, sizeof(askUser));
     std::cin >> askUser;
   }
-  if (runAll || '1' == *askUser && !askUser[1U]) {
+  if (runAll || ('1' == *askUser && !askUser[1U])) {
     static const auto STR_BUF_SIZE_ = 440U * 1024U;
 
     auto const cstr___1_ptr_ = new(std::nothrow) CStr<STR_BUF_SIZE_ - 1U>;
@@ -355,9 +356,10 @@ static void testStaticStr() {
     cstr___1_.clear();
     std::cout << cstr___1_.strBuf; // to force the compiler to generate the actual code
 
-    std::cout << "static str: " << static_str_test_time_ << std::endl;
+    std::cout << "\n";
+    std::cout << "static str:  " << static_str_test_time_ << std::endl;
     std::cout << "dynamic str: " << dynamic_str_test_time_ << std::endl;
-    std::cout << "cstr: " << cstr_test_time_ << std::endl;
+    std::cout << "cstr:        " << cstr_test_time_ << std::endl;
     std::cout << "\nStatic str.: 1.0, dynamic str.: "
               << static_cast<double>(dynamic_str_test_time_) / static_str_test_time_
               << ", POD C str.: "
@@ -378,7 +380,7 @@ static void testStaticStr() {
            str_1_.getHashIfKnown(knownHash) && knownHash && !str_1_.modified() &&
            !str_1_.full() && !str_1_.truncated());
     ASSERT__(!strcmp(str_1_.c_str(), "a"));
-
+    
     ASSERT__(str_1_.resize(4U, ' '));
     knownHash = false;
     ASSERT__(!str_1_.empty() && 4U == str_1_.length() &&
@@ -417,7 +419,8 @@ static void testStaticStr() {
     StaticallyBufferedStringLight<> str_1_;
     ASSERT__(!str_1_.size() && !str_1_.length() && !*str_1_.c_str());
 
-    auto r_1_ = str_1_.pop_back();
+    volatile auto r_1_ = str_1_.pop_back();
+    r_1_ += r_1_;
 
     const char c_1_[] = {"7y3c47x3778xg43xmxh3g"};
     str_1_ += c_1_;
@@ -716,9 +719,10 @@ static void testStaticStr() {
 
     // Reverse the bit order - NO effect
     // 2 256 979 456 = 1000 0110 1000 0110 1100 0110 0000 0000
-    const unsigned int u1_a_i_ = MathUtils::ReverseBitsEx(u1_a_.ui);
+    volatile unsigned int u1_a_i_ = MathUtils::ReverseBitsEx(u1_a_.ui);
     // 2 252 752 384 = 1000 0110 0100 0110 0100 0110 0000 0000
-    const unsigned int u1_b_i_ = MathUtils::ReverseBitsEx(u1_b_.ui);
+    volatile unsigned int u1_b_i_ = MathUtils::ReverseBitsEx(u1_b_.ui);
+    u1_a_i_ += u1_b_i_;
 
     //// Reverse bytes - Ok
     //// 1 633 772 288
@@ -728,8 +732,9 @@ static void testStaticStr() {
     std::swap(u1_b_.a[0U], u1_b_.a[3U]);
     std::swap(u1_b_.a[1U], u1_b_.a[2U]);
 
-    const auto r1_ = u1_a_.ui < u1_b_.ui;
-    const auto r2_ = u1_a_.ui - u1_b_.ui;
+    volatile auto r1_ = u1_a_.ui < u1_b_.ui;
+    volatile auto r2_ = u1_a_.ui - u1_b_.ui;
+    r1_ = !r1_, r2_ += r2_;
 
     char strBuf_23_[4U] = {0};
     HashTester::Params<std::extent<decltype(strBuf_23_)>::value> params(strBuf_23_);
@@ -856,6 +861,7 @@ static void testStaticStr() {
         // 'strCmp<>' with 4U works MUCH faster, then with the 8U
         r0 = strCmp<>(mem1, mem2);
       }
+      r0 += r0;
       time2 = std::chrono::system_clock::now();
       *counts = (time2 - time1).count();
       *avg += *counts;
@@ -885,6 +891,7 @@ static void testStaticStr() {
       for (size_t testIdx = size_t(); testIdx < TEST_COUNT_001_; ++testIdx) {
         r3 = strcmp(mem1, mem2);
       }
+      r3 += r3;
       time2 = std::chrono::system_clock::now();
       counts[3] = (time2 - time1).count();
       avg[3U] += counts[3];
@@ -896,6 +903,7 @@ static void testStaticStr() {
         // 'memCmp' with 8U works faster, then with 4U (BUT we can't do that)
         r4 = memCmp<>(mem1, mem2, count_1_);
       }
+      r4 += r4;
       time2 = std::chrono::system_clock::now();
       counts[4] = (time2 - time1).count();
       avg[4U] += counts[4];
@@ -905,6 +913,7 @@ static void testStaticStr() {
       for (size_t testIdx = size_t(); testIdx < TEST_COUNT_001_; ++testIdx) {
         r5 = isEqualMemD(mem1, mem2, SIZE_);
       }
+      r5 = !r5;
       time2 = std::chrono::system_clock::now();
       counts[5] = (time2 - time1).count();
       avg[5U] += counts[5];
@@ -915,6 +924,7 @@ static void testStaticStr() {
       for (size_t testIdx = size_t(); testIdx < TEST_COUNT_001_; ++testIdx) {
         r6 = isEqualMem<8U>(mem1, mem2, count_02_);
       }
+      r6 = !r6;
       time2 = std::chrono::system_clock::now();
       counts[6] = (time2 - time1).count();
       avg[6U] += counts[6];
@@ -1002,6 +1012,7 @@ static void testStaticStr() {
     for (size_t testIdx = size_t(); testIdx < 100000U; ++testIdx) {
       result__01_ = s_str_01_ < s_str_02_;
     }
+    result__01_ = !result__01_;
     time2 = std::chrono::system_clock::now();
     counts[1] = (time2 - time1).count();
 
@@ -1079,7 +1090,7 @@ static void testStaticStr() {
     const auto r_01_ = strcmp("оcклавд", "свнсы");
     const auto r_02_ = strCmp<>("оcклавд", "свнсы");
     const auto r_03_ = memcmp("оcклавд", "свнсы", std::min<>(strlen("оcклавд"), strlen("свнсы")) + 1U);
-    ASSERT__(r_01_ > 0 == r_02_ > 0 && r_01_ > 0 == r_03_ > 0); // check equal sign
+    ASSERT__(((r_01_ > 0) == (r_02_ > 0)) && ((r_01_ > 0) == (r_03_ > 0))); // check equal sign
     
     StaticallyBufferedStringLight<> s01_ = "оcклавд", s02_ = "свнсы";
     const auto r_00_ = s01_ < s02_;
@@ -1088,7 +1099,7 @@ static void testStaticStr() {
     auto r_04_ = strcmp("свнсы", "ваыпcwцо");
     auto r_05_ = strCmp<>("свнсы", "ваыпcwцо");
     auto r_06_ = memcmp("свнсы", "ваыпcwцо", std::min<>(strlen("оcклавд"), strlen("свнсы")) + 1U);
-    ASSERT__(r_04_ > 0 == r_05_ > 0 && r_04_ > 0 == r_06_ > 0); // check equal sign
+    ASSERT__(((r_04_ > 0) == (r_05_ > 0)) && ((r_04_ > 0) == (r_06_ > 0))); // check equal sign
 
     s01_ = "свнсы", s02_ = "ваыпcwцо";
     auto r_07_ = s01_ < s02_;
@@ -1098,7 +1109,7 @@ static void testStaticStr() {
     r_05_ = strCmp<>("оcклавд", "опc4x3вый3пвл");
     r_06_ = memcmp("оcклавд", "опc4x3вый3пвл",
                    std::min<>(strlen("оcклавд"), strlen("опc4x3вый3пвл")) + 1U);
-    ASSERT__(r_04_ > 0 == r_05_ > 0 && r_04_ > 0 == r_06_ > 0); // check equal sign
+    ASSERT__(((r_04_ > 0) == (r_05_ > 0)) && ((r_04_ > 0) == (r_06_ > 0))); // check equal sign
 
     s01_ = "оcклавд", s02_ = "опc4x3вый3пвл";
     r_07_ = s01_ < s02_;
@@ -1167,7 +1178,7 @@ static void testStaticStr() {
     
     for (; val_56_ < 999U; val_56_ += 10U, val_66_ += 1234.654321) {
       memset(ch56_, 0, sizeof(ch56_));
-      sprintf(ch56_, "%u", val_56_);
+      sprintf(ch56_, "%lu", val_56_);
       strLight_56_.clear();
       strLight_56_.append(val_56_);
 
@@ -1229,7 +1240,7 @@ static void testStaticStr() {
     std::cout << "\nEnter '1' to perform the alloc./dealloc. speed test: ";
     std::cin >> askUser;
   }
-  if (runAll || '1' == *askUser && !askUser[1U]) {
+  if (runAll || ('1' == *askUser && !askUser[1U])) {
     std::cout << "\nTesting...\n";
 
     struct Funct1__ {
@@ -1265,7 +1276,7 @@ static void testStaticStr() {
     std::cout << "\nEnter '1' to perform the mass equality comparison speed test: ";
     std::cin >> askUser;
   }
-  if (runAll || '1' == *askUser && !askUser[1U]) {
+  if (runAll || ('1' == *askUser && !askUser[1U])) {
     std::cout << "\nTesting...\n";
 
     static auto const STR1
@@ -1282,6 +1293,7 @@ static void testStaticStr() {
 
       volatile int operator()() const throw() {
         volatile auto result = (str1 != str2);
+        result = !result;
         return 0;
       }
 
@@ -1295,6 +1307,7 @@ static void testStaticStr() {
 
       volatile int operator()() const throw() {
         volatile auto result = (str1 != str2);
+        result = !result;
         return 0;
       }
 
