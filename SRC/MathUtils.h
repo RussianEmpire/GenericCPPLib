@@ -1,7 +1,7 @@
 ﻿#ifndef MathUtilsH
 #define MathUtilsH
 
-//// [!] Version 1.027 [!]
+//// [!] Version 1.028 [!]
 
 #include "CPPUtils.h"    // for 'CONSTEXPR_14_'
 #include "TypeHelpers.h"
@@ -332,7 +332,7 @@ public:
     } else data.intPart = static_cast<decltype(data.intPart)>(intPartFraction);
 
     //// Get int. part str. (if possible)
-    size_t currDigit;
+	size_t currDigit;
     const size_t intPartRealLen = static_cast<size_t>(std::log10(intPartFraction)) + size_t(1U);
     auto tooShortOrNoBuf = false;
     if (strBuf_) {
@@ -343,7 +343,8 @@ public:
         auto intPartRestLen = intPartRealLen;
         while (intPartRestLen--) { // while int. part
           currDigit = static_cast<decltype(currDigit)>(std::fmod(intPartFraction, 10.0L));
-          *--strBuf_ = currDigit + '0';
+		  assert(currDigit < 10U);
+          *--strBuf_ = static_cast<char>(currDigit + '0');
           intPartFraction /= 10.0L;
         }
         strBuf_ = intPartBufEnd;
@@ -375,6 +376,7 @@ public:
       while (data.fractPartlen < PART_LEN_LIMIT_) {
         fractPartFraction *= 10.0L;
         currDigit = static_cast<decltype(currDigit)>(std::fmod(fractPartFraction, 10.0L));
+		assert(currDigit < 10U);
         // An IEEE double has 53 significant bits (that's the value of DBL_MANT_DIG in <cfloat>)
         // That's approximately 15.95 decimal digits (log10(2^53))
         //  the implementation sets 'DBL_DIG' to 15, not 16, because it has to round down
@@ -383,7 +385,7 @@ public:
         //// Get fract. part str. (if possible)
         if (!tooShortOrNoBuf) { // buf presented AND contains free
           if (strBuf_ < strBufLast) { // last one for a str. terminator
-            *strBuf_++ = currDigit + '0';
+            *strBuf_++ = static_cast<char>(currDigit + '0');
           } else { // NOT enough free space
             tooShortOrNoBuf = true;
             ++data.errCount;
@@ -642,7 +644,8 @@ public:
   /*
   [!] OPTIMIZATION: use standart C++ bit fields (http://en.cppreference.com/w/cpp/language/bit_field) [!]
   [!] Remember about bit/byte endianness, type sizes AND alignment (padding) [!]
-  
+  [!] Warning! Type punning using 'union' is unsafe [!]
+
   template <typename TDataType,
           const size_t Part1Size, const size_t Part2Size, const size_t Part3Size, const size_t Part4Size, 
           const size_t Part5Size, const size_t Part6Size, const size_t Part7Size, const size_t Part8Size>
@@ -1163,6 +1166,7 @@ public:
   template <typename TIntegralNumType,
             typename TIntgeralNumPartType = unsigned char,
             class ReverseBitsInPartFunctor = ReverseBitsInByteExFunctor>
+  // [!] Warning! Type punning! Unsafe! [!]
   static TIntegralNumType ReverseBits(const TIntegralNumType num) throw() {
     static_assert(1U == sizeof(unsigned char), "'unsigned char' type SHOULD be 1 byte long!");
     // SHOULD fits perfectly
@@ -1194,6 +1198,7 @@ public:
   // Just like 'ReverseBits', BUT uses dynamically generated AND larger lookup table
   // Thread safe; const complexity, should be faster, then 'ReverseBits'
   // [!] Size of 'TIntegralNumType' SHOULD divisible by 2 [!]
+  // [!] Warning! Type punning! Unsafe! [!]
   template <typename TIntegralNumType>
   static TIntegralNumType ReverseBitsEx(const TIntegralNumType num) throw() {
     static_assert(2U == sizeof(uint16_t), "'uint16_t' SHOULD be 2 bytes large!");
@@ -1215,7 +1220,7 @@ public:
       
       // Zero item inited with zeroes as a static
       for (size_t idx = 1U; idx < COUNT; ++idx) {
-        separator.ui = idx;
+        separator.ui = static_cast<decltype(separator.ui)>(idx);
         
         *separator.ucs =
           ReverseBitsInByteEx(*separator.ucs); // first, reverse bits order
@@ -1243,6 +1248,7 @@ public:
   }
 
   // Static singleton
+  // [!] Warning! Type punning! Unsafe! [!]
   class ByteOrderTester {
 
   public:

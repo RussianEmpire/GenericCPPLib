@@ -1,7 +1,7 @@
 ﻿#ifndef ConvertionUtilsTestsH
 #define ConvertionUtilsTestsH
 
-//// [!] Version 1.116 [!]
+//// [!] Version 1.117 [!]
 
 #include "TestUtils.h"
 #include "ConvertionUtils.h"
@@ -4410,13 +4410,13 @@ static void testStrToL() {
   ASSERT__(!result && !val && errMsg && *errMsg);
 
   char strBuf[32U] = {};
-  sprintf(strBuf, "%Ld", LONG_MIN);
+  sprintf(strBuf, "%ld", LONG_MIN);
   val = decltype(val)(); // reset
   errMsg = nullptr;
   result = ConvertionUtils::strToL(val, strBuf, errMsg);
   ASSERT__(result && LONG_MIN == val && errMsg && !*errMsg);
 
-  sprintf(strBuf, "%Ld", LONG_MAX);
+  sprintf(strBuf, "%ld", LONG_MAX);
   val = decltype(val)(); // reset
   errMsg = nullptr;
   result = ConvertionUtils::strToL(val, strBuf, errMsg);

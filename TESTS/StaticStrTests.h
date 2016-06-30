@@ -1,11 +1,13 @@
 ﻿#ifndef StaticStrTestsH
 #define StaticStrTestsH
 
-//// [!] Version 1.007 [!]
+//// [!] Version 1.008 [!]
 
 #include "TestUtils.h"
 #include "PerformanceTester.h"
 #include "StaticallyBufferedStringLight.h"
+
+#include <ctime>
 
 #include <set>
 #include <list>
@@ -79,7 +81,7 @@ struct TestFunctor {
 
 template <class TStrType>
 auto TestConcat(TStrType& str, const size_t maxLen) throw()
--> decltype(std::chrono::system_clock::now() - std::chrono::system_clock::now()) {
+-> decltype(std::chrono::high_resolution_clock::now() - std::chrono::high_resolution_clock::now()) {
   static const auto MIN_CHAR_ = 'a';
   static const auto MAX_CHAR_ = 'z';
   static_assert(MIN_CHAR_ < MAX_CHAR_, "Invalid chars");
@@ -823,7 +825,7 @@ static void testStaticStr() {
     ASSERT__(!st_str_33_.modified() && !st_str_33_.truncated() && !st_str_33_.full());
 
     for (size_t idx = 0U; idx < st_str_33_.max_size() + 8U; ++idx) {
-      const char c = 'A' + idx / 3U;
+      const char c = static_cast<char>('A' + idx / 3U);
       st_str_33_ += c;
     }
     ASSERT__(!st_str_33_.modified() && st_str_33_.truncated() && st_str_33_.full());
@@ -845,7 +847,7 @@ static void testStaticStr() {
     mem2[SIZE_ - 1U] = '\0';
     
     // (64 bit OS, 64 bit CPU, 32 bit application)
-    decltype(std::chrono::system_clock::now()) time1, time2;
+    decltype(std::chrono::steady_clock::now()) time1, time2;
     static const auto COUNT_001_ = 7U;
     static const auto TEST_COUNT_001_ = 40U;
     decltype((time2 - time1).count()) counts[COUNT_001_] = {0};
@@ -855,48 +857,48 @@ static void testStaticStr() {
     const auto iterCount_1_ = 40U;
 
     for (size_t idx = 0U; idx < iterCount_1_; ++idx) {
-      time1 = std::chrono::system_clock::now();
+      time1 = std::chrono::steady_clock::now();
       volatile long long int r0 = 0LL;
       for (size_t testIdx = size_t(); testIdx < TEST_COUNT_001_; ++testIdx) {
         // 'strCmp<>' with 4U works MUCH faster, then with the 8U
         r0 = strCmp<>(mem1, mem2);
       }
       r0 += r0;
-      time2 = std::chrono::system_clock::now();
+      time2 = std::chrono::steady_clock::now();
       *counts = (time2 - time1).count();
       *avg += *counts;
 
-      time1 = std::chrono::system_clock::now();
+      time1 = std::chrono::steady_clock::now();
       volatile long long int r1 = 0LL;
       for (size_t testIdx = size_t(); testIdx < TEST_COUNT_001_; ++testIdx) {
         // 'quickCmp' looks like with 8U works faster, then with the 4U
         //  (BUT we can't use 8U AND this func. is NOT used)
         r1 = quickCmp(mem1, mem2, SIZE_);
       }
-      time2 = std::chrono::system_clock::now();
+      time2 = std::chrono::steady_clock::now();
       counts[1] = (time2 - time1).count();
       avg[1U] += counts[1];
 
-      time1 = std::chrono::system_clock::now();
+      time1 = std::chrono::steady_clock::now();
       volatile long long int r2 = 0LL;
       for (size_t testIdx = size_t(); testIdx < TEST_COUNT_001_; ++testIdx) {
         r2 = memcmp(mem1, mem2, SIZE_);
       }
-      time2 = std::chrono::system_clock::now();
+      time2 = std::chrono::steady_clock::now();
       counts[2] = (time2 - time1).count();
       avg[2U] += counts[2];
 
-      time1 = std::chrono::system_clock::now();
+      time1 = std::chrono::steady_clock::now();
       volatile long long int r3 = 0LL;
       for (size_t testIdx = size_t(); testIdx < TEST_COUNT_001_; ++testIdx) {
         r3 = strcmp(mem1, mem2);
       }
       r3 += r3;
-      time2 = std::chrono::system_clock::now();
+      time2 = std::chrono::steady_clock::now();
       counts[3] = (time2 - time1).count();
       avg[3U] += counts[3];
 
-      time1 = std::chrono::system_clock::now();
+      time1 = std::chrono::steady_clock::now();
       volatile long long int r4 = 0LL;
       const auto count_1_ = SIZE_ / sizeof(std::uintptr_t);
       for (size_t testIdx = size_t(); testIdx < TEST_COUNT_001_; ++testIdx) {
@@ -904,28 +906,28 @@ static void testStaticStr() {
         r4 = memCmp<>(mem1, mem2, count_1_);
       }
       r4 += r4;
-      time2 = std::chrono::system_clock::now();
+      time2 = std::chrono::steady_clock::now();
       counts[4] = (time2 - time1).count();
       avg[4U] += counts[4];
 
-      time1 = std::chrono::system_clock::now();
+      time1 = std::chrono::steady_clock::now();
       volatile bool r5 = false;
       for (size_t testIdx = size_t(); testIdx < TEST_COUNT_001_; ++testIdx) {
         r5 = isEqualMemD(mem1, mem2, SIZE_);
       }
       r5 = !r5;
-      time2 = std::chrono::system_clock::now();
+      time2 = std::chrono::steady_clock::now();
       counts[5] = (time2 - time1).count();
       avg[5U] += counts[5];
 
-      time1 = std::chrono::system_clock::now();
+      time1 = std::chrono::steady_clock::now();
       volatile bool r6 = false;
       const auto count_02_ = SIZE_ / 8U;
       for (size_t testIdx = size_t(); testIdx < TEST_COUNT_001_; ++testIdx) {
         r6 = isEqualMem<8U>(mem1, mem2, count_02_);
       }
       r6 = !r6;
-      time2 = std::chrono::system_clock::now();
+      time2 = std::chrono::steady_clock::now();
       counts[6] = (time2 - time1).count();
       avg[6U] += counts[6];
 
@@ -943,10 +945,10 @@ static void testStaticStr() {
       if (counts[4] < counts[2]) ++memCmp_faster_then_memcmp_count;
       if (counts[4] < counts[1]) ++memCmp_faster_then_quickCmp;
     }
-    std::cout << "\nmemCmp_faster_then_memcmp_count: "
+    std::cout << "\n'memCmp' faster then 'memcmp': "
               << memCmp_faster_then_memcmp_count  << " / "
               << iterCount_1_ << std::endl;
-    std::cout << "memCmp_faster_then_quickCmp: "
+    std::cout << "'memCmp' faster then 'quickCmp': "
               << memCmp_faster_then_quickCmp << " / "
               << iterCount_1_ << std::endl << std::endl;
 
@@ -994,48 +996,62 @@ static void testStaticStr() {
 
     //// On release static. str COULD be a bit slower (~7%) [OR COULD be NOT]
 
-    std::cout << "\nSecond SHOULD be slower!\n";
+    std::cout << "\nTesting 'less then': second SHOULD be slower!\n";
     PerformanceTester::TestResults results1;
     PerformanceTester::test(testLessThen1, testLessThen2, 6000000U, results1); // less then
 
     testLessThen1.mode = testLessThen2.mode = 1U; // equality comparing speed test
     PerformanceTester::TestResults results2;
-    std::cout << "\nSecond SHOULD be slower!\n";
+    std::cout << "\nTesting 'equality comparing': second SHOULD be slower!\n";
     PerformanceTester::test(testLessThen1, testLessThen2, 6000000U, results2);
 
     // Another speed test
     const decltype(s_str_01_) s_str_02_ = static_chars_01_;
     const decltype(dstr_01_) dstr_02_ = static_chars_01_;
 
+	volatile auto cTime1 = clock_t(), cTime2 = clock_t();
+	volatile long long int cCounts[3U] = {};
+
     volatile auto result__01_ = false;
-    time1 = std::chrono::system_clock::now();
+    time1 = std::chrono::steady_clock::now();
+	cTime1 = clock();
     for (size_t testIdx = size_t(); testIdx < 100000U; ++testIdx) {
       result__01_ = s_str_01_ < s_str_02_;
     }
+	time2 = std::chrono::steady_clock::now();
+	cTime2 = clock();
     result__01_ = !result__01_;
-    time2 = std::chrono::system_clock::now();
-    counts[1] = (time2 - time1).count();
+    counts[1U] = (time2 - time1).count();
+	*cCounts = cTime2 - cTime1;
 
-    time1 = std::chrono::system_clock::now();
+    time1 = std::chrono::steady_clock::now();
+	cTime1 = clock();
     for (size_t testIdx = size_t(); testIdx < 100000U; ++testIdx) {
       result__01_ = dstr_01_ < dstr_02_;
     }
-    time2 = std::chrono::system_clock::now();
-    counts[2] = (time2 - time1).count();
+    time2 = std::chrono::steady_clock::now();
+	cTime2 = clock();
+    counts[2U] = (time2 - time1).count();
+	cCounts[1U] = cTime2 - cTime1;
 
-    time1 = std::chrono::system_clock::now();
+    time1 = std::chrono::steady_clock::now();
+	cTime1 = clock();
     for (size_t testIdx = size_t(); testIdx < 100000U; ++testIdx) {
       result__01_ = strcmp(s_str_01_.c_str(), s_str_02_.c_str()) == 0;
     }
-    time2 = std::chrono::system_clock::now();
-    counts[3] = (time2 - time1).count();
+    time2 = std::chrono::steady_clock::now();
+	cTime2 = clock();
+    counts[3U] = (time2 - time1).count();
+	cCounts[2U] = cTime2 - cTime1;
 
-    volatile auto diff = static_cast<double>(counts[2]) / counts[1];
+    volatile auto diff = static_cast<long double>(counts[2]) / counts[1];
     std::cout << "\nStatic str. 'operator<' " << diff << " times faster then the dynamic one\n";
-    if (diff < 1.0) std::cout << "[!] SLOW [!]\n";
+    if (diff < 1.0L) std::cout << "[!] SLOW [!]\n";
     diff = static_cast<double>(counts[3]) / counts[1];
     std::cout << "  and " << diff << " times faster then the 'strcmp'\n";
-    if (diff < 1.0) std::cout << "[!] SLOW [!]\n";
+    if (diff < 1.0L) std::cout << "[!] SLOW [!]\n\n";
+
+	std::cout << cCounts[0U] << '\n' << cCounts[1U] << '\n' << cCounts[2U] << '\n';
   }
    
   {
@@ -1136,7 +1152,7 @@ static void testStaticStr() {
   {
     StaticallyBufferedStringLight<> s_001_ = "012345678";
     for (size_t i = 0U; i < s_001_.length(); ++i) {
-      s_001_[i] = s_001_.back() - i; // NOTE that such an actions compromises an internall hash
+      s_001_[i] = static_cast<char>(s_001_.back() - i); // NOTE that such an actions compromises an internall hash
     }
     ASSERT__(s_001_ == "876543210");
     
@@ -1241,8 +1257,6 @@ static void testStaticStr() {
     std::cin >> askUser;
   }
   if (runAll || ('1' == *askUser && !askUser[1U])) {
-    std::cout << "\nTesting...\n";
-
     struct Funct1__ {
       volatile int operator()() throw() {
         volatile StaticallyBufferedStringLight<> str;
@@ -1259,7 +1273,7 @@ static void testStaticStr() {
     } funct2__;
 
     PerformanceTester::TestResults results1;
-    std::cout << "\nSecond SHOULD be slower!\n";
+    std::cout << "\nTesting 'creation & allocation': second SHOULD be slower!\n";
     PerformanceTester::test(funct1__, funct2__, 9999999U, results1);
   }
 
@@ -1277,8 +1291,6 @@ static void testStaticStr() {
     std::cin >> askUser;
   }
   if (runAll || ('1' == *askUser && !askUser[1U])) {
-    std::cout << "\nTesting...\n";
-
     static auto const STR1
       = "cam834mht8xth,a4xh387th,txh87c347837 g387go4 4w78t g34 3g7rgo bvgq7 tgq3874g478g8g oebgbg8 b"
         "cwmc8htcw,o7845mt754cm8w4gcm8w4gc78w4gcw4cw4yc4c4xn34x63gc7sch74s4h5mc7h7cn34xm7xg78gxm7384x";
@@ -1316,7 +1328,7 @@ static void testStaticStr() {
     } funct2__;
 
     PerformanceTester::TestResults results1;
-    std::cout << "\nSecond SHOULD be slower!\n";
+    std::cout << "\nTesting 'equality comparing (!=)': second SHOULD be slower!\n";
     PerformanceTester::test(funct1__, funct2__, 9999999U, results1);
   }
 }

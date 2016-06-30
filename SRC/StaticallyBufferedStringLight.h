@@ -1,7 +1,7 @@
 ﻿#ifndef StaticallyBufferedStringLightH
 #define StaticallyBufferedStringLightH
 
-//// [!] Version 1.046 [!]
+//// [!] Version 1.047 [!]
 
 #include "CPPUtils.h"  // for 'CONSTEXPR_14_'
 #include "FuncUtils.h"
@@ -35,6 +35,7 @@ class HashCodeChecker;
 template<typename TElemType = char, const size_t MaxLen = 127U>
 class StaticallyBufferedStringLight; // forward declaration of the template class
 
+// [!] Consider optimizations, as this class is NOT very outperforms the standart std::string in MS VS 2015 [!]
 // 'TElemType' - char / wchar_t / char16_t / char32_t (provides POD C str. if 'TElemType' is a char)
 // [!] WARNING! Hash calc. mechanic currently would only work correct woth the classic chars [!]
 template<typename TElemType, const size_t MaxLen>
