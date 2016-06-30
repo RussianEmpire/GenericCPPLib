@@ -1,7 +1,7 @@
 ﻿#ifndef MathUtilsH
 #define MathUtilsH
 
-//// [!] Version 1.028 [!]
+//// [!] Version 1.029 [!]
 
 #include "CPPUtils.h"    // for 'CONSTEXPR_14_'
 #include "TypeHelpers.h"
@@ -332,7 +332,7 @@ public:
     } else data.intPart = static_cast<decltype(data.intPart)>(intPartFraction);
 
     //// Get int. part str. (if possible)
-	size_t currDigit;
+    size_t currDigit;
     const size_t intPartRealLen = static_cast<size_t>(std::log10(intPartFraction)) + size_t(1U);
     auto tooShortOrNoBuf = false;
     if (strBuf_) {
@@ -343,7 +343,7 @@ public:
         auto intPartRestLen = intPartRealLen;
         while (intPartRestLen--) { // while int. part
           currDigit = static_cast<decltype(currDigit)>(std::fmod(intPartFraction, 10.0L));
-		  assert(currDigit < 10U);
+          assert(currDigit < 10U);
           *--strBuf_ = static_cast<char>(currDigit + '0');
           intPartFraction /= 10.0L;
         }
@@ -376,7 +376,7 @@ public:
       while (data.fractPartlen < PART_LEN_LIMIT_) {
         fractPartFraction *= 10.0L;
         currDigit = static_cast<decltype(currDigit)>(std::fmod(fractPartFraction, 10.0L));
-		assert(currDigit < 10U);
+        assert(currDigit < 10U);
         // An IEEE double has 53 significant bits (that's the value of DBL_MANT_DIG in <cfloat>)
         // That's approximately 15.95 decimal digits (log10(2^53))
         //  the implementation sets 'DBL_DIG' to 15, not 16, because it has to round down
