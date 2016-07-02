@@ -2,8 +2,8 @@
 #define MacroUtilsH
 
 namespace MacroUtils {
-  #define M_S_(arg) #arg
-  #define MAKE_STR_(arg) M_S_(arg)
+  #define M_S_(Arg) #Arg
+  #define MAKE_STR_(Arg) M_S_(Arg)
 }
 
 #endif // MacroUtilsH
