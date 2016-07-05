@@ -1,12 +1,13 @@
 ﻿#ifndef ConvertionUtilsTestsH
 #define ConvertionUtilsTestsH
 
-//// [!] Version 1.117 [!]
+//// [!] Version 1.118 [!]
 
 #include "TestUtils.h"
 #include "ConvertionUtils.h"
 
 #include <string>
+#include <iostream>
 
 #ifdef _MSC_VER // MS VS
   #define STRCMPI _stricmp // ISO C++ conformant
@@ -25,7 +26,7 @@ namespace ConvertionUtilsTests {
 
 template <class TStrType = std::string>
 static void test() {
-  auto result = false;
+  volatile auto result = false;
   auto num = 0.0L;
   auto errMsg = "", resultStr = "";
   ConvertionUtils::LocaleSettings localeSettings;
@@ -957,7 +958,7 @@ static void test() {
 
 template <class TStrType = std::string>
 static void testFractions() {
-  auto result = false;
+  volatile auto result = false;
   auto num = 0.0L;
   auto errMsg = "", resultStr = "";
   ConvertionUtils::LocaleSettings localeSettings; // default settings
@@ -3261,6 +3262,7 @@ static void testFractions() {
   ASSERT__(result);
   ASSERT__(errMsg && !*errMsg);
   ASSERT__(!STRCMPI(str__01_.c_str(), resultStr));
+  std::cout << '\n' << num << " =\n  " << resultStr << '\n';
 
   str__01_.clear();
   num = -2.678678L;
@@ -3357,7 +3359,7 @@ static void testFractions() {
 
 template <class TStrType = std::string>
 static void testRusNumbers() {
-  auto result = false;
+  volatile auto result = false;
   auto num = 0.0L;
   auto errMsg = "", resultStr = "";
   ConvertionUtils::LocaleSettings localeSettings; // default settings
@@ -4298,7 +4300,7 @@ static void testRusNumbers() {
 
 static void testStrToL() {
   auto val = 0L;
-  auto result = false;
+  volatile auto result = false;
   const char* errMsg = nullptr;
 
   result = ConvertionUtils::strToL(val, "", errMsg);

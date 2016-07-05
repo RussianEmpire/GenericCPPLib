@@ -1,7 +1,7 @@
 ﻿#ifndef ConvertionUtilsH
 #define ConvertionUtilsH
 
-//// [!] Version 1.117 [!]
+//// [!] Version 1.118 [!]
 
 #include "MacroUtils.h"
 #include "FuncUtils.h" // for 'ExecIfPresent'
@@ -53,7 +53,7 @@ namespace ConvertionUtils {
     }
     errMsg = "";
     return true;
-  };
+  }
 
   // In AMERICAN English, many students are taught NOT to use the word "and"
   //  anywhere in the whole part of a number
@@ -85,7 +85,7 @@ namespace ConvertionUtils {
     bool shortFormat  = false; // skip mention zero int. / fract. part
     bool foldFraction = false; // try find repeated pattern & treat it
     ELocale locale = ELocale::L_EN_GB;
-    size_t precison = size_t(LDBL_DIG); // max. digits count (<= 'LDBL_DIG')
+    int precison = int(LDBL_DIG); // max. digits count (<= 'LDBL_DIG')
   };
 
   // TO DO:
@@ -153,6 +153,7 @@ namespace ConvertionUtils {
         case ELocale::L_EN_US: return positive ? "positive" : "negative";
         case ELocale::L_EN_GB: return positive ? "plus" : "minus";
         case ELocale::L_RU_RU: return positive ? "плюс" : "минус";
+        default:;
       }
       assert(false); // locale error
       // Design / implementation error, NOT runtime error!
@@ -163,7 +164,8 @@ namespace ConvertionUtils {
       str += getSignStr(localeSettings.locale, !negativeNum);
     }
     if (truncated::ExecIfPresent(str)) { // check if truncated
-      if (errMsg) *errMsg = "too short buffer"; return false;
+      if (errMsg) *errMsg = "too short buffer";
+      return false;
     }
     //// Get str. representation in the scientific notation
 
@@ -178,7 +180,7 @@ namespace ConvertionUtils {
         without change - ANY number with this many decimal digits can be converted to a value of type 'T'
          AND back to decimal form, without change due to rounding OR overflow
     */
-    static const size_t MAX_DIGIT_COUNT_ = size_t(LDBL_DIG);
+    static const int MAX_DIGIT_COUNT_ = int(LDBL_DIG);
     // Normalized form (mantissa is a 1 digit ONLY):
     //  first digit (one of 'MAX_DIGIT_COUNT_') + '.' + [max. digits AFTER '.' - 1] + 'e+000'
     //   [https://en.wikipedia.org/wiki/Scientific_notation#Normalized_notation]
@@ -189,6 +191,8 @@ namespace ConvertionUtils {
     char strBuf[BUF_SIZE_];
     // 21 digits is max. for 'long double' [https://msdn.microsoft.com/ru-ru/library/4hwaceh6.aspx]
     //  (20 of them can be AFTER decimal point in the normalized scientific notation)
+    if (localeSettings.precison < decltype(localeSettings.precison)())
+      localeSettings.precison = decltype(localeSettings.precison)();
     if (localeSettings.precison > MAX_DIGIT_COUNT_) localeSettings.precison = MAX_DIGIT_COUNT_;
     const ptrdiff_t len = sprintf(strBuf, "%.*Le", localeSettings.precison, num); // scientific format
     // On failure, a negative number is returned
@@ -204,7 +208,6 @@ namespace ConvertionUtils {
     auto testPattern = [](const char* const str, const char* const strEnd,
                           const size_t patternSize) throw() {
       assert(str); // SHOULD NOT be nullptr
-      auto equal = true;
       auto nextOccurance = str + patternSize;
       while (true) {
         if (memcmp(str, nextOccurance, patternSize)) return nextOccurance; // NOT macthed
@@ -284,7 +287,7 @@ namespace ConvertionUtils {
     currSymbPtr = strBuf + intPartLen +
       (expVal > decltype(expVal)() ? size_t(1U) : size_t()); // 1.23e1 = 12.3e0 [move right +1]
 
-    auto fractPartTrailingZeroesCount = size_t(), fractPartAddedCount = size_t();
+    auto fractPartTrailingZeroesCount = size_t();
     char* fractPartRealStart;
     auto folded = false; // true if repeated pattern founded
     auto calcFractPartRealLen = [&]() throw() {
@@ -303,20 +306,22 @@ namespace ConvertionUtils {
              fractPartLen >= static_cast<ptrdiff_t>(fractPartTrailingZeroesCount));
       fractPartLen -= fractPartTrailingZeroesCount;
       //// Fraction folding (if needed)
-      if (fractPartLen > size_t(1U) && localeSettings.foldFraction) {
+      if (fractPartLen > ptrdiff_t(1) && localeSettings.foldFraction) {
         //// Remove delim. (if needed)
         assert(fractPartStart && fractPartStart > strBuf); // SHOULD be setted (delim. founded)
         if (fractPartRealStart < fractPartStart) { // move: "12.1e-1" -> "1 21e-1"
           currSymbPtr = fractPartStart - size_t(1U);
           assert(*currSymbPtr == DECIMAL_DELIM_);
-          while (currSymbPtr > fractPartRealStart)
-            *currSymbPtr-- = *(currSymbPtr - size_t(1U)); // reversed move
+          while (currSymbPtr > fractPartRealStart) {
+            *currSymbPtr = *(currSymbPtr - ptrdiff_t(1)); // reversed move
+            --currSymbPtr;
+          }
           *currSymbPtr = '\0';
           fractPartRealStart = currSymbPtr + size_t(1U); // update, now SHOULD point to the new real start
           assert(fractPartLen);
         }
         //// Actual folding (if needed)
-        if (fractPartLen > size_t(1U)) {
+        if (fractPartLen > ptrdiff_t(1)) {
           const auto patternLen = tryFindPattern(fractPartRealStart, fractPartLen);
           if (patternLen) {
             fractPartLen = patternLen; // actual folding (reduce fract. part len. to the pattern. len)
@@ -402,6 +407,7 @@ namespace ConvertionUtils {
           }
           if (!*postfix) postfix = RU_POSTFIXES[currDigit]; // if NOT setted yet
           return RU_TABLE[currDigit];
+        default:;
       }
       assert(false); // locale error
       return "<locale error [" MAKE_STR_(__LINE__) "]>";
@@ -497,6 +503,7 @@ namespace ConvertionUtils {
             }
           }
           return getZeroOrderNumberStr(currDigit, size_t(), infix, localeSettings);
+        default:;
       } // END switch (locale)
       assert(false); // locale error
       return "<locale error [" MAKE_STR_(__LINE__) "]>";
@@ -525,9 +532,7 @@ namespace ConvertionUtils {
          "квинвигинтиллион", "сексвигинтиллион", "септемвигинтиллион", "октовигинтиллион" /*10^87*/,
          "новемвигинтиллион", "тригинтиллион", "антригинтиллион", "дуотригинтиллион"}; // 10^99
       static_assert(sizeof(EN_TABLE) == sizeof(RU_TABLE), "Tables SHOULD have the same size");
-      static const size_t MAX_ORDER_ =
-        (std::extent<decltype(EN_TABLE)>::value - size_t(1U)) * size_t(3U); // first empty
-
+      
       static const char* const RU_THOUSAND_POSTFIXES[] = // десять двадцать сто двести тысяч
         // Одна тысячА | две три четыре тысячИ | пять шесть семь восемь девять тысяч
         {"", "а", "и", "и", "и", "", "", "", "", ""};
@@ -551,14 +556,16 @@ namespace ConvertionUtils {
             if (size_t(1U) != preLastDigit) {
               postfix = RU_THOUSAND_POSTFIXES[lastDigit];
             } else postfix = ""; // 'тринадцать тысяч'
-          } else if (order > size_t(3U)) { // != 3U
+          } else if (order > size_t(3U)) {
             if (size_t(1U) == preLastDigit) { // десять одиннадцать+ миллионОВ миллиардОВ etc
               postfix = "ов";
             } else postfix = RU_MILLIONS_AND_BIGGER_POSTFIXES[lastDigit];
-          }
+          } else postfix = ""; // 'order' : 0, 1, 2
           order /= 3U; // 6 - 8: миллионы, 9 - 11: миллиарды etc
           assert(order < std::extent<decltype(RU_TABLE)>::value);
           return RU_TABLE[order]; // [0, 33]
+        break;
+        default:;
       }
       assert(false); // locale error
       return "<locale error [" MAKE_STR_(__LINE__) "]>";
@@ -578,6 +585,7 @@ namespace ConvertionUtils {
           return ptrdiff_t(1) == intPartLastDigit ?
             (ptrdiff_t(1) == intPartPreLastDigit ? "целых" : "целая") : // одинадцать целЫХ | одна целАЯ
             "целых"; // ноль, пять - девять целЫХ; две - четыре целЫХ; десять цел ых
+        default:;
       }
       assert(false); // locale error
       return "<locale error [" MAKE_STR_(__LINE__) "]>";
@@ -589,6 +597,7 @@ namespace ConvertionUtils {
         case ELocale::L_EN_US: return "to infinity"; // also 'into infinity', 'to the infinitive'
         case ELocale::L_EN_GB: return "repeating"; // also 'repeated'
         case ELocale::L_RU_RU: return "в периоде";
+        default:;
       }
       assert(false); // locale error
       return "<locale error [" MAKE_STR_(__LINE__) "]>";
@@ -600,6 +609,7 @@ namespace ConvertionUtils {
       switch (localeSettings.locale) {
         case ELocale::L_EN_US: case ELocale::L_EN_GB: return size_t(2U); // hundreds
         case ELocale::L_RU_RU: return size_t(3U); // тысячи
+        default:;
       }
       assert(false); // locale error
       return size_t();
@@ -632,6 +642,7 @@ namespace ConvertionUtils {
             if (!(static_cast<size_t>(num) % size_t(100U))) return size_t(2U); // if is multiples of 100
           }
         break;
+        default:;
       }
       return size_t();
     };
@@ -644,6 +655,7 @@ namespace ConvertionUtils {
         switch (localeSettings.locale) { // triads by default
           // For eng. numbers step = 1 can be ALSO used: 64.705 — 'six four point seven nought five'
           case ELocale::L_EN_US: case ELocale::L_EN_GB: case ELocale::L_RU_RU: subPartSize = size_t(3U);
+          default:;
         }
       }
       return subPartSize;
@@ -655,6 +667,7 @@ namespace ConvertionUtils {
           // Step = 2 OR 3 can be ALSO used: 14.65 - 'one four point sixty-five'
           return size_t(1U); // point one two seven
         case ELocale::L_RU_RU: return size_t(3U); // сто двадцать семь сотых
+        default:;
       }
       assert(false); // locale error
       return size_t();
@@ -691,6 +704,7 @@ namespace ConvertionUtils {
             if (fractPart && digitsPartSize) len_ += RU_DELIM_LEN_ + RU_MAX_FREQ_FRACT_POSTFIX_LEN_;
             return len_;
           }
+        default:;
       }
       assert(false); // locale error
       return size_t();
@@ -711,6 +725,7 @@ namespace ConvertionUtils {
             return;
           }
         case ELocale::L_RU_RU: return; // NO specific prefix
+        default:;
       }
       assert(false); // locale error
     };
@@ -843,6 +858,7 @@ namespace ConvertionUtils {
               str += getSecondOrderNumberStr(currDigit, infix, postfix, localeSettings);
               str += infix, str += postfix;
             break;
+            default:;
           }
           ++currAddedCount, ++totalAddedCount;
         break;
@@ -976,7 +992,8 @@ namespace ConvertionUtils {
 
     processDigitsPart(intPartLen, getIntSubPartSize(), intPartBonusOrder, false);
     if (truncated::ExecIfPresent(str)) { // check if truncated
-      if (errMsg) *errMsg = "too short buffer"; return false;
+      if (errMsg) *errMsg = "too short buffer";
+      return false;
     }
     if (intPartLen) { // if int. part exist
       assert(currSymbPtr > strBuf);
@@ -1003,7 +1020,6 @@ namespace ConvertionUtils {
     }
     processDigitsPart(fractPartLen, getFractSubPartSize(localeSettings), size_t(), true);
     if (addedCount) { // smth. added (even if zero part)
-      fractPartAddedCount = addedCount;
       //// Add specific ending (if needed, like 'десятимиллионная')
       assert(fractPartLen >= decltype(fractPartLen)());
       size_t fractPartLastDigitOrderExt = fractPartLeadingZeroesCount + fractPartLen;
@@ -1012,9 +1028,10 @@ namespace ConvertionUtils {
     }
     assert(totalAddedCount); // SHOULD NOT be zero
     if (truncated::ExecIfPresent(str)) { // check if truncated
-      if (errMsg) *errMsg = "too short buffer"; return false;
+      if (errMsg) *errMsg = "too short buffer";
+      return false;
     } return true;
   }
-};
+}
 
 #endif // ConvertionUtilsH
