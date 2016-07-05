@@ -1,11 +1,13 @@
 ﻿#include "WinAPIUtils.h"
 
+#ifdef WINDOWS_
+
 #include <algorithm>
 
 // Does NOT synched.
 const char* WinAPIUtils::getLogFileNameFromAppName() throw() {
-  static auto* const LOG_FILE_EXT = ".txt";
-  static const auto LOG_FILE_EXT_LEN = strlen(LOG_FILE_EXT); // use constexpr if possible
+  static CONSTEXPR_11_ auto const LOG_FILE_EXT = ".txt";
+  static CONSTEXPR_11_ const auto LOG_FILE_EXT_LEN = strlen(LOG_FILE_EXT);
   static char appName[MAX_PATH + 1U + 8U - (MAX_PATH + 1U) % 8U]; // make 8 even
   static_assert(!(sizeof(appName) % 8U), "SHOULD be 8 even");
 
@@ -33,9 +35,9 @@ char* WinAPIUtils::getErrorMsg(char* const msgBuf, const size_t bufSize,
   *msgBuf = '\0';
   if (ERROR_SUCCESS == errorCode) return msgBuf; // operation completed successfully
   
-  static const DWORD FLAGS
+  static CONSTEXPR_11_ const DWORD FLAGS
     = FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_MAX_WIDTH_MASK;
-  static const auto LANG = MAKELANGID(LANG_ENGLISH, SUBLANG_DEFAULT); // en
+  static CONSTEXPR_11_ const auto LANG = MAKELANGID(LANG_ENGLISH, SUBLANG_DEFAULT); // en
   // Return value is the number of TCHARs stored in the output buffer,
   //  excluding the terminating null character
   const auto count = FormatMessage(FLAGS, nullptr, errorCode, LANG, msgBuf, bufSize, nullptr);
@@ -100,3 +102,5 @@ void* WinAPIUtils::copyEventData(const DWORD dwControl, const DWORD dwEventType,
   
   return newData;
 }
+
+#endif // WINDOWS_

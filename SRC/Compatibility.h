@@ -1,6 +1,10 @@
 ﻿#ifndef CompatibilityH
 #define CompatibilityH
 
+//// [!] Version 1.001 [!]
+
+//// Compiler-specific
+
 //// '_countof' - MS VS specific (from 'stdlib.h')
 #if !defined(_MSC_VER) && !defined(_countof)
   #include <type_traits> // for 'std::extent'

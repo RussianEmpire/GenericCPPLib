@@ -1,13 +1,17 @@
 ﻿#ifndef HardwareUtilsH
 #define HardwareUtilsH
 
-//// [!] Version 1.001 [!]
+//// [!] Version 1.002 [!]
 
-#ifdef _MSC_VER
+#include "CPPUtils.h" // for 'CONSTEXPR_11_'
+
+#ifdef _MSC_VER // MS VS
   #include <cstring>
   #include <intrin.h> // Microsoft Specific
-#elif __GNUC__
-  #include <cpuid.h> // GCC
+#elif __GNUC__ // GCC
+  #include <cpuid.h>
+#else
+  static_assert(false, "Unsupported compiler");
 #endif
 
 class CPUInfo {
@@ -42,7 +46,7 @@ private:
   // HINT: Better rewrite this using an assembly
   //  (see examples: https://en.wikipedia.org/wiki/CPUID#CPUID_usage_from_high-level_languages)
   static bool findIs64BitCPU() throw() {
-    static const auto GET_MAX_CMD_SUPPORTED = 0x80000000U; // 2 147 483 648
+    static CONSTEXPR_11_ const auto GET_MAX_CMD_SUPPORTED = 0x80000000U; // 2 147 483 648
     
     unsigned int cpuInfo[4U] = {0}; // from EAX, EBX, ECX, and EDX
     #ifdef _MSC_VER
@@ -61,7 +65,7 @@ private:
     #endif
     
     // Get Extended Processor Info and Feature Bits
-    static const auto GET_EXTENDED_INFO  = 0x80000001U; // 2 147 483 649
+    static CONSTEXPR_11_ const auto GET_EXTENDED_INFO  = 0x80000001U; // 2 147 483 649
     // If does NOT supports extended flags
     if (maxFuncIDSupported < GET_EXTENDED_INFO) return false;
     #ifdef _MSC_VER
@@ -75,7 +79,7 @@ private:
     #endif
     
     //' LM' (Long Mode) flag for AMD / 'EM64T' for Intel
-    static const auto LONG_MODE_BIT = 536870912U; // 2 pow 29: 29-th bit
+    static CONSTEXPR_11_ const auto LONG_MODE_BIT = 536870912U; // 2 pow 29: 29-th bit
     // Check if bit is signaled
     return 0U != (LONG_MODE_BIT & cpuInfo[3U]); // from EDX (cpuInfo[3U])
   }

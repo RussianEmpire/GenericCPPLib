@@ -1,14 +1,20 @@
 ﻿#ifndef WinAPIUtilsH
 #define WinAPIUtilsH
 
-#include "Windows.h"
+//// [!] Version 1.001 [!]
+
+#include "WinUtils.h"
+
+#ifdef WINDOWS_
+
+#include "CPPUtils.h" // for 'CONSTEXPR_11_'
 
 // Abstract
 class WinAPIUtils {
 
 public:
   
-  static const auto DEFAULT_ERR_MSG_BUF_SIZE_ = 256U;
+  static CONSTEXPR_11_ const auto DEFAULT_ERR_MSG_BUF_SIZE_ = 256U;
   
   static const char* getLogFileNameFromAppName() throw();
   
@@ -31,5 +37,7 @@ private:
   WinAPIUtils& operator=(const WinAPIUtils&) throw() = delete;
   WinAPIUtils& operator=(WinAPIUtils&&) throw() = delete;
 };
+
+#endif // WINDOWS_
 
 #endif // WinAPIUtilsH
