@@ -1,7 +1,7 @@
 ﻿#ifndef MathUtilsH
 #define MathUtilsH
 
-//// [!] Version 1.029 [!]
+//// [!] Version 1.030 [!]
 
 #include "CPPUtils.h"    // for 'CONSTEXPR_14_'
 #include "TypeHelpers.h"
@@ -25,6 +25,20 @@ class MathUtils {
 public:
 
   static const long double DEFAULT_CMP_EPSILON_NEIGHBORHOOD_;
+  
+  // Zero considered postive
+  template<typename T1, typename T2,
+           typename T1_ = typename std::conditional<std::is_scalar<T1>::value, const T1, const T1&>::type,
+           typename T2_ = typename std::conditional<std::is_scalar<T2>::value, const T2, const T2&>::type,
+           const bool OnlyNumeric = true>
+  static bool isEqualSign(const T1 val1, const T2 val2) throw() {
+    static_assert(OnlyNumeric ? std::is_arithmetic<T1>::value && std::is_arithmetic<T2>::value : true,
+                  "Both T1 & T2 SHOULD be arithmetic types");
+    static CONSTEXPR_14_ const auto DEFAULT_T1_ = T1();
+    static CONSTEXPR_14_ const auto DEFAULT_T2_ = T2();
+    const bool isNegativeVal2 = val2 < DEFAULT_T2_;
+    return (val1 < DEFAULT_T1_) ? isNegativeVal2 : !isNegativeVal2;
+  }
 
   // Epsilon-neighborhood: https://en.wikipedia.org/wiki/Neighbourhood_(mathematics)#In_a_metric_space
   // 'long double' precision: 'LDBL_EPSILON'
