@@ -1,7 +1,7 @@
 ﻿#ifndef MathUtilsH
 #define MathUtilsH
 
-//// [!] Version 1.030 [!]
+//// [!] Version 1.031 [!]
 
 #include "CPPUtils.h"    // for 'CONSTEXPR_14_'
 #include "TypeHelpers.h"
@@ -31,30 +31,27 @@ public:
            typename T1_ = typename std::conditional<std::is_scalar<T1>::value, const T1, const T1&>::type,
            typename T2_ = typename std::conditional<std::is_scalar<T2>::value, const T2, const T2&>::type,
            const bool OnlyNumeric = true>
-  static bool isEqualSign(const T1 val1, const T2 val2) throw() {
+  static CONSTEXPR_11_ bool isEqualSign(const T1 val1, const T2 val2) throw() {
     static_assert(OnlyNumeric ? std::is_arithmetic<T1>::value && std::is_arithmetic<T2>::value : true,
                   "Both T1 & T2 SHOULD be arithmetic types");
-    static CONSTEXPR_14_ const auto DEFAULT_T1_ = T1();
-    static CONSTEXPR_14_ const auto DEFAULT_T2_ = T2();
-    const bool isNegativeVal2 = val2 < DEFAULT_T2_;
-    return (val1 < DEFAULT_T1_) ? isNegativeVal2 : !isNegativeVal2;
+    return (val1 < T1()) ? (val2 < T2()) : !(val2 < T2());
   }
 
   // Epsilon-neighborhood: https://en.wikipedia.org/wiki/Neighbourhood_(mathematics)#In_a_metric_space
   // 'long double' precision: 'LDBL_EPSILON'
   // Complexity: constant O(1)
-  template<typename TType1, typename TType2>
-  static bool isApproxEqual(const TType1& val1, const TType2& val2,
-                            const long double& eps = DEFAULT_CMP_EPSILON_NEIGHBORHOOD_) throw()
+  // Zero considered positive
+  static CONSTEXPR_11_ bool isApproxEqual(const long double val1, const long double val2,
+                                          const long double eps = DEFAULT_CMP_EPSILON_NEIGHBORHOOD_) throw()
   {
-    // https://ru.wikipedia.org/wiki/Эпсилон-окрестность
-    return std::abs(val1 - val2) < std::abs(eps);
+    return (((val1 < 0.0L) && (val2 >= 0.0L)) || ((val1 >= 0.0L) && (val2 < 0.0L))) ? // diff. sign
+      false : (std::fabs(val1 - val2) < std::fabs(eps)); // https://ru.wikipedia.org/wiki/Эпсилон-окрестность
   }
 
   // Up to 10^18; returns zero if degree > 18
   // Complexity: constant - O(1)
-  static long long int getTenPositiveDegree(const size_t degree = 0U) throw() {
-    static const long long int TABLE[] =
+  static CONSTEXPR_14_ long long int getTenPositiveDegree(const size_t degree = size_t(0U)) throw() {
+    CONSTEXPR_11_ const long long int TABLE[] =
        // 32 bit
       {1LL, 10LL, 100LL, 1000LL, 10000LL, 100000LL, 1000000LL, 10000000LL, 100000000LL, 1000000000LL,
        // 64 bit
@@ -427,7 +424,7 @@ public:
   // [!] Do NOT confuse this with the std. C++ keyword 'xor'
   //  (which is an alias for the bitwise operator '^') [!]
   // Better use in logic utils
-  static bool XOR(const bool b1, const bool b2) throw() {
+  static CONSTEXPR_11_ bool XOR(const bool b1, const bool b2) throw() {
     return (b1 || b2) && !(b1 && b2);
   }
   

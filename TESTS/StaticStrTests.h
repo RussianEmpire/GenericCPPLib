@@ -1,7 +1,7 @@
 ﻿#ifndef StaticStrTestsH
 #define StaticStrTestsH
 
-//// [!] Version 1.008 [!]
+//// [!] Version 1.009 [!]
 
 #include "TestUtils.h"
 #include "PerformanceTester.h"
@@ -81,7 +81,7 @@ struct TestFunctor {
 
 template <class TStrType>
 auto TestConcat(TStrType& str, const size_t maxLen) throw()
--> decltype(std::chrono::high_resolution_clock::now() - std::chrono::high_resolution_clock::now()) {
+-> decltype(std::chrono::steady_clock::now() - std::chrono::steady_clock::now()) {
   static const auto MIN_CHAR_ = 'a';
   static const auto MAX_CHAR_ = 'z';
   static_assert(MIN_CHAR_ < MAX_CHAR_, "Invalid chars");
@@ -92,13 +92,13 @@ auto TestConcat(TStrType& str, const size_t maxLen) throw()
   char strToAdd[2U] = {0};
 
   str.clear();
-  const auto startTime = std::chrono::high_resolution_clock::now();
+  const auto startTime = std::chrono::steady_clock::now();
 
   for (size_t charIdx = 0U; charIdx < maxLen; ++charIdx) {
-    *strToAdd = distr(gen); // constant complexity
+    *strToAdd = static_cast<std::decay<decltype(*strToAdd)>::type>(distr(gen)); // constant complexity
     str += strToAdd; // linear to const complexity
   }
-  const auto endTime = std::chrono::high_resolution_clock::now();
+  const auto endTime = std::chrono::steady_clock::now();
 
   return endTime - startTime;
 }
@@ -120,11 +120,13 @@ static long long int quickCmp(const void* const mem1, const void* const mem2, co
 }
 
 // Both functional & performance tests (+a few CRT/STL integration tests)
-static void testStaticStr() {
+static void testStaticStr(const bool all = false, const bool shouldAsk = true) {
   char askUser[8U] = {0};
-  std::cout << "\nEnter '1' to perform ALL static str. tests: ";
-  std::cin >> askUser;
-  const bool runAll = '1' == *askUser && !askUser[1U];
+  if (!all && shouldAsk) {
+    std::cout << "\nEnter '1' to perform ALL static str. tests: ";
+    std::cin >> askUser;
+  }
+  const bool runAll = all || ('1' == *askUser && !askUser[1U]);
   
   //// Empty strs equality test
 
@@ -309,13 +311,20 @@ static void testStaticStr() {
 
   //// Strs speed comparison
   
-  if (!runAll) {
+  if (!runAll && shouldAsk) {
     std::cout << "\nEnter '1' to perform the concat. speed test: ";
     memset(askUser, 0, sizeof(askUser));
     std::cin >> askUser;
   }
   if (runAll || ('1' == *askUser && !askUser[1U])) {
     static const auto STR_BUF_SIZE_ = 440U * 1024U;
+    
+    if (shouldAsk) {
+      StaticallyBufferedStringLight<> str_1___;
+      std::cout << "\nEnter smth.: ";
+      std::cin >> str_1___;
+      std::cout << "\n>> " << str_1___ << '\n';
+    }
 
     auto const cstr___1_ptr_ = new(std::nothrow) CStr<STR_BUF_SIZE_ - 1U>;
     if (!cstr___1_ptr_) {
@@ -833,7 +842,7 @@ static void testStaticStr() {
   
   // String performance tests
   char c_02_ = '\0';
-  if (!runAll) {
+  if (!runAll && shouldAsk) {
     std::cout << "\nEnter 1 to perform a speed comparison test: ";
     std::cin >> c_02_;
   }
@@ -1009,40 +1018,40 @@ static void testStaticStr() {
     const decltype(s_str_01_) s_str_02_ = static_chars_01_;
     const decltype(dstr_01_) dstr_02_ = static_chars_01_;
 
-	volatile auto cTime1 = clock_t(), cTime2 = clock_t();
-	volatile long long int cCounts[3U] = {};
+    volatile auto cTime1 = clock_t(), cTime2 = clock_t();
+    volatile long long int cCounts[3U] = {};
 
     volatile auto result__01_ = false;
     time1 = std::chrono::steady_clock::now();
-	cTime1 = clock();
+    cTime1 = clock();
     for (size_t testIdx = size_t(); testIdx < 100000U; ++testIdx) {
       result__01_ = s_str_01_ < s_str_02_;
     }
-	time2 = std::chrono::steady_clock::now();
-	cTime2 = clock();
+    time2 = std::chrono::steady_clock::now();
+    cTime2 = clock();
     result__01_ = !result__01_;
     counts[1U] = (time2 - time1).count();
-	*cCounts = cTime2 - cTime1;
+    *cCounts = cTime2 - cTime1;
 
     time1 = std::chrono::steady_clock::now();
-	cTime1 = clock();
+    cTime1 = clock();
     for (size_t testIdx = size_t(); testIdx < 100000U; ++testIdx) {
       result__01_ = dstr_01_ < dstr_02_;
     }
     time2 = std::chrono::steady_clock::now();
-	cTime2 = clock();
+    cTime2 = clock();
     counts[2U] = (time2 - time1).count();
-	cCounts[1U] = cTime2 - cTime1;
+    cCounts[1U] = cTime2 - cTime1;
 
     time1 = std::chrono::steady_clock::now();
-	cTime1 = clock();
+    cTime1 = clock();
     for (size_t testIdx = size_t(); testIdx < 100000U; ++testIdx) {
       result__01_ = strcmp(s_str_01_.c_str(), s_str_02_.c_str()) == 0;
     }
     time2 = std::chrono::steady_clock::now();
-	cTime2 = clock();
+    cTime2 = clock();
     counts[3U] = (time2 - time1).count();
-	cCounts[2U] = cTime2 - cTime1;
+    cCounts[2U] = cTime2 - cTime1;
 
     volatile auto diff = static_cast<long double>(counts[2]) / counts[1];
     std::cout << "\nStatic str. 'operator<' " << diff << " times faster then the dynamic one\n";
@@ -1051,7 +1060,7 @@ static void testStaticStr() {
     std::cout << "  and " << diff << " times faster then the 'strcmp'\n";
     if (diff < 1.0L) std::cout << "[!] SLOW [!]\n\n";
 
-	std::cout << cCounts[0U] << '\n' << cCounts[1U] << '\n' << cCounts[2U] << '\n';
+   std::cout << cCounts[0U] << '\n' << cCounts[1U] << '\n' << cCounts[2U] << '\n';
   }
    
   {
@@ -1222,12 +1231,13 @@ static void testStaticStr() {
 
     std::cout << "\nTest insert: " << strLight_57_ << std::endl;
 
-    strLight_57_.clear();
-    std::cout << "Enter smth.: ";
-    std::cin >> strLight_57_;
-    ASSERT__(strLight_57_.length() && !strLight_57_.modified());
-    std::cout << "         -> '" << strLight_57_ << "'\n";
-
+    if (shouldAsk) {
+      strLight_57_.clear();
+      std::cout << "Enter smth.: ";
+      std::cin >> strLight_57_;
+      ASSERT__(strLight_57_.length() && !strLight_57_.modified());
+      std::cout << "         -> '" << strLight_57_ << "'\n";
+    }
     const auto val_34_ = 16.42L;
     strLight_56_.clear();
     strLight_56_ << val_34_;
@@ -1251,7 +1261,7 @@ static void testStaticStr() {
 
   //// Speed test 4
 
-  if (!runAll) {
+  if (!runAll && shouldAsk) {
     memset(askUser, 0, sizeof(askUser));
     std::cout << "\nEnter '1' to perform the alloc./dealloc. speed test: ";
     std::cin >> askUser;
@@ -1285,7 +1295,7 @@ static void testStaticStr() {
 
   //// Speed test 5
 
-  if (!runAll) {
+  if (!runAll && shouldAsk) {
     memset(askUser, 0, sizeof(askUser));
     std::cout << "\nEnter '1' to perform the mass equality comparison speed test: ";
     std::cin >> askUser;

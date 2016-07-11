@@ -1,7 +1,7 @@
 ﻿#ifndef StaticallyBufferedStringLightH
 #define StaticallyBufferedStringLightH
 
-//// [!] Version 1.047 [!]
+//// [!] Version 1.048 [!]
 
 #include "CPPUtils.h"  // for 'CONSTEXPR_14_'
 #include "FuncUtils.h"
@@ -998,14 +998,15 @@ namespace std {
   template<typename TElemType, const size_t MaxLen>
   std::istream& operator>>(std::istream& stream,
                            StaticallyBufferedStringLight<TElemType, MaxLen>& str) {
+    typedef typename std::remove_reference<decltype(str)>::type TStrType;
     auto symb = stream.get(); // skip first (it is '\n')
     while (true) {
       symb = stream.get(); // on EOF - 'failbit' flag is set
       switch (symb) {
-        case '\n': case '\r': return stream; // escape char.
+        case '\n': case '\r': case '\0': return stream; // escape char.
       }
       if (!stream) break; // true if either 'failbit' or 'badbit' flag is set
-      if (!str.push_back(symb)) break;
+      if (!str.push_back(static_cast<typename TStrType::value_type>(symb))) break;
     }
     return stream;
   }
