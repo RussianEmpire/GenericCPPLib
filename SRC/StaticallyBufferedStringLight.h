@@ -1,7 +1,7 @@
 ﻿#ifndef StaticallyBufferedStringLightH
 #define StaticallyBufferedStringLightH
 
-//// [!] Version 1.048 [!]
+//// [!] Version 1.049 [!]
 
 #include "CPPUtils.h"  // for 'CONSTEXPR_14_'
 #include "FuncUtils.h"
@@ -999,14 +999,22 @@ namespace std {
   std::istream& operator>>(std::istream& stream,
                            StaticallyBufferedStringLight<TElemType, MaxLen>& str) {
     typedef typename std::remove_reference<decltype(str)>::type TStrType;
-    auto symb = stream.get(); // skip first (it is '\n')
+    typedef typename TStrType::value_type TSymbType;
+    decltype(stream.get()) streamChar;
+    auto nonControlSymbMet = false;
     while (true) {
-      symb = stream.get(); // on EOF - 'failbit' flag is set
-      switch (symb) {
-        case '\n': case '\r': case '\0': return stream; // escape char.
+      streamChar = stream.get(); // on EOF - 'failbit' flag is set
+      assert(streamChar >= static_cast<decltype(streamChar)>(std::numeric_limits<TSymbType>::lowest()) &&
+             streamChar <= static_cast<decltype(streamChar)>(std::numeric_limits<TSymbType>::max()));
+      switch (streamChar) {
+        case '\0': return stream;
+        case '\n': case '\r': // skip escape char.
+          if (!stream || nonControlSymbMet) return stream; // true if either 'failbit' or 'badbit' flag is set
+          continue;
+        default: nonControlSymbMet = true;
       }
-      if (!stream) break; // true if either 'failbit' or 'badbit' flag is set
-      if (!str.push_back(static_cast<typename TStrType::value_type>(symb))) break;
+      if (!str.push_back(static_cast<typename TStrType::value_type>(streamChar))) break;
+      if (!stream) return stream; // check on 'EOF' OR ANY error
     }
     return stream;
   }
