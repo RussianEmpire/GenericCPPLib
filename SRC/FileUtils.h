@@ -1,7 +1,7 @@
 ﻿#ifndef FileUtilsH
 #define FileUtilsH
 
-//// [!] Version 1.000 [!]
+//// [!] Version 1.001 [!]
 
 #include "Portability.h"
 #include "CPPUtils.h" // for 'CONSTEXPR_11_'
@@ -14,8 +14,9 @@
 
 #ifdef UNIX_ // LINUX_ || BSD_ || SOLARIS_
   #include <errno.h>
-  #include <unistd.h> // for 'readlink'
-  #include <limits.h> // for 'PATH_MAX'
+  #include <unistd.h>   // for 'readlink'
+  #include <limits.h>   // for 'PATH_MAX'
+  #include <sys/stat.h> // for 'lstat'
   
   #ifdef FREE_BSD_
     #include <syslimits.h> // for 'PATH_MAX' in FreeBSD
@@ -105,10 +106,66 @@ namespace FileUtils {
     #endif
   }
   
-  // Thread-safe
+  #ifdef UNIX_
+    enum class EAllocBufForSymbolicLinkResult {
+      ABFSLR_Error, // internall / crit. error
+      ABFSLR_EmptyOrUnknownLink,
+      ABFSLR_OldBufLeft, // NO buff. replace maded [OK buf. OR new size is undefined - can NOT be replaced]
+      ABFSLR_BufReplaced // new one allocated AND used [params replaced, old buf deleted]
+    };
+
+    /* Using a statically sized buffer might NOT provide enough room for the symbolic link contents
+       Dynamically allocating the buffer addresses a common portability problem when using 'PATH_MAX'
+        for the buffer size, as this const. is NOT guaranteed to be defined per POSIX
+         if the system does NOT have such limit
+    */
+    // Returns nullptr on CRITICAL / internall error
+    // Returns new OR old buf if:
+    //  1) ALL OK [AND updates incoming params in this case]
+    //  2) empty / unknown symbolic link
+    // [!] Prev. buf. (if exist) SHOULD be allocated using 'new' [!]
+    static EAllocBufForSymbolicLinkResult allocBufForSymbolicLink(const char* const pathName,
+                                                                  char*& prevBuf,
+                                                                  size_t& prevBufSize) throw() {
+      /* Docs:
+         'lstat': http://pubs.opengroup.org/onlinepubs/009695399/functions/lstat.html
+         'stat' : http://pubs.opengroup.org/onlinepubs/009695399/basedefs/sys/stat.h.html
+      */
+      if ((prevBuf && !prevBufSize) || (prevBufSize && !prevBuf))
+        return EAllocBufForSymbolicLinkResult::ABFSLR_Error; // invalid params [internall error]
+      if (!pathName || !*pathName) // empty symbolic link
+        return EAllocBufForSymbolicLinkResult::ABFSLR_EmptyOrUnknownLink;
+      
+      struct stat linkStats = {}; // get info. about the link
+      if (lstat(pathName, &linkStats)) // returns zero on success; see 'errno' for the exact error
+        return EAllocBufForSymbolicLinkResult::ABFSLR_EmptyOrUnknownLink; // unknown link? 
+      
+      // 'st_size' shall contain the length of the pathname contained in the symbolic link
+      //  (does NOT count ANY trailing null)
+      assert(linkStats.st_size > -1); // CAN be zero sometimes [even on OK links!]
+      if (!linkStats.st_size) return EAllocBufForSymbolicLinkResult::ABFSLR_OldBufLeft; // try use old
+
+      const size_t newBufSize = AUTO_ADJUST_MEM((linkStats.st_size + size_t(1U)), 8U);
+      // Number of bytes written SHOULD be checked to make sure that the size of the
+      //  symbolic link did NOT increase between the calls
+      if (prevBufSize < newBufSize) { // new buf. needed
+        auto const newBuf = new(std::nothrow) char[newBufSize];
+        if (!newBuf) // alloc. error - CRITICAL error
+          return EAllocBufForSymbolicLinkResult::ABFSLR_Error;
+
+        delete[] prevBuf;
+        prevBuf = newBuf; // replace buf.
+        prevBufSize = newBufSize;
+        return EAllocBufForSymbolicLinkResult::ABFSLR_BufReplaced;
+      }
+      return EAllocBufForSymbolicLinkResult::ABFSLR_OldBufLeft; // old buf. is OK
+    }
+  #endif
+  
+  // Thread-safe (synchronized)
   // Returns empty str. at ANY error
   static const char* getExeName() throw() {
-    static const auto NAME_BUF_SIZE_ = getBufSizeForFullPath();
+    static auto NAME_BUF_SIZE_ = getBufSizeForFullPath();
     // SHOULD be lock-free; NOT atomic init., BUT synched as a static
     static std::atomic<char*> NAME_BUF_(nullptr);
     
@@ -140,6 +197,18 @@ namespace FileUtils {
       
       decltype(readlink("", NAME_BUF_THREAD_, size_t())) charCount;
       for (auto const currLink: EXE_NAME_LINKS_) {
+        // Check whether currently allocated buf. is large enough
+        //  (AND TRY to allocate NEW AND larger one, if NOT)
+        // OPTIMIZATION | REDESIGN HINT: better obtain required buf. size BEFORE allocation
+        //  (BUT Win. CAN ALSO use long path names, up to 32k, with Unicode)
+        switch (allocBufForSymbolicLink(currLink, NAME_BUF_THREAD_, NAME_BUF_SIZE_)) {
+          case EAllocBufForSymbolicLinkResult::ABFSLR_Error: // REAL error
+            delete[] NAME_BUF_THREAD_;
+            NAME_BUF_THREAD_ = nullptr;
+            return "";
+          case EAllocBufForSymbolicLinkResult::ABFSLR_EmptyOrUnknownLink: continue; // try next link
+          default:;
+        }
         // Returns something like '/home/tMckGg/prog'
         charCount = readlink(currLink, NAME_BUF_THREAD_, NAME_BUF_SIZE_ - 1U);
         if (charCount > decltype(charCount)()) { // return the number of bytes placed; -1 on error
@@ -164,6 +233,7 @@ namespace FileUtils {
       */
     #endif
     
+    assert(NAME_BUF_THREAD_ && *NAME_BUF_THREAD_); // check if at least one link is OK [really can be NO]
     // Writes in the current thread are visible in other threads
     NAME_BUF_.store(NAME_BUF_THREAD_, std::memory_order_release);
     return NAME_BUF_THREAD_;
