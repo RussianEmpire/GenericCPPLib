@@ -1,7 +1,11 @@
 ﻿#ifndef CompatibilityH
 #define CompatibilityH
 
-//// [!] Version 1.001 [!]
+//// [!] Version 1.002 [!]
+
+/* See also:
+   MS VS: https://msdn.microsoft.com/ru-ru/library/sk54f3f5.aspx
+*/
 
 //// Compiler-specific
 
